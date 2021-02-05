@@ -46,10 +46,10 @@
     <!-- 添加角色 -->
     <el-dialog
     title="添加角色" :visible.sync="addRoleOpen" :close-on-click-modal='false' 
-    :close-on-press-escape='false' width="10%" custom-class='dialog' center>
+    :close-on-press-escape='false' width="10%" custom-class='dialog' center top="80px">
       <Addrole ref="Addrole" v-if="addRoleOpen" @close='close'></Addrole>
       <div class="dialog-btn">
-        <el-button type="primary" size='small' round @click="addRole">添 加</el-button>
+        <el-button type="primary" size='small' round @click="addRoleRole">添 加</el-button>
         <el-button size='small' round @click="close">取 消</el-button>
       </div>
     </el-dialog>
@@ -59,16 +59,20 @@
     title="编辑角色" :visible.sync="editRoleOpen" :close-on-click-modal='false' 
     :close-on-press-escape='false' width="30%" custom-class='dialog' center>
       <EditRole ref="EditRole" v-if="editRoleOpen" @close='close'></EditRole>
+      <div class="dialog-btn">
+        <el-button type="primary" size='small' round @click="preser">保 存</el-button>
+        <el-button size='small' round @click="close">取 消</el-button>
+      </div>
     </el-dialog>
 
-    <!-- 添加成员 -->
+    <!-- 添加成员 --> 
     <el-dialog
     title="添加成员" :visible.sync="addMember" :close-on-click-modal='false' 
     :close-on-press-escape='false' width="30%" custom-class='dialog' center>
       <AddMember ref="AddMember" v-if="addMember" @close='close'></AddMember>
       <div class="dialog-btn">
-        <el-button type="primary" @click="submitForm()" size="small" round>添 加</el-button>
-        <el-button @click="cancel" size="small" type="danger" round>取 消</el-button>
+        <el-button type="primary" @click="submitForm()" size="small" round>添加选中人员</el-button>
+        <el-button @click="close" size="small" type="danger" round>取 消</el-button>
       </div>
     </el-dialog>
 
@@ -77,6 +81,10 @@
     title="添加成员" :visible.sync="delMember" :close-on-click-modal='false' 
     :close-on-press-escape='false' width="30%" custom-class='dialog' center>
       <DelMember ref="DelMember" v-if="delMember" @close='close'></DelMember>
+      <div class="dialog-btn">
+        <el-button type="primary" size='small' round @click="preseMember">保 存</el-button>
+        <el-button size='small' round @click="close">取 消</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>

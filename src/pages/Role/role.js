@@ -149,13 +149,24 @@ export default {
     /**
      * 各子集组件按钮
      */
-    // 关闭添加角色 dialog
     close(){
       this.addRoleOpen = false
       this.editRoleOpen = false
       this.addMember = false
       this.delMember = false
     },
+    addRoleRole() {
+      // let 
+    },
+    preser() {
+
+    },
+    submitForm() {
+
+    },
+    preseMember() {
+
+    }
   },
   mounted() {
     var dom = document.querySelector('.table')

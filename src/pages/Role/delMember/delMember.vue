@@ -25,11 +25,6 @@
         :total="total">
       </el-pagination>
     </div>
-
-    <div class="dialog-btn">
-      <el-button size='small' round @click="cancel">取 消</el-button>
-      <el-button type="primary" size='small' round @click="delPerson">删 除</el-button>
-    </div>
   </div>
 </template>
 
@@ -51,14 +46,6 @@ export default {
     }
   },
   methods: {
-    // 取消
-    cancel(){
-      this.$emit('close', '取消')
-    },
-    // 添加选中人员
-    delPerson() {
-      this.$emit('close', '删除')
-    },
     // 分页
     sizeChange(val){
       this.pageSize = val

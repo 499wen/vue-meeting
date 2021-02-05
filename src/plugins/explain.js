@@ -10,7 +10,9 @@
 
 /**
  * el-table 
+ * border添加边框
  * :resizable="false" 禁止拖动表头
+ * align="center" 居中
  * 
  * 铺满父盒子
  */ 

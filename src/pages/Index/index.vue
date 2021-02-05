@@ -26,6 +26,14 @@
                             <el-menu-item index="1-4-1">选项1</el-menu-item>
                         </el-submenu>
                     </el-submenu>
+                    <el-menu-item index="/approval_subscribe">
+                        <i class="el-icon-menu"></i>
+                        <span slot="title">预约审批</span>
+                    </el-menu-item>
+                    <el-menu-item index="/approval_atten">
+                        <i class="el-icon-menu"></i>
+                        <span slot="title">参会审批</span>
+                    </el-menu-item>
                     <el-menu-item index="/hotel">
                         <i class="el-icon-menu"></i>
                         <span slot="title">酒店管理</span>

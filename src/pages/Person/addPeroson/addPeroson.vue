@@ -158,11 +158,6 @@ export default addPeroson
 }
 
 .addperson {
-  width: 100%;
-  height: 100%;
-  max-height: calc(100vh - 214px) !important;
-  box-sizing: border-box;
-  overflow: auto;
 
   .userForm {
     height: calc(100% - 72px);

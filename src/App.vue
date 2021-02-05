@@ -79,8 +79,12 @@ body {
   padding: 0 !important;
 
   & > div {
+    max-height: calc(100vh - 214px) !important;
+    width: 100%;
+    height: 100%;
     padding: 10px 20px;
     box-sizing: border-box;
+    overflow: auto;
   }
 }
 

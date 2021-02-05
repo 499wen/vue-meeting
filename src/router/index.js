@@ -100,7 +100,27 @@ const routes = [
         name: '人员管理',
         component: () => import(/* webpackChunkName: "person" */ '../pages/Person/person.vue'),
         children: []
-      }
+      },
+
+      /**
+       * 会务管理 - 参会审批 Approval_atten
+       */
+      {
+        path: '/approval_atten',
+        name: '参会审批',
+        component: () => import(/* webpackChunkName: "approval_atten" */ '../pages/Approval_atten/approval_atten.vue'),
+        children: []
+      },
+
+      /**
+       * 会议室预约 - 预约审批 approval_subscribe
+       */
+      {
+        path: '/approval_subscribe',
+        name: '预约审批',
+        component: () => import(/* webpackChunkName: "approval_subscribe" */ '../pages/Approval_subscribe/approval_subscribe.vue'),
+        children: []
+      },
     ]
   },
   

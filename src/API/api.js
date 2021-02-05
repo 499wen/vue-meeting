@@ -32,7 +32,7 @@ const Api = {
     updateRestaurant: `${Key}/release/updateRestaurant`, // 修改餐厅
     delectRestaurantById: id => `${Key}/release/delectRestaurantById?id=${id}`, // 删除餐厅
     
-
+// Approval_atten
     /**
      * 基础设置 - 会议室管理
      */
