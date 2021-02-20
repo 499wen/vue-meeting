@@ -91,6 +91,7 @@
             :data="data"
             :props="treeProps"
             node-key="id"
+            @node-click='treeClick'
             :render-content="renderContent">
           </el-tree>
         </div>

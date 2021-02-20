@@ -84,3 +84,58 @@ this.height = dom.offsetHeight
           
     }).catch(() => {})
  */
+
+ /**
+  * el-tree  树形结构
+  * 
+  * html 
+      <el-tree
+        :data="data"
+        :props="treeProps"
+        node-key="id"
+        @node-click='treeClick'
+        :render-content="renderContent">
+      </el-tree>
+
+    js
+      data: [
+        { id: 1, label: '一级 1',
+          children: []
+        }
+      ],
+      treeProps: {
+        children: 'children',
+        label: 'label'
+      },
+
+      // tree - 点击触发
+      treeClick(node, data){
+        
+      },
+      // tree - 树结构
+      renderContent(h, { node, data, store }) {
+        return (
+          <span class="custom-tree-node">
+            <span>{node.label}</span>
+            <span>
+              <el-button size="mini" type="text" on-click={ () => this.append(data) } icon="el-icon-circle-plus-outline"></el-button>
+              <el-button size="mini" type="text" on-click={ () => this.remove(node, data) } icon="el-icon-delete"></el-button>
+              <el-button size="mini" type="text" on-click={ () => this.edit(node, data) } icon="el-icon-edit"></el-button>
+            </span>
+          </span>);
+      },
+      // tree - 添加
+      append(data){
+
+      },
+      // tree - 删除
+      remove(node, data){
+
+      },
+
+      // tree - 编辑
+      edit(node, data){
+
+      },
+  * 
+  */

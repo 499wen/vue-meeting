@@ -45,17 +45,36 @@ export default {
       }
     },
     methods: {
+      // tree - 点击触发
+      treeClick(node, data){
+        
+      },
       // tree - 树结构
       renderContent(h, { node, data, store }) {
         return (
           <span class="custom-tree-node">
             <span>{node.label}</span>
             <span>
-              <el-button size="mini" type="text" on-click={ () => this.append(data) }>添加</el-button>
-              <el-button size="mini" type="text" on-click={ () => this.remove(node, data) }>删除</el-button>
+              <el-button size="mini" type="text" on-click={ () => this.append(data) } icon="el-icon-circle-plus-outline"></el-button>
+              <el-button size="mini" type="text" on-click={ () => this.remove(node, data) } icon="el-icon-delete"></el-button>
+              <el-button size="mini" type="text" on-click={ () => this.edit(node, data) } icon="el-icon-edit"></el-button>
             </span>
           </span>);
       },
+      // tree - 添加
+      append(data){
+
+      },
+      // tree - 删除
+      remove(node, data){
+
+      },
+
+      // tree - 编辑
+      edit(node, data){
+
+      },
+
       // 分页方法
       sizeChange(val){
         this.pageSize = val

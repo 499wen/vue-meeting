@@ -93,6 +93,15 @@ const routes = [
       },
 
       /**
+       * 基础设置 - 短信中心
+       */
+      {
+        path: '/short_message',
+        name: '短信中心',
+        component: () => import(/* webpackChunkName: "short_message" */ '../pages/Short_message/short_message.vue'),
+      },
+
+      /**
        * 基础设置 - 人员管理
        */
       {
