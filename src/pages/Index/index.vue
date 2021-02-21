@@ -26,6 +26,10 @@
                             <el-menu-item index="1-4-1">选项1</el-menu-item>
                         </el-submenu>
                     </el-submenu>
+                    <el-menu-item index="/home">
+                        <i class="el-icon-menu"></i>
+                        <span slot="title">首页</span>
+                    </el-menu-item>
                     <el-menu-item index="/short_message">
                         <i class="el-icon-menu"></i>
                         <span slot="title">短信中心</span>

@@ -113,10 +113,10 @@ body {
 
   .tap {
     width: 100%;
-    height: 45px;
+    height: 40px;
     box-sizing: border-box;
     font-size: 16px;
-    line-height: 45px;
+    line-height: 40px;
 
     & > span {
       margin-right: 20px;
@@ -142,7 +142,17 @@ body {
       content: '';
     }
   }
+
+  .look-more {
+    color: #0000ee;
+    font-size: 15px;
+    text-decoration: underline;
+    white-space: nowrap;
+    cursor: pointer;
+  }
 }
+
+
 
 .pagin {
   width: 100%;

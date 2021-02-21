@@ -20,6 +20,7 @@ const routes = [
     path: '/',
     name: '框架',
     component: () => import(/* webpackChunkName: "index" */ '../pages/Index/index.vue'),
+    redirect: '/home',
     children: [
       {
         path: '/home',

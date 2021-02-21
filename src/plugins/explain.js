@@ -10,7 +10,7 @@
 
 /**
  * el-table 
- * border添加边框
+ * border 添加边框
  * :resizable="false" 禁止拖动表头
  * align="center" 居中
  * 

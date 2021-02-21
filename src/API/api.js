@@ -32,7 +32,6 @@ const Api = {
     updateRestaurant: `${Key}/release/updateRestaurant`, // 修改餐厅
     delectRestaurantById: id => `${Key}/release/delectRestaurantById?id=${id}`, // 删除餐厅
     
-// Approval_atten
     /**
      * 基础设置 - 会议室管理
      */
@@ -41,6 +40,14 @@ const Api = {
     selectRoomById: id => `${Key}/release/selectRoomById?id=${id}`, // 查询会议室 - 查询单个
     updateRoomById: `${Key}/release/updateRoomById`, // 修改会议室
     delectRoomById: id => `${Key}/release/delectRoomById?id=${id}`, // 删除会议室
+
+    /**
+     * 基础设置 - 人员管理 
+     */
+    addDepartmentForCompany: `${Key}/release/addDepartmentForCompany`, // 添加部门
+    findCompanyDepartment: `${Key}/release/findCompanyDepartment`, // 获取部门
+    delDpeartmentForCompany: `${Key}/release/delDpeartmentForCompany`, // 删除部门
+    editDepartmentNameForCompany: (id, parentId, departmentName) => `${Key}/release/editDepartmentNameForCompany?id=${id}&parentId=${parentId}&departmentName=${departmentName}`, // 修改部门
 } 
 
 Vue.prototype.API = Api

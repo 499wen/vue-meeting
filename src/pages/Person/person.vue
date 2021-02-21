@@ -91,7 +91,9 @@
             :data="data"
             :props="treeProps"
             node-key="id"
+            highlight-current
             @node-click='treeClick'
+            default-expand-all
             :render-content="renderContent">
           </el-tree>
         </div>
@@ -125,7 +127,7 @@
             <el-pagination
             background
             @size-change="sizeChange"
-            @current-change="curChange"
+            @current-change="curChange" 
             :current-page="pageNum"
             :page-sizes="[50, 100, 300, 500]"
             :page-size="pageSize"
