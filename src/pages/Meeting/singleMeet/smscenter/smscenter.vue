@@ -10,15 +10,14 @@
     <div class="sms-body">
       <!-- table -->
       <div class="table">
-        <el-table ref="singleTable" @cell-mouse-enter='hoverTable' @cell-mouse-leave='closeHover'
+        <el-table ref="singleTable" @cell-mouse-enter='hoverTable'
           :data="tableData" border :height="height">
           <el-table-column align="center" :resizable='false' type="selection" width="50"></el-table-column>
-          <el-table-column type="index" width="50" label="序号" align="center" :resizable="false"></el-table-column>
           <el-table-column :prop="item.props" :label="item.label" :width="item.width"
             v-for="(item, idx) in tableCate" :key="idx"
             align="center" :resizable="false">
           </el-table-column>
-          <el-table-column align="center" :resizable='false' label="状态" width='100'>
+          <el-table-column align="center" :resizable='false' label="参会人分组" width='500'>
             <template slot-scope="scope">
               <span>{{scope.row.status}}</span>
             </template>
@@ -43,7 +42,7 @@
     </div>
 
     <!-- 短信表格 -->
-    <div class="sms-table" tabindex="0" :style="style">
+    <div class="sms-table" :style="style">
       
     </div>
   </div>
@@ -57,13 +56,9 @@ export default {
     return {
       // table
       height: null,
-      tableData: [{}],
+      tableData: [{}, {}],
       tableCate: [
-        {props: 'userName', label: '姓名', width: ''},
-        {props: 'phone', label: '手机号', width: ''},
-        {props: 'departmentName', label: '部门', width: ''},
-        {props: 'characterId', label: '角色', width: ''},
-        {props: 'attribute1', label: '组别', width: ''},
+        {props: 'groupName', label: '短信类型', width: ''}
       ],
 
       // 分页
@@ -77,38 +72,34 @@ export default {
   methods: {
     // 鼠标移动表格中
     hoverTable(row, column, cell){
-          console.log(2)
-
-      let parent = $(cell.parentNode)
-      var top = parent.offset().top + parent.height()
-      this.style = {
-        'top': top + 'px',
-        'width': parent.width() + 'px',
-        'display': 'block'
-      }
-      // 获取子集短信 dom
-      let childSms = $('.sms-table')[0]
-      console.log(childSms)
-      childSms.focus()
-      childSms.onblur = () => {
+      cell.parentNode.onmousemove = (e) => {
+        let parent = $(cell.parentNode)
+        var top = parent.offset().top + parent.height()
         this.style = {
-          'display': 'none'
+          'top': (top) + 'px',
+          'width': parent.width() + 'px',
+          'display': 'block'
         }
-        childSms.onblur = null
       }
-    },
-    // 关闭 hover - table
-    closeHover(){
-      document.body.onmousemove = (e) => {
+
+      cell.parentNode.onmouseout = (e) => {
         if(e.toElement.getAttribute("class") != 'sms-table'){
-          console.log(1)
-          document.body.onmousemove = null
           this.style = {
             'display': 'none'
           }
         }
       }
+
+      // 获取子集短信 dom
+      let childSms = $('.sms-table')[0]
+      childSms.onmouseout = (e) => {
+        this.style = {
+          'display': 'none'
+        }
+      }
+
     },
+
     // 分页方法
     sizeChange(val){
       this.pageSize = val
@@ -147,7 +138,7 @@ export default {
   .sms-table {
     position: fixed;
     height: 300px;
-    background-color: #638e50;
+    background-color: #fff;
     box-shadow: 1px 1px 10px 1px #ccc;
     display: none;
   }
