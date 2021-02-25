@@ -30,6 +30,10 @@
                         <i class="el-icon-menu"></i>
                         <span slot="title">首页</span>
                     </el-menu-item>
+                    <el-menu-item index="/meeting">
+                        <i class="el-icon-menu"></i>
+                        <span slot="title">会议管理</span>
+                    </el-menu-item>
                     <el-menu-item index="/short_message">
                         <i class="el-icon-menu"></i>
                         <span slot="title">短信中心</span>
@@ -182,6 +186,7 @@ export default {
     height: 100vh;
     display: flex;
     justify-content: flex-start;
+    overflow: hidden;
 
     .left-nav {
         width: 200px;

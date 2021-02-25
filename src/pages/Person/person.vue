@@ -22,11 +22,11 @@
 				<div class="right-10px" @click="openBox">
 					<el-button size="small">自定义条件</el-button>
 				</div>
-
+ 
         <!-- :id="searStatus ? 'bae' : ''" -->
 				<div class="search-box right-10px" >
-					<el-input size="small" placeholder="输入姓名、拼音、手机进行搜索" v-model="searchKey"  @keyup.enter.native='doSeacKey'>
-						<el-button slot="append" icon="el-icon-search" @click="doSeacKey"></el-button>
+					<el-input size="small" placeholder="输入姓名、拼音、手机进行搜索" v-model="searchKey"  @keyup.enter.native='searchBtn'>
+						<el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
 					</el-input>
 				</div>
 
@@ -177,7 +177,7 @@ export default Person
 
 .person .list {
   width: 100%;
-  height: calc(100% - 98px);
+  height: calc(100% - 92px);
   margin-top: 10px;
   display: flex;
   justify-content: flex-start;

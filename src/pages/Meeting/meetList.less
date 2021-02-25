@@ -1,0 +1,192 @@
+.meeting {
+  width: 100%;
+  height: 100%;
+
+  .opera {
+    display: flex;
+    align-items: center;
+    height: 100%;
+
+    .add-hotel {
+      margin-left: 10px;
+    }
+  }
+
+  .meet-body {
+    width: 100%;
+    height: calc(100% - 50px);
+    padding: 0 15px;
+    box-sizing: border-box;
+
+    .nav {
+      width: 100%;
+      height: 30px;
+
+      span {
+        display: inline-block;
+        height: 100%;
+        padding: 5px 15px;
+        font-size: 16px;
+        box-sizing: border-box;
+        cursor: pointer;
+      }
+
+      .select {
+        font-weight: 700;
+        position: relative;
+      }
+      .select:before {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 0;
+        height: 2px;
+        width: 100%;
+        background-color: #234060;
+      }
+      
+    }
+
+    .meet-list {
+      width: 100%;
+      height: calc(100% - 72px);
+      border: 1px solid #ccc;
+      overflow: auto;
+      padding: 5px 15px;
+      box-sizing: border-box;
+
+      .meet-single {
+        min-width: 1200px;
+        width: 100%;
+        height: 140px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        padding: 5px 10px;
+        box-sizing: border-box;
+        display: flex;
+
+        .box-left {
+          // flex: 1;
+          width: calc(100% - 540px);
+          height: 100%;
+        }
+
+        .box-right {
+          width: 540px;
+          height: 100%;
+        }
+      }
+
+      .meet-single:nth-last-child(1) {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.box-left {
+  display: flex;
+
+  .meet-cover {
+    width: 120px;
+    height: 100%;
+    text-align: center;
+    padding: 5px 0;
+    box-sizing: border-box;
+    border: 1px dashed #ccc;
+    position: relative;
+
+    & > img {
+      width: 80px;
+      height: 100%;
+    }
+
+    .meet-tips {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      font-size: 12px;
+      padding: 2px 3px;
+      box-sizing: border-box;
+      border-radius: 5px;
+      color: #fff;
+      background-color: #2ba2ff;
+    }
+
+    // 已发布
+    .published {
+      background-color: #60cfb9;
+    }
+
+    // 进行中
+    .ongoing {
+      background-color: #ffd04b;
+    }
+
+    // 已结束
+    .over {
+      background-color: #6f6f6f;
+    }
+  }
+
+  .basic-info {
+    width: calc(100% - 120px);
+    height: 100%;
+    box-sizing: border-box;
+    padding: 15px;
+    display: flex;
+    align-content: space-between;
+    flex-wrap: wrap;
+
+    .clumn {
+      width: 100%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 15px;
+    }
+  }
+}
+
+.box-right {
+  display: flex;
+  justify-content: flex-end;
+  
+  .meet-func {
+    width: 420px;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-content: center;
+    flex-wrap: wrap;
+
+    .icon {
+      width: 140px;
+      height: 25px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      font-size: 14px;
+      cursor: pointer;
+      // color: #333;
+
+      img {
+        width: 16px;
+        height: 16px;
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .meet-btn {
+    width: 100px;
+    height: 100%;
+
+    .btn {
+      width: 90px;
+      margin-left: 0;
+      margin-bottom: 5px;
+    }
+  }
+}

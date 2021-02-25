@@ -7,8 +7,8 @@
       </div>
 
       <div class="opera">
-        <el-input size="small" placeholder="请输入酒店名称" v-model="searchKey" class="input-with-select">
-          <el-button slot="append" icon="el-icon-search"></el-button>
+        <el-input size="small" placeholder="请输入酒店名称" v-model="searchKey" @keyup.native.enter="searchBtn">
+          <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
         </el-input>
         <el-button size="small" @click="addHotel" type="primary" plain class="add-hotel"> 新建酒店 </el-button>
       </div>
@@ -129,6 +129,10 @@ export default {
             this.total = 0
           }
         })
+    },
+    // 搜索按钮
+    searchBtn(){
+      console.log('触发')
     }
   },
   mounted() {

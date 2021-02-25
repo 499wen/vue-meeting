@@ -78,7 +78,7 @@
 
     <!-- 删除成员 -->
     <el-dialog
-    title="添加成员" :visible.sync="delMember" :close-on-click-modal='false' 
+    title="删除成员" :visible.sync="delMember" :close-on-click-modal='false' 
     :close-on-press-escape='false' width="30%" custom-class='dialog' center>
       <DelMember ref="DelMember" v-if="delMember" @close='close'></DelMember>
       <div class="dialog-btn">

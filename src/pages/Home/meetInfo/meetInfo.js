@@ -16,7 +16,10 @@ export default {
   methods: {
     // 查看更多
     more(){
-      
+      this.$router.push({
+        path: '/info_more',
+        query: { msg: '会议信息'}
+      })
     }
   },
   mounted() {

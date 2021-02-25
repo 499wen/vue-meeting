@@ -8,11 +8,12 @@ const postcss = px2rem({
 })
 
 module.exports = {
-    publicPath: process.env.NODE_ENV === "production" ? "/dist/" : "./",
+    // publicPath: process.env.NODE_ENV === "production" ? "/dist/" : "./",
     outputDir: "dist",
+    publicPath: "./",
     assetsDir: "static",
     lintOnSave: true, // 是否开启eslint保存检测
-    productionSourceMap: false, // 是否在构建生产包时生成sourcdeMap
+    productionSourceMap: true, // 是否在构建生产包时生成sourcdeMap
     chainWebpack: config => {
         config.resolve.alias
         .set("@", resolve("src"))
@@ -26,7 +27,7 @@ module.exports = {
         // host: "localhost",
         /* 本地ip地址 */
         //host: "192.168.1.63",
-        host: "192.168.0.241", //局域网和本地访问
+        host: "192.168.0.239", //局域网和本地访问
         port: "8888",
         hot: true,
         /* 自动打开浏览器 */

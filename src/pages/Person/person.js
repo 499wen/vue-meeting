@@ -200,7 +200,7 @@ export default {
 
       },
       // 输入框搜索
-      doSeacKey() {
+      searchBtn() {
 
       },
       // 自定匹配
@@ -279,7 +279,7 @@ export default {
             // }, 500)
           }
         })
-      }
+      },
     },
     mounted() {
       var dom = document.querySelector('.table')

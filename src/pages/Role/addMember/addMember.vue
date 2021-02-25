@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="oper">
-      <el-input  placeholder="请输入内容" v-model="searchKey" class="input-with-select">
-        <el-button slot="append" icon="el-icon-search"></el-button>
+      <el-input  placeholder="请输入内容" v-model="searchKey" class="input-with-select" @keyup.native.enter="searchBtn">
+        <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
       </el-input>
       <el-button > 添加人员 </el-button>
     </div>
@@ -59,6 +59,11 @@ export default {
     },
     curChange(val){
       this.pageNum = val
+    },
+
+    // 搜索按钮
+    searchBtn(){
+      console.log('触发')
     }
   },
   mounted() {

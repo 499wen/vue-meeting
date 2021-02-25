@@ -22,11 +22,33 @@ const routes = [
     component: () => import(/* webpackChunkName: "index" */ '../pages/Index/index.vue'),
     redirect: '/home',
     children: [
+      /**
+       * 首页
+       */
       {
         path: '/home',
         name: '首页',
         component: () => import(/* webpackChunkName: "home" */ '../pages/Home/home.vue'),
       },
+      {
+        path: '/info_more',
+        name: '首页-查看更多',
+        component: () => import(/* webpackChunkName: "home" */ '../pages/Home/info_more/info_more.vue'),
+      },
+      /**
+       * 会议管理
+       */
+      {
+        path: '/meeting',
+        name: '会议管理',
+        component: () => import(/* webpackChunkName: "home" */ '../pages/Meeting/meetList.vue'),
+      },
+      {
+        path: '/singleMeet',
+        name: '会议管理-单级会议',
+        component: () => import(/* webpackChunkName: "home" */ '../pages/Meeting/singleMeet/singleMeet.vue'),
+      },
+
       {
         path: '/role',
         name: '权限',
@@ -137,7 +159,7 @@ const routes = [
 ];
 
 const router = new VueRouter({
-  mode: 'history',
+  // mode: 'history',
   base: process.env.BASE_URL,
   routes,
 });

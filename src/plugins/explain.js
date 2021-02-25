@@ -1,18 +1,61 @@
 /** 此文件用于记录 element-ui 细节上的修改处理 */
 
 /**
+ * SecretId: AKIDJO7atw6odCYWFi7nDNHwSiT6UHoFoDiw 
+   SecretKey: A6E6ffP2aIkvsTYNzQbVAaMUM0OVLvFI
+ * 顶部导航栏 样式
+ *  <div class="header-opera special">
+      <div class="tap">
+        <span>会议日程</span> 
+      </div>
+
+      <div class="look-more" @click="more">查看更多>>></div>
+    </div>
+
+    .header-opera 基本样式 
+    .special 去除外边距
+ */
+
+/**
  * el-button 按钮颜色
  * 添加 #66b1ff, 查看 #67c23a, 编辑 #e6a23c, 删除 #f56c6c
  *     primary, success, warning, danger
  * 圆角 round size='small'
  */
 
-
+ 
 /**
  * el-table 
  * border 添加边框
  * :resizable="false" 禁止拖动表头
  * align="center" 居中
+ * 
+ * html:
+ *  <el-table ref="singleTable"
+      :data="tableData" border :height="height">
+      <el-table-column align="center" :resizable='false' type="selection" width="50"></el-table-column>
+      <el-table-column type="index" width="50" label="序号" align="center" :resizable="false"></el-table-column>
+      <el-table-column :prop="item.props" :label="item.label" :width="item.width"
+        v-for="(item, idx) in tableCate" :key="idx"
+        align="center" :resizable="false">
+      </el-table-column>
+      <el-table-column align="center" :resizable='false' label="状态" width='100'>
+        <template slot-scope="scope">
+          <span>{{scope.row.status}}</span>
+        </template>
+      </el-table-column>
+    </el-table>
+
+  js: 
+    height: null,
+    tableData: [],
+    tableCate: [
+      {props: 'userName', label: '姓名', width: ''},
+      {props: 'phone', label: '手机号', width: ''},
+      {props: 'departmentName', label: '部门', width: ''},
+      {props: 'characterId', label: '角色', width: ''},
+      {props: 'attribute1', label: '组别', width: ''},
+    ]
  * 
  * 铺满父盒子
  */ 
@@ -118,24 +161,40 @@ this.height = dom.offsetHeight
           <span class="custom-tree-node">
             <span>{node.label}</span>
             <span>
-              <el-button size="mini" type="text" on-click={ () => this.append(data) } icon="el-icon-circle-plus-outline"></el-button>
-              <el-button size="mini" type="text" on-click={ () => this.remove(node, data) } icon="el-icon-delete"></el-button>
-              <el-button size="mini" type="text" on-click={ () => this.edit(node, data) } icon="el-icon-edit"></el-button>
+              <el-button size="mini" type="text" on-click={ (e) => this.append(data, e) } icon="el-icon-circle-plus-outline"></el-button>
+              <el-button size="mini" type="text" on-click={ (e) => this.remove(node, data, e) } icon="el-icon-delete"></el-button>
+              <el-button size="mini" type="text" on-click={ (e) => this.edit(node, data, e) } icon="el-icon-edit"></el-button>
             </span>
           </span>);
       },
       // tree - 添加
-      append(data){
+      append(data, e){
 
       },
       // tree - 删除
-      remove(node, data){
+      remove(node, data, e){
 
       },
 
       // tree - 编辑
-      edit(node, data){
+      edit(node, data, e){
 
       },
   * 
   */
+
+/**
+ * el-input 列表搜索
+ *  html:
+      <el-input size="small" placeholder="请输入会议名称" v-model="searchKey" @keyup.native.enter="searchBtn">
+        <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
+      </el-input>
+    
+    js: 
+      searchKey: '',
+
+      // 搜索按钮
+      searchBtn(){
+        console.log('触发')
+      },
+ */

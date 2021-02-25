@@ -32,7 +32,6 @@
 export default {
   data() {
     return {
-      searchKey: '',
       tableCate: [
         {value: 'userName', label: '姓名'},
         {value: 'sex', label: '性别'},

@@ -31,10 +31,15 @@ export default {
 <style lang="less">
 body {
   margin: 0;
+  -moz-user-select:none; /*火狐*/
+  -webkit-user-select:none; /*webkit浏览器*/
+  -ms-user-select:none; /*IE10*/
+  -khtml-user-select:none; /*早期浏览器*/
+  user-select:none;
 }
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Avenir,Helvetica,Arial,sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
@@ -101,6 +106,7 @@ body {
   margin-top: 80px !important;
 }
 
+// 顶部导航栏
 .header-opera {
   width: 100%;
   display: flex;
@@ -151,7 +157,10 @@ body {
     cursor: pointer;
   }
 }
-
+// 顶部导航栏 去除外边距
+.special {
+  margin-bottom: 0;
+}
 
 
 .pagin {
@@ -197,5 +206,10 @@ body {
 
 .tangram-suggestion-main {
   z-index: 999999;
+}
+
+// 去掉右边框
+.el-menu {
+  border-right: none !important;
 }
 </style>
