@@ -10,7 +10,7 @@
     <div class="sms-body">
       <!-- table -->
       <div class="table">
-        <el-table ref="singleTable" @cell-mouse-enter='hoverTable'
+        <el-table ref="singleTable" @cell-mouse-enter='mouseTable'
           :data="tableData" border :height="height">
           <el-table-column align="center" :resizable='false' type="selection" width="50"></el-table-column>
           <el-table-column :prop="item.props" :label="item.label" :width="item.width"
@@ -42,16 +42,20 @@
     </div>
 
     <!-- 短信表格 -->
-    <div class="sms-table" :style="style">
-      
+    <div class="sms-table" :style="style" v-show="hoverBool">
+      <hoverTable ref="hoverTable" v-if="hoverBool"></hoverTable>
     </div>
   </div>
 </template>
 
 <script>
+import hoverTable from './hoverTable/hoverTable.vue'
 import $ from 'jquery'
 
 export default {
+  components: {
+    hoverTable
+  },
   data() {
     return {
       // table
@@ -66,35 +70,38 @@ export default {
       pageNum: 1,
       pageSize: 10,
 
-      style: {}
+      style: {},
+      hoverBool: false
     }
   },
   methods: {
     // 鼠标移动表格中
-    hoverTable(row, column, cell){
+    mouseTable(row, column, cell){
       cell.parentNode.onmousemove = (e) => {
-        let parent = $(cell.parentNode)
-        var top = parent.offset().top + parent.height()
+        let parent = $(cell.parentNode),
+          top = parent.offset().top + parent.height(),
+          widowHeight = $(document).height()
+          console.log(widowHeight)
+        this.hoverBool = true
         this.style = {
           'top': (top) + 'px',
           'width': parent.width() + 'px',
-          'display': 'block'
+          'max-height': (widowHeight - top) + 'px',
         }
       }
 
       cell.parentNode.onmouseout = (e) => {
         if(e.toElement.getAttribute("class") != 'sms-table'){
-          this.style = {
-            'display': 'none'
-          }
+          this.hoverBool = false
         }
       }
 
       // 获取子集短信 dom
       let childSms = $('.sms-table')[0]
       childSms.onmouseout = (e) => {
-        this.style = {
-          'display': 'none'
+        let obj = e.toElement || e.relatedTarget
+        if(!childSms.contains(obj)){
+          this.hoverBool = false
         }
       }
 
@@ -136,11 +143,14 @@ export default {
   }
 
   .sms-table {
+    padding: 10px;
+    box-sizing: border-box;
     position: fixed;
     height: 300px;
     background-color: #fff;
     box-shadow: 1px 1px 10px 1px #ccc;
-    display: none;
+    overflow-y: auto;
+    z-index: 9999;
   }
 }
 </style>

@@ -7,10 +7,9 @@ function G(id) {
 export default {
   data() {
     return {
-      ruleForm: {
+      addForm: {
         restauranAddress: "", // 地址
-        restaurantName: '', // 餐厅名称
-        maxPeopleNumber: '', // 容纳人数
+        restaurantName: '', // 会议名称
         restaurantPhoto: "" , // 封面
         restaurantType: '', // 类型
         restaurantPresentation: '', // 介绍
@@ -21,30 +20,38 @@ export default {
       cover: '',
       rules: {
         restaurantName: [
-          { required: true, message: '请输入餐厅名称', trigger: 'blur' },
+          { required: true, message: '请输入会议名称', trigger: 'blur' },
         ],
         restauranAddress: [
-          { required: true, message: '请输入餐厅地址', trigger: 'blur' }
-        ],
-        maxPeopleNumber: [
-          { required: true, message: '请输入容纳人数', trigger: 'blur' }
-        ],
-        restaurantType: [
-          { required: true, message: '请输入餐厅类型', trigger: 'blur' }
-        ],
-        restaurantPhoto: [
-          { required: true, message: '请添加餐厅封面', trigger: 'blur' }
+          { required: true, message: '请输入会议地址', trigger: 'blur' }
         ]
       },
-      headers: {}
+      headers: {},
+
+      // 折叠板
+      collapse: '',
+
+      // 过期开关
+      meetIsEnd: false,
+
+
+      // del
+      select: ''
     }
   },
   methods: {
-    // 添加餐厅
+    // 折叠板 change 事件
+    collapseChange(activeNames){
+      setTimeout(() => {
+        let formbody = document.querySelector('.form-body')
+        formbody.scrollTop = 9000000
+      }, 400)
+    },
+    // 添加会议
     save(){
-      this.$refs['ruleForm'].validate((valid) => {
+      this.$refs['addForm'].validate((valid) => {
         if(valid){
-          this.$http.post(this.API.saveRestaurant, this.ruleForm)
+          this.$http.post(this.API.saveRestaurant, this.addForm)
             .then((res) => {
               if(res.code == '000') {
                 this.$message.success('添加成功!')
@@ -79,7 +86,7 @@ export default {
         myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
         
         // 赋值给vue 
-        that.ruleForm.restauranAddress = myValue
+        that.addForm.restauranAddress = myValue
         setPlace();
       });
     
@@ -100,7 +107,7 @@ export default {
   mounted() {
     this.map()
     // console.log(this.$http)
-    // this.$http.post(this.API.addHotelByCustomer, this.ruleForm)
+    // this.$http.post(this.API.addHotelByCustomer, this.addForm)
     //     .then((res: any) => {
     //       console.log(res)
     //     })

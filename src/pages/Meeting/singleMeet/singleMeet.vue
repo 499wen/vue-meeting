@@ -60,7 +60,7 @@ export default {
   data() {
     return {
       // tab
-      tabFunc: '通知消息管理',
+      tabFunc: '基本信息',
       tabList: [
         {name: '基本信息', eng: 'basicInfo', select: true},
 				{name: '参会人管理', eng: 'attendee', select: false},
