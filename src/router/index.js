@@ -153,6 +153,16 @@ const routes = [
         component: () => import(/* webpackChunkName: "approval_subscribe" */ '../pages/Approval_subscribe/approval_subscribe.vue'),
         children: []
       },
+
+      /**
+       * 数据统计 - 统计报表 
+       */
+      {
+        path: '/reportForm',
+        name: '统计报表',
+        component: () => import(/* webpackChunkName: "reportForm" */ '../pages/ReportForm/reportForm.vue'),
+        children: []
+      },
     ]
   },
   

@@ -1,7 +1,6 @@
 <template>
-  <div class="child">
+  <div class="reportForm">
     <!-- 表格 -->
-    <div class="table">
     <div class="table">
       <el-table :data="tableData" :height='height' border>
         <el-table-column type="index" width="80" label="序号" align='center' :resizable='false'></el-table-column>
@@ -38,8 +37,13 @@
           <el-table-column prop="arrivalRate" label="到会率" align='center' :resizable='false'>
           </el-table-column>
         </el-table-column>
+        <el-table-column align="center" :resizable='false' label="操作" width='180'>
+          <template slot-scope="scope">
+            <el-button round size='small' type="primary" @click="clumnLook(scope.row)">查看</el-button>
+            <el-button round size='small' type="primary" @click="detailed(scope.row)">明细</el-button>
+          </template>
+        </el-table-column>
       </el-table>
-    </div>
     </div>
 
     <!-- 分页 -->
@@ -55,24 +59,63 @@
       :total="total">
       </el-pagination>
     </div>
+
+    <!-- 查看 -->
+    <el-dialog title="下载选择项" :visible.sync="clumnLook_child" width="10%" center
+      :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
+      <clumnLook ref="clumnLook" v-if="clumnLook_child"></clumnLook>
+      <div class="dialog-btn">
+        <el-button size="small" type="danger" round>取 消</el-button>
+        <el-button type="primary" size="small" round>添 加</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 明细 -->
+    <el-dialog title="查明细" :visible.sync="detailed_child" width="80%" center
+      :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
+      <detailed ref="detailed" v-if="detailed_child"></detailed>
+      <div class="dialog-btn">
+        <el-button size="small" type="danger" round>取 消</el-button>
+        <el-button type="primary" size="small" round>添 加</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import clumnLook from './clumnLook/clumnLook.vue'
+import detailed from './detailed/detailed.vue'
+
 export default {
+  components: {
+    clumnLook,
+    detailed
+  },
   data() {
     return {
       // table
-      tableData: [],
+      tableData: [{}],
       height: null,
 
       // 分页
       total: 0,
       pageNum: 1,
-      pageSize: 10
+      pageSize: 10,
+
+      // 子集组件 开关
+      clumnLook_child: false,
+      detailed_child: false
     }
   },
   methods: {
+    // 查看
+    clumnLook(data){
+      this.clumnLook_child = true
+    },
+    // 明细
+    detailed(data){
+      this.detailed_child = true
+    },
     // 分页方法
     sizeChange(val){
       this.pageSize = val
@@ -91,7 +134,7 @@ export default {
 </script>
 
 <style scoped lang='less'>
-.child {
+.reportForm {
   width: 100%;
   height: 100%;
 

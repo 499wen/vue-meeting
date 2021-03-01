@@ -46,6 +46,10 @@
             <i class="el-icon-menu"></i>
             <span slot="title">参会审批</span>
           </el-menu-item>
+          <el-menu-item index="/reportForm">
+            <i class="el-icon-menu"></i>
+            <span slot="title">统计报表</span>
+          </el-menu-item>
           <el-menu-item index="/hotel">
             <i class="el-icon-menu"></i>
             <span slot="title">酒店管理</span>
@@ -131,12 +135,12 @@
     </div>
 
     <!-- 公司信息 -->
-    <el-dialog title="公司信息" :visible.sync="companyInfo_child" width="40%" center
+    <el-dialog title="公司信息" :visible.sync="companyInfo_child" width="10%" center
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <companyInfo ref="companyInfo" v-if="companyInfo_child"></companyInfo>
-      <div class="dialog-btn">
+      <!-- <div class="dialog-btn">
         <el-button type="primary" size="small" round>关 闭</el-button>
-      </div>
+      </div> -->
     </el-dialog>
   </div>
 </template>

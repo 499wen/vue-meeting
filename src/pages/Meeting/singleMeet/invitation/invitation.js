@@ -644,7 +644,7 @@ export default {
       })
 
       var ficDom = document.createElement('img')
-      ficDom.src = require('../../assets/images/logo.png')
+      ficDom.src = require('@/assets/images/logo.png')
       ficDom.style = `width: 30px; height: 30px; position: absolute; top: 50px; left: 50px; `
       qrcode.appendChild(ficDom)
       this.codeVisible = !this.codeVisible

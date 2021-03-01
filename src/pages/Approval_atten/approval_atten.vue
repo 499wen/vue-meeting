@@ -46,7 +46,7 @@ export default {
     return {
       // table
       height: null,
-      tableData: [],
+      tableData: [{}],
       tableCate: [
         { prop: 'userName', label: '申请人', width: '150'},
         { prop: 'phone', label: '手机号', width: '150'},

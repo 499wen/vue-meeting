@@ -23,7 +23,7 @@
  * 圆角 round size='small'
  */
 
- 
+
 /**
  * el-table 
  * border 添加边框
@@ -70,7 +70,7 @@ this.height = dom.offsetHeight
  * :close-on-press-escape='false'
  * custom-class='dialog' top='80px'
  * 
- * eg：按钮不与组件一起写
+ * 注：按钮不与组件一起写
  *    <el-dialog title="添加人员" :visible.sync="addPeroson_child" width="60%" center
         :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
         <AddPerson ref="AddPerson" v-if="addPeroson_child"></AddPerson>
