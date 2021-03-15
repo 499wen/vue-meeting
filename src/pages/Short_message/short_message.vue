@@ -18,6 +18,8 @@
           :props="treeProps"
           node-key="id"
           @node-click='treeClick'
+          :expand-on-click-node="false"
+          :highlight-current="true"
           :render-content="renderContent">
         </el-tree>
       </div>
@@ -35,7 +37,7 @@
             </el-table-column>
             <el-table-column label="操作" width="120" align="center" :resizable="false">
               <template slot-scope="scope">
-                <el-button size="small" round @click="smsDetail(scope.row)">详情</el-button>
+                <el-button size="small" round @click="smsDetail(scope.row)" :class="scope.row.configurable == 1 && 'tips'">详情</el-button>
               </template>
             </el-table-column>
             <el-table-column label="启用状态" width="120" align="center" :resizable="false">
@@ -62,6 +64,15 @@
 
       </div>
     </div>
+
+    <!-- 查看详情 -->
+    <el-dialog title="短信详情" :visible.sync="smsDetail_child" width="60%" center
+      :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
+      <detail ref="detail" v-if="smsDetail_child" :detail='detail'></detail>
+      <div class="dialog-btn">
+        <el-button type="primary" @click="submitForm" size="small" round>保 存</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 

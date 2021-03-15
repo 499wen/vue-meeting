@@ -12,7 +12,7 @@
 					</div>
 					<!-- <p class="el-icon-close closeImg" v-if="index != 0" @click.stop="tempData.list.splice(index, 1),showKey = 0"></p> -->
 				</li>
-			</ul> 
+			</ul>  
 			<div class="imgBtn">  
 				<div class="pImg" @click="addPage">
 					<img src="@/assets/images/addpageBtn.png" alt /> 

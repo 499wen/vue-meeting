@@ -94,10 +94,10 @@
       <div class="header">
         <!-- 公司信息 -->
         <div class="company-info">
-          <span class="company-name">单位</span>
+          <span class="company-name">{{ loginInfo.companyName }}</span>
           <div class="login-user" @click="company_info">
             <img src="@/assets/images/hztLogo.png" alt="">
-            <span>翘翘</span>
+            <span>{{ loginInfo.loginName }}</span>
           </div>
         </div>
 
@@ -120,7 +120,7 @@
                 <i class="el-icon-setting"></i>
               </template>
               <el-menu-item index="2-2">
-                <div id="logout">
+                <div id="logout" @click="logout">
                 <i class="el-icon-switch-button"></i> 注销
                 </div>
               </el-menu-item>
@@ -148,6 +148,7 @@
 <script>
 import companyInfo from './companyInfo/companyInfo.vue'
 import { selfTime } from '@/plugins/plugins'
+import { delCookie } from '@/plugins/cookie.js'
 
 export default {
   components: {
@@ -159,11 +160,27 @@ export default {
       days: '',
       router: [],
       
+      // 公司信息
+      loginInfo: {},
+
       // 子集组件 开关
       companyInfo_child: false
     }
   },
   methods: {
+    // 监听刷新页面
+    listenPage() {
+      let that = this
+      window.onbeforeunload = function (e) {
+        e = e || window.event;
+        // that.$router.push('/')
+        location.href = '/'
+        if (e) {
+          e.returnValue = '关闭提示';
+        }
+        return '关闭提示';
+      };
+    },
     // 公司信息
     company_info() {
       this.companyInfo_child = true
@@ -175,6 +192,22 @@ export default {
     // 关闭导航
     handleClose(data){
       console.log('handleClose', data)
+    },
+
+    // 退出登录
+    logout(){
+      this.$confirm('是否推出该账号?', '提示', {  
+        closeOnPressEscape: false,
+        closeOnClickModal: false,
+        cancelButtonClass: 'btn_custom_cancel',
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        delCookie('autoLogin')
+        this.$router.push('/login')
+      }).catch(() => {})
+      
     }
   },
   created() {
@@ -200,6 +233,18 @@ export default {
 
     let routes = this.$router.options.routes
     routes.filter(item => item.name == '框架' && this.router.push(...item.children))
+
+    // 获取公司信息
+    this.$http.get(this.API.getCustomer)
+      .then(res => {
+        if(res.code == '000'){
+          this.loginInfo = res.data
+          localStorage.setItem('loginInfo', JSON.stringify(res.data))
+        }
+      })
+  },
+  mounted() {
+    // this.listenPage()
   }
 }
 </script>

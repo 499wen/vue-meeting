@@ -1,0 +1,69 @@
+.attendee {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-content: flex-start;
+
+  .atte-tree {
+    width: 16%;
+    height: 100%;
+    margin-right: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px; 
+    box-sizing: border-box;
+
+    .tree-head {
+      width: 100%;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      color: #fff;
+      background-color: #e67c7c;
+      font-size: 14px;
+    }
+  }
+
+  .atte-data {
+    width: calc(84% - 20px);
+    height: 100%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    padding: 5px 10px 5px 10px;
+
+    .data-oper {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 5px;
+
+      .data-add {}
+      .data-query {
+        display: flex;
+        justify-content: flex-end;
+
+        .spacing {
+          margin-right: 10px;
+        }
+      }
+    }
+
+    .show-data {
+      width: 100%;
+      height: calc(100% - 37px);
+      box-sizing: border-box;
+
+      .table-child {
+        width: 100%;
+        height: calc(100% - 37px);
+      }
+
+      .pagin {
+        padding-top: 5px;
+      }
+    }
+  }
+}

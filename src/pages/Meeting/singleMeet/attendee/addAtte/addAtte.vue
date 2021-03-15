@@ -3,19 +3,22 @@
     <div class="head">
       <div class="head-left">
         <!-- 条件组查询 -->
-        <el-dropdown trigger="click" class="spacing">
-          <el-button size="small">
-            条件组查询<i class="el-icon-arrow-down el-icon--right"></i>
-          </el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-plus">黄金糕</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-circle-plus">狮子头</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+        <el-button-group autofocus>
+          
+          <el-button size="small" @click="custom">自定义条件</el-button> 
+          <el-dropdown trigger="click" class="spacing" @command='clickCondi' placement='bottom'>
+            <el-button size="small">
+              条件组查询<i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item v-for="(item, idx) in condiData" :key="idx" :command='idx'>{{ item.groupName }}</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </el-button-group>
       </div>
 
       <div class="head-right">
-        <el-input size="small" placeholder="请输入会议名称" v-model="searchKey" @keyup.native.enter="searchBtn">
+        <el-input size="small" placeholder="请输入人员名称" v-model="searchKey" @keyup.native.enter="searchBtn">
           <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
         </el-input>
       </div>
@@ -25,7 +28,7 @@
     <div class="data-atte">
       <div class="table">
         <el-table ref="singleTable"
-          :data="tableData" border :height="height">
+          :data="tableData" border :height="height" @selection-change="batchAdd">
           <el-table-column align="center" :resizable='false' type="selection" width="50"></el-table-column>
           <el-table-column type="index" width="50" label="序号" align="center" :resizable="false"></el-table-column>
           <el-table-column :prop="item.props" :label="item.label" :width="item.width"
@@ -57,50 +60,22 @@
         </el-pagination>
       </div>
     </div>
+
+    <!-- 条件组 -->
+    <el-dialog title="条件组" :visible.sync="condi_child" width="60%" center append-to-body :before-close="cancel"
+      :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
+      <conditionGroup ref="conditionGroup" v-if="condi_child"></conditionGroup>
+      <div class="dialog-btn">
+        <el-button @click="cancel" size="small" type="danger" round>关 闭</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      searchKey: '',
+import addAtte from './addAtte.js'
 
-      // table
-      height: null,
-      tableData: [],
-      tableCate: [
-        {props: 'userName', label: '姓名', width: ''},
-        {props: 'phone', label: '手机号', width: ''},
-        {props: 'departmentName', label: '部门', width: ''},
-        {props: 'characterId', label: '角色', width: ''},
-        {props: 'attribute1', label: '组别', width: ''},
-      ],
-
-      // 分页
-      total: 0,
-      pageNum: 1,
-      pageSize: 10
-    }
-  },
-  methods: {
-    // 搜索按钮
-    searchBtn(){
-      console.log('触发')
-    },
-    // 分页方法
-    sizeChange(val){
-      this.pageSize = val
-    },
-    curChange(val){
-      this.pageNum = val
-    }
-  },
-  mounted() {
-    var dom = document.querySelector('.table')
-    this.height = dom.offsetHeight
-  }
-}
+export default addAtte
 </script>
 
 <style scoped lang='less'>

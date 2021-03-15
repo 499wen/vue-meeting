@@ -1,3 +1,5 @@
+import { Loading } from 'element-ui'
+
 /**
  * 时间戳转换日期
  * @param date 时间戳(ms) 
@@ -5,7 +7,7 @@
  * @param chinese 中文格式
  */
 
-export function selfTime(date, complete = false, chinese = false) {
+export function selfTime(date, complete = false, chinese = false, minusOne = false) {
     if(typeof date != 'number'){
         return ''
     }
@@ -25,6 +27,11 @@ export function selfTime(date, complete = false, chinese = false) {
     h = h < 10 ? ("0" + h) : h;
     m1 = m1 < 10 ? ("0" + m1) : m1;
 
+    if(minusOne && h == '00' && m1 == '00'){
+      h = '23'
+      m1 = '59'
+    }
+
     if(chinese){
         return complete 
                 ?  y + "年" + m + "月" + d + "日 " + h + ":" + m1
@@ -43,9 +50,10 @@ export function selfTime(date, complete = false, chinese = false) {
  * @param num 次数
  * @param size 每次增加数量
  * @param callBack 回调
- * document.querySelector('.el-table__body-wrapper')
+ * let table_scroll = document.querySelector('.el-table__body-wrapper')
  * dataScrollLoad(table_scroll, res.data, 1, 20, (res) => {
  *   this.tableData = res
+ *   this.total = res.total
  * })
  */
 export function dataScrollLoad(_dom, totalData, num, size,  callBack) {
@@ -103,4 +111,85 @@ export function map(params) {
       });
       local.search(myValue);
     }
+}
+
+
+// 地址栏获取数据失去焦点
+export function tips_blur (){
+  let tipsArr = document.querySelectorAll('.tangram-suggestion-main')
+  for(let i = 0; i < tipsArr.length; i ++){
+    tipsArr[i].style.display = 'none'
+  }
+}
+
+
+/**
+ * 将数组解析成树结构
+ * @param {*} data 数据
+ */
+export function toTree(data) {
+    let result = []
+    if(!Array.isArray(data)) {
+        return result
+    }
+    data.forEach(item => {
+        delete item.children;
+    });
+    let map = {};
+    data.forEach(item => {
+        map[item.id] = item;
+    });
+    data.forEach(item => {
+        let parent = map[item.parentId];
+        if(parent) {
+            (parent.children || (parent.children = [])).push(item);
+        } else {
+            result.push(item);
+        }
+    });
+    return result;
+}
+
+/**
+ * 导出excel
+ * @param {*} personData 导出数据
+ * @param {*} title 导出文件名
+ * @param {*} tHeader excel标题 
+ * @param {*} filterVal 标题对应字段
+ * @param {*} callBack 回调 - 处理加载
+ */
+export function exportToExcel(personData, title, tHeader, filterVal, callBack) {
+  //excel数据导出
+  require.ensure([], () => {
+    const {
+      export_json_to_excel
+    } = require("@/plugins/Export2Excel.js");
+
+    const data = formatJson(filterVal, personData);
+    export_json_to_excel(tHeader, data, title);
+    setTimeout(() => {
+      callBack()
+    }, 500)
+  });
+}
+function formatJson(filterVal, jsonData) { 
+    return jsonData.map(v => filterVal.map(j => v[j]));
+}
+
+/**
+ * 将el-loading 简化
+ */
+export class Load {
+  constructor (){
+    this.load = Loading.service({
+      lock: true,
+      text: '正在加载中。。。',
+      spinner: 'el-icon-loading',
+      background: 'rgba(0, 0, 0, 0.6)'
+    })
+  }
+
+  close() {
+    this.load.close()
+  }
 }

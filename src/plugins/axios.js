@@ -1,4 +1,7 @@
 import Vue from 'vue'
+import router from '@/router'
+import { delCookie } from '@/plugins/cookie.js'
+
 
 //引入axios
 import axios from 'axios';
@@ -108,7 +111,14 @@ instance.interceptors.request.use(
 //响应拦截器
 instance.interceptors.response.use(
   response=>{
-    
+    // console.log(response)
+    // 判断是否过期
+    if(response.data.code == -1){
+      console.dir(router)
+      delCookie('autoLogin')
+      router.push('/login')
+    }
+
      //判断当前请求是否设置了不显示Loading（不显示自然无需隐藏）
     if(response.config.headers.showLoading !== false){
       toHideLoading();
@@ -183,8 +193,6 @@ instance.interceptors.response.use(
 
   
     //  设置5S定时 超过给出提示
-
-
     if(err.config.headers.showLoading !== false){
       hideLoading();
     }
@@ -202,7 +210,7 @@ instance.interceptors.response.use(
     }else{
       Message.error(err.message);
       return Promise.reject(err);
-    }
+    } 
    
     
   }

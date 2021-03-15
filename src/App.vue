@@ -199,6 +199,11 @@ body {
   padding-right: 8px;
 }
 
+// 设置选中时 背景颜色
+.el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
+  background-color: #d0e7ff;
+}
+
 .btn_custom_cancel{
     float: right;
     margin-left: 10px !important;
@@ -211,5 +216,10 @@ body {
 // 去掉右边框
 .el-menu {
   border-right: none !important;
+}
+
+// 
+.el-button--small, .el-button--small.is-round {
+  padding: 7px 15px !important;
 }
 </style>

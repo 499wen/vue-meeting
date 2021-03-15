@@ -29,7 +29,7 @@
  * border 添加边框
  * :resizable="false" 禁止拖动表头
  * align="center" 居中
- * 
+ * @selection-change="batchDel" 勾选回调
  * html:
  *  <el-table ref="singleTable"
       :data="tableData" border :height="height">
@@ -116,12 +116,12 @@ this.height = dom.offsetHeight
 /**
  * el-ui $confirm 使删除按钮在右边显示
  * 
- *  this.$confirm('是否删除该餐厅?', '提示', {
+ *  this.$confirm('是否删除该餐厅?', '提示', {  
       closeOnPressEscape: false,
       closeOnClickModal: false,
+      cancelButtonClass: 'btn_custom_cancel',
       confirmButtonText: '确定',
       cancelButtonText: '取消',
-      cancelButtonClass: 'btn_custom_cancel',
       type: 'warning'
     }).then(() => {
           
@@ -137,6 +137,8 @@ this.height = dom.offsetHeight
         :props="treeProps"
         node-key="id"
         @node-click='treeClick'
+        :expand-on-click-node="false"
+        :highlight-current="true"
         :render-content="renderContent">
       </el-tree>
 
@@ -180,6 +182,10 @@ this.height = dom.offsetHeight
       edit(node, data, e){
 
       },
+
+    使tree 默认高亮
+      document.querySelector('.el-tree-node__content').click()
+
   * 
   */
 

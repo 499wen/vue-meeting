@@ -14,7 +14,7 @@
                 </el-option> 
               </el-select>
             </el-form-item>   
-          </el-col> 
+          </el-col>  
           <div class="userImage"> 
             <el-upload class="avatar-uploader" :action="`API.url + API.router.uploadFile`" :show-file-list="false" ref="updateFace"
             :headers="headers" accept="image/png,image/jpeg,image/jpg" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
@@ -30,7 +30,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="出生日期" >
-              <el-date-picker size='small' class="full" v-model="user.birthday" type="date" placeholder="请选择出生日期">
+              <el-date-picker size='small' @change='getBirthday' class="full" v-model="user.birthday" type="date" placeholder="请选择出生日期">
               </el-date-picker>
             </el-form-item>
           </el-col>

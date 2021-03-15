@@ -1,5 +1,5 @@
-var n = 0, curDate
-import {selfTime} from '@/plugins/plugins.js'
+import { selfTime } from '@/plugins/plugins.js'
+import { mapState } from 'vuex'
 
 // 获取餐厅配置
 function Ct(type, date){
@@ -45,7 +45,6 @@ function Tmeals(n = 0, date = new Date(new Date().toLocaleDateString()).getTime(
 }
 
 export default {
-  props: ['meetIsEnd'],
   data() {
     return {
       card: [
@@ -78,6 +77,7 @@ export default {
       rest: '',
 
       requestApi: false, // 是否有请求数据
+      meetIsEnd: false, 
 
       pickerOptions: {
         disabledDate(time) {
@@ -86,14 +86,34 @@ export default {
       },
     }
   },
+  computed: {
+    ...mapState([
+      'meetingData'
+    ])
+  },
   methods: {
+    // 处理时间
+    formatDate(date) {
+      if(typeof date != 'number'){
+          return ''
+      }
+  
+      date = new Date(date);
+      var h = date.getHours();
+      var m1 = date.getMinutes(); 
+      var s = date.getSeconds();
+      h = h < 10 ? ("0" + h) : h;
+      m1 = m1 < 10 ? ("0" + m1) : m1;
+      s = s < 10 ? ("0" + s) : s;
+  
+      return h + ":" + m1 + ":" + s
+    },
     // 获取当前时间
     getCurTime(time){
       // 当天0时 时间戳
       var ling = new Date(new Date().toLocaleDateString()).getTime()
-
       if(time == ling){
-        return selfTime(new Date().getTime(), false) + ' - 23:59:59' 
+        return this.formatDate(new Date().getTime(), false) + ' - 23:59:59' 
       }
 
       return '00:00:00 - 23:59:59'
@@ -136,19 +156,14 @@ export default {
       this.can = can
       this.tableData = JSON.parse(JSON.stringify(item.person))
  
-      console.log('diani')
+      console.log('diani', this.chrId)
       this.addPersonBox = true
       this.getChrPerson(this.chrId)
     },
 
     // 获取参会人 - 人员
     getChrPerson(id){ 
-      var obj = {
-        contanUserIdArr: [],
-        ifContanUserIdArr: false,
-        queryConditionArr: []
-      }
-      this.$http.post(this.API.url + this.API.router.findByMeetingIdAndPage('2', id, this.pageNum, 999, '', '', ''), obj)
+      this.$http.get(this.API.findByMeetingIdAndPage(id, this.pageNum, 999))
           .then(res => {
             if(res.code == '000'){
               var obj = new Map()
@@ -176,7 +191,6 @@ export default {
                 }
               })
             }
-            console.log(res)
           })
     },
     // 移除人员
@@ -411,7 +425,7 @@ export default {
       console.log(arr)
       // return 
       if(this.requestApi){
-        this.$http.post(this.API.url + this.API.router.updateCatering, arr)
+        this.$http.post(this.API.updateCatering, arr)
         .then(res => {
           if(res.code == '000'){
             console.log(res)
@@ -420,7 +434,7 @@ export default {
           }
         })
       } else {
-        this.$http.post(this.API.url + this.API.router.saveCatering, arr)
+        this.$http.post(this.API.saveCatering, arr)
             .then(res => {
               if(res.code == '000'){
                 console.log(res)
@@ -432,13 +446,12 @@ export default {
     },
     // 初始化数据
     initPage (){
-      console.log('initPage ')
-      this.meetingId = 'ggbahxhq3362xxybhahy'
+      this.meetingId = this.meetingData.id
 
-      this.$http.get(this.API.url + this.API.router.selectByMeetingId(this.meetingId))
+      this.$http.get(this.API.selectCateringByMeetingId(this.meetingId))
       .then(res => {
         console.log(res)
-        if(res.code == '000' && res.data.length){
+        if(res.code == '000' && res.data && res.data.length){
           var obj = new Map()
           this.requestApi = true
           // 区分同一天的数据
@@ -463,12 +476,10 @@ export default {
               obj.set(item.dayC, this.handleEcho(item, o))
             }
           })
-          console.log(obj)
           this.card = []
           obj.forEach((value, key) => {
             this.card.push(value)
           })
-          console.log()
         }
       })
 
@@ -478,10 +489,10 @@ export default {
     // 获取参会人
     getChrData(){
       // 参会人 - 树
-      this.$http.get(this.API.url + this.API.router.findByMeeting(this.meetingId))
+      this.$http.get(this.API.getConfereeGroupAll(this.meetingId))
           .then(res => {
             console.log(res)
-            if(res.statusCode == '000'){
+            if(res.code == '000'){
               res.data.filter(item => {
                 if(item.confereeGroupName == '全体参会人'){
                   this.chrId = item.id
@@ -494,7 +505,7 @@ export default {
     },
     // 获取餐厅列表
     getCtList(){
-      this.$http.get(this.API.url + this.API.router.selectRestaurant())
+      this.$http.get(this.API.selectRestaurantAll(1, 9999, ''))
       .then(res => {
         console.log(res)
         if(res.code == '000'){
@@ -542,8 +553,6 @@ export default {
     }
   },
   created() {
-    
-    
     this.initPage()
   },
   mounted() {

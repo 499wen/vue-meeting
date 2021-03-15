@@ -151,7 +151,7 @@ const routes = [
         path: '/approval_subscribe',
         name: '预约审批',
         component: () => import(/* webpackChunkName: "approval_subscribe" */ '../pages/Approval_subscribe/approval_subscribe.vue'),
-        children: []
+        children: [] 
       },
 
       /**
@@ -173,5 +173,10 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
+
+// 监听路由
+// router.beforeEach((to, from, next) => {
+  
+// })
 
 export default router;

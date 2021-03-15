@@ -9,11 +9,11 @@
 
     <!-- 切换类型 -->
     <div class="tab-type">
-      <div class="single select">全部</div>
-      <div class="single">未审批</div>
-      <div class="single">已审批</div>
+      <div @click="getApproval" :class="['single', tabIndex == 0 && 'select']">全部</div>
+      <div @click="getType(0)" :class="['single', tabIndex == 1 && 'select']">未审批</div>
+      <div @click="getType(1)" :class="['single', tabIndex == 2 && 'select']">已审批</div>
     </div>
-
+ 
     <!-- 表格 -->
     <div class="table">
       <el-table ref="multipleTable" :data="tableData" border :height='height'
@@ -48,9 +48,14 @@
 </template>
 
 <script>
+import { selfTime } from '@/plugins/plugins.js'
+
 export default {
   data() {
     return {
+      // tab
+      tabIndex: 0,
+
       // table
       height: null,
       tableData: [],
@@ -66,7 +71,10 @@ export default {
       // 分页
       total: 0,
       pageNum: 1,
-      pageSize: 10
+      pageSize: 10,
+
+      meetRoomTypeEnum:['方形','椭圆','菱形'], //会议室类型
+      stateEnum:['待审批','通过','未通过'], //状态
     }
   },
   methods: {
@@ -80,12 +88,52 @@ export default {
     },
     curChange(val){
       this.pageNum = val
+    },
+
+    // 未审批 - 已审批
+    getType(idx){
+      this.tabIndex = idx + 1
+      this.$http.get(this.API.selectByStateCodeAlready(idx, this.pageNum, this.pageSize))
+        .then(res => {
+          console.log(res)
+          if(res.code == '000' && res.data){
+            res.data.filter(item => {
+              item.cate = this.meetRoomTypeEnum[item.type]
+              item.time = selfTime(item.beginDate, false)
+              item.st = selfTime(item.beginDate, false, true)
+              item.et = selfTime(item.endDate, false, true, true)
+            })
+
+            this.tableData = res.data
+          }
+        })
+    },
+    // 获取全部审批数据
+    getApproval() {
+      this.tabIndex = 0
+      this.$http.get(this.API.selectByStateCode(this.pageNum, this.pageSize))
+        .then(res => {
+          console.log(res)
+          if(res.code == '000' && res.data){
+            res.data.filter(item => {
+              item.cate = this.meetRoomTypeEnum[item.type]
+              item.time = selfTime(item.beginDate, false)
+              item.st = selfTime(item.beginDate, false, true)
+              item.et = selfTime(item.endDate, false, true, true)
+            })
+
+            this.tableData = res.data
+          }
+        })
     }
   },
   mounted() {
+    // 表格高度
     var dom = document.querySelector('.table')
     this.height = dom.offsetHeight
 
+    // 获取全部审批数据
+    this.getApproval()
   }
 };
 </script>

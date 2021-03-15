@@ -12,7 +12,7 @@
       <!-- tab 栏 -->
       <div class="func-list">
         <span v-for="(item, idx) in tabList" :key="idx"
-          :class="item.select && 'select'" @click="choiceTab(idx)"> {{ item.name }} </span>
+          :class="item.select && 'select'" @click="choiceTab(item.eng)"> {{ item.name }} </span>
       </div>
 
       <!-- 内容 -->
@@ -47,6 +47,8 @@ import invitation from './invitation/invitation.vue' // 邀请函
 import guestroom from './guestroom/guestroom.vue' // 住宿管理
 import restaurant from './restaurant/restaurant.vue' // 餐饮管理
 
+import { mapState } from 'vuex'
+
 export default {
   components: {
     basicInfo,
@@ -75,11 +77,35 @@ export default {
       ]
     }
   },
+  computed: {
+    ...mapState([
+      'meetingData'
+    ])
+  },
   methods: {
     // 选择tab
-    choiceTab(index) {
-      this.tabFunc = this.tabList[index].name
-      this.tabList.filter((item, idx) => idx == index ? item.select = true : item.select = false)
+    choiceTab(eng) {
+      // 判断会议
+      if(!this.meetingData.id) {
+        this.$message.info('请先保存会议!')
+        return 
+      }
+      this.tabList.filter((item, idx) => {
+        if(item.eng == eng){
+          item.select = true 
+          this.tabFunc = item.name
+        } else {
+          item.select = false
+        }
+      })
+    }
+  },
+  created() {
+    let tab = this.$route.query
+    if(tab.select){
+      this.choiceTab(tab.select)
+      console.clear()
+      console.log(`%cID: ${tab.meetingId}`, 'color: red;font-size: 18px')
     }
   }
 }

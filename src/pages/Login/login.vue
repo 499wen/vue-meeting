@@ -14,7 +14,7 @@
                 <el-tab-pane label="验证码登录" name="verCode">
                     <el-input placeholder="请输入手机号" prefix-icon="el-icon-phone" v-model="ruleForm.phone">
                     </el-input>
-                    <el-input placeholder="请输入验证码" class="auto-hight" prefix-icon="el-icon-paperclip" v-model="ruleForm.smsCheckCode">
+                    <el-input placeholder="请输入验证码" class="auto-hight" prefix-icon="el-icon-paperclip" @keyup.native.enter="login" v-model="ruleForm.smsCheckCode">
                         <el-button slot="append" class="btn" @click="getVerCode">{{ verCodeText }}</el-button>
                     </el-input>
                    

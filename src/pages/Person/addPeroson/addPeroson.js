@@ -3,7 +3,7 @@ function User() {
 	return { 
 		userName: '', //姓名
 		sex: '男', //性别
-		birthday: '', //生日
+		birthday: 0, //生日
 		nation: '', //民族 
 		political: '', //政治面貌
 		party: '', //党派
@@ -31,101 +31,93 @@ function User() {
 }
 
 export default {
-    data() {
-      var checkPhone = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('手机号不能为空'));
+  props: ['deparmentId'],
+  data() {
+    var checkPhone = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('手机号不能为空'));
+      }
+      setTimeout(() => {
+        let partent = new RegExp(/^1[0-9]{10}$/)
+        if (!partent.test(value)) {
+          callback(new Error('请输入有效的手机号'));
+        } else {
+          callback();
         }
-        setTimeout(() => {
-          let partent = new RegExp(/^1[0-9]{10}$/)
-          if (!partent.test(value)) {
-            callback(new Error('请输入有效的手机号'));
-          } else {
-            callback();
-          }
-        }, 500);
-      };
-      return {
-          user: new User(),
-          userRules: {
-            userName: [{
-              required: true,
-              message: '请输入姓名',
+      }, 500);
+    };
+    return {
+        user: new User(),
+        userRules: {
+          userName: [{
+            required: true,
+            message: '请输入姓名',
+            trigger: 'blur'
+          }],
+          sex: [{
+            required: true,
+            message: '请选择性别',
+            trigger: 'blur'
+          }],
+          birthday: [{
+            type: 'date',
+            required: true,
+            message: '请选择出生日期',
+            trigger: 'blur'
+          }],
+          phone: [{
+              validator: checkPhone,
               trigger: 'blur'
-            }],
-            sex: [{
-              required: true,
-              message: '请选择性别',
-              trigger: 'blur'
-            }],
-            birthday: [{
-              type: 'date',
-              required: true,
-              message: '请选择出生日期',
-              trigger: 'blur'
-            }],
-            phone: [{
-                validator: checkPhone,
-                trigger: 'blur'
-              },
-              {
-                required: true,
-                message: '请输入手机号',
-                trigger: 'blur'
-              }
-            ],
-          },
-          sexOptions: [
-            {
-              value: '男'
             },
             {
-              value: '女'
+              required: true,
+              message: '请输入手机号',
+              trigger: 'blur'
             }
           ],
-          educationOptions: [{
-              value: '大专'
-            },
-            {
-              value: '本科'
-            },
-            {
-              value: '硕士'
-            },
-            {
-              value: '博士'
-            },
-            {
-              value: '其它'
-            },
-          ],
-          headers: {}
-      }
-    },
-    methods: {
-      handleAvatarSuccess(){
-
-      },
-      beforeAvatarUpload() {
-
-      },
-
-      // 关闭
-      cancel(){
-
-      },
-      // 提交表单
-      submitForm(formName) {
-        let _this = this, from = {...this.user}
-        this.$refs[formName].validate((valid) => {
-          console.log(valid)
-          if (valid) {
-            
-          } else { 
-            console.log('error submit!!');
-            return false;
+        },
+        sexOptions: [
+          {
+            value: '男'
+          },
+          {
+            value: '女'
           }
-        }); 
-      },
+        ],
+        educationOptions: [{
+            value: '大专'
+          },
+          {
+            value: '本科'
+          },
+          {
+            value: '硕士'
+          },
+          {
+            value: '博士'
+          },
+          {
+            value: '其它'
+          },
+        ],
+        headers: {}
     }
+  },
+  methods: {
+    handleAvatarSuccess(){
+
+    },
+    beforeAvatarUpload() {
+
+    },
+
+    // 获取生日
+    getBirthday(birthday){
+      this.user.birthday = new Date(birthday).getTime()
+    }
+
+  },
+  mounted() {
+    this.user.companyId = this.deparmentId
+  }
 }

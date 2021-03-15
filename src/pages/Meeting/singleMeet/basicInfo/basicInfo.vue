@@ -9,8 +9,8 @@
           <div class="form-body">
             <el-form :model="addForm" :rules="rules" ref="addForm" label-width="145px">
               <div class="a-part">
-                <el-form-item label="会议名称" prop="restaurantName">
-                  <el-input size="small" v-model="addForm.restaurantName" placeholder="请输入会议名称"></el-input>
+                <el-form-item label="会议名称" prop="meetingName">
+                  <el-input size="small" v-model="addForm.meetingName" placeholder="请输入会议名称"></el-input>
                 </el-form-item> 
                 <el-form-item label="会议图片" prop='capacity'>
                   <el-upload
@@ -29,8 +29,8 @@
                     </div>
                   </el-upload>
                 </el-form-item> 
-                <el-form-item label="会议地址" prop="restauranAddress">
-                  <el-input id="suggestId" size="small" v-model="addForm.restauranAddress" placeholder="请输入会议地址"></el-input>
+                <el-form-item label="会议地址" prop="address">
+                  <el-input id="suggestId" size="small" v-model="addForm.address" @input="addressFact" placeholder="请输入会议地址"></el-input>
                 </el-form-item> 
                 <el-form-item label="会议内容">
                   <el-input class="textarea" v-model="addForm.restaurantPresentation" :autosize="{ minRows: 5, maxRows: 5}" type="textarea" placeholder="请输入会议描述"></el-input>
@@ -77,7 +77,7 @@
                       v-model="addForm.leaveTime" format="yyyy-MM-dd HH:mm" size="small"></el-date-picker>
                   </el-form-item>
                 </el-col>
-              </div>
+              </div> 
               <!-- ---------------- 折叠板 ---------------- -->
               <el-col :span='24'>
                 <el-collapse v-model="collapse" class="collapse" @change="collapseChange" accordion>
@@ -149,48 +149,47 @@
 
                   <!-- 更多信息 -->
                   <el-collapse-item title="更多信息" name="更多信息">
-                    <el-form-item label="确认参会方式">
-                      <div class="set-margin">
-                        <el-input placeholder="请输入内容" size="small" v-model="input3" class="sm-input">
-                          <el-select v-model="select" slot="prepend" placeholder="请选择" class="sm-select">
-                            <el-option label="餐厅名" value="1"></el-option>
-                            <el-option label="订单号" value="2"></el-option>
-                            <el-option label="用户电话" value="3"></el-option>
+                    <el-form-item label="会议组织">
+                      <div class="set-margin" v-for="(item, idx) in addForm.sponsorArrJsonStr" :key="idx">
+                        <el-input placeholder="请输入内容" size="small" v-model="item.value" class="sm-input">
+                          <el-select v-model="item.type" slot="prepend" placeholder="请选择组织类型" class="sm-select">
+                            <el-option label="主办方" value="organizer"></el-option>
+                            <el-option label="协办方" value="coOrganizer"></el-option>
                           </el-select>
                         </el-input>
-                        <el-button size="small" class="sm-del">删除</el-button>
+                        <el-button size="small" class="sm-del" @click="delSponsor(idx)">删除</el-button>
                       </div>
                       <div class="set-margin">
-                        <el-button size="small" class="sm-select">添加会议组织</el-button>
+                        <el-button size="small" class="sm-select" @click="addSponsor">添加会议组织</el-button>
                       </div>
                     </el-form-item> 
 
                     <el-form-item label="会议联系人">
                       <div class="set-margin c-card">
-                        <div class="card">
+                        <div class="card" v-for="(item, idx) in addForm.contactJson" :key='idx'>
                           <div class="card-single">
                             <div class="label-name">姓 名</div>
-                            <el-input v-model="input1" size="small"></el-input>
+                            <el-input v-model="item.name" size="small"></el-input>
                           </div>
                           <div class="card-single">
                             <div class="label-name">职 务</div>
-                            <el-input v-model="input1" size="small"></el-input>
+                            <el-input v-model="item.duty" size="small"></el-input>
                           </div>
                           <div class="card-single">
                             <div class="label-name">手 机</div>
-                            <el-input v-model="input1" size="small"></el-input>
+                            <el-input v-model="item.handPhone" size="small"></el-input>
                           </div>
                           <div class="card-single">
                             <div class="label-name">电 话</div>
-                            <el-input v-model="input1" size="small"></el-input>
+                            <el-input v-model="item.teltPhone" size="small"></el-input>
                           </div>
                           <div class="card-single">
-                            <el-button size="small" class="sm-select">添加联系人</el-button>
+                            <el-button size="small" class="sm-select" @click="delContact(idx)">删除联系人</el-button>
                           </div>
                         </div>
                       </div>
                       <div class="set-margin">
-                        <el-button size="small" class="sm-select">添加联系人</el-button>
+                        <el-button size="small" class="sm-select" @click="addContact">添加联系人</el-button>
                       </div>
                     </el-form-item> 
 
@@ -201,14 +200,14 @@
                     </el-form-item>
 
                     <el-form-item label="会议议程">
-                      <div class="set-margin">
-                        <div class="label-agenda">议程1:</div>
-                        <el-input size="small" v-model="input3" class="sm-input">
+                      <div class="set-margin" v-for="(item, idx) in addForm.meetingProduce" :key="idx">
+                        <div class="label-agenda">议程{{ idx + 1 }}:</div>
+                        <el-input size="small" v-model="item.value" class="sm-input">
                         </el-input>
-                        <el-button size="small" class="sm-del">删除</el-button>
+                        <el-button size="small" class="sm-del" @click="delProduce(idx)">删除</el-button>
                       </div>
                       <div class="set-margin">
-                        <el-button size="small" class="sm-select">添加会议议程</el-button>
+                        <el-button size="small" class="sm-select" @click="addProduce">添加会议议程</el-button>
                       </div>
                     </el-form-item> 
 
@@ -383,6 +382,7 @@ export default basicInfo
 
 .c-card {
   height: auto;
+  flex-wrap: wrap;
 
   .card {
     background-color: #fff;

@@ -10,7 +10,7 @@
           <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
         </el-input>
         <el-button size="small" @click="addMeeting = true" type="primary" plain class="add-hotel"> 新建会议 </el-button>
-      </div>
+      </div> 
     </div>
 
     <!-- 主体 -->
@@ -23,7 +23,7 @@
 
       <!-- 会议列表 -->
       <div class="meet-list">
-        <div class="meet-single" v-for="(item, idx) in 5" :key="idx">
+        <div class="meet-single" v-for="(item, idx) in tableData" :key="idx">
 
           <!-- 盒子拆分 - 左右结构 -->
           <div class="box-left">
@@ -38,9 +38,9 @@
 
             <!-- 会议基本信息 -->
             <div class="basic-info">
-              <div class="clumn">会议名称</div>
-              <div class="clumn">会议时间: 2021-02-24 00:00 至 2021-02-27 00:00</div>
-              <div class="clumn">会议地址: 深圳市宝安区深圳宝安国际机场</div>
+              <div class="clumn">{{ item.meetingName }}</div>
+              <div class="clumn">会议时间: {{ item.beginTime }} 至 {{ item.endTime }}</div>
+              <div class="clumn">会议地址: {{ item.address }}</div>
             </div>
 
           </div>
@@ -50,6 +50,7 @@
             <div class="meet-func">
               <div class="icon" v-show="data.isShow == '1'"
                 v-for="(data, idx) in funcBtnUse" :key="idx" :style="data.isUse != '1' && `cursor: not-allowed;color: #aaa;`"
+                @click="meet_func(item, data)"
               >
                 <img :src="imgIcon(data.icon)" alt />
                 {{ data.name }}

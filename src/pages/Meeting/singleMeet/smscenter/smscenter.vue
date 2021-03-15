@@ -12,14 +12,22 @@
       <div class="table">
         <el-table ref="singleTable" @cell-mouse-enter='mouseTable'
           :data="tableData" border :height="height">
-          <el-table-column align="center" :resizable='false' type="selection" width="50"></el-table-column>
           <el-table-column :prop="item.props" :label="item.label" :width="item.width"
             v-for="(item, idx) in tableCate" :key="idx"
             align="center" :resizable="false">
           </el-table-column>
           <el-table-column align="center" :resizable='false' label="参会人分组" width='500'>
             <template slot-scope="scope">
-              <span>{{scope.row.status}}</span>
+              <div v-if="scope.row.allData" class="check-person">
+                <div>
+                  <el-checkbox v-model="scope.row.allData.is_select" title='全体参会人' class="sm-ck singRow" @change="all(scope.row)">全体参会人</el-checkbox>
+                </div>
+                <div v-for="(item, idx) in scope.row.data" :key="idx">
+                  <el-checkbox v-model="item.is_select" class="sm-ck singRow" :title='item.confereeGroupName' @change="single(scope.row, idx)">
+                    {{ item.confereeGroupName }}
+                  </el-checkbox>
+                </div>
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -27,130 +35,42 @@
 
       <!-- 分页 -->
       <div class="pagin">
-        <el-pagination
-        background
-        @size-change="sizeChange"
-        @current-change="curChange"
-        :current-page="pageNum"
-        :page-sizes="[20, 50, 100, 300]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total">
-        </el-pagination>
+        <el-button size="small" round type="primary" @click="determine">保存</el-button>
       </div>
 
     </div>
 
     <!-- 短信表格 -->
     <div class="sms-table" :style="style" v-show="hoverBool">
-      <hoverTable ref="hoverTable" v-if="hoverBool"></hoverTable>
+      <hoverTable ref="hoverTable" v-if="hoverBool" :smsRow='smsRow' @update='updateData'></hoverTable>
     </div>
   </div>
 </template>
 
 <script>
-import hoverTable from './hoverTable/hoverTable.vue'
-import $ from 'jquery'
+import smscenter from './smscenter.js'
 
-export default {
-  components: {
-    hoverTable
-  },
-  data() {
-    return {
-      // table
-      height: null,
-      tableData: [{}, {}],
-      tableCate: [
-        {props: 'groupName', label: '短信类型', width: ''}
-      ],
-
-      // 分页
-      total: 0,
-      pageNum: 1,
-      pageSize: 10,
-
-      style: {},
-      hoverBool: false
-    }
-  },
-  methods: {
-    // 鼠标移动表格中
-    mouseTable(row, column, cell){
-      cell.parentNode.onmousemove = (e) => {
-        let parent = $(cell.parentNode),
-          top = parent.offset().top + parent.height(),
-          widowHeight = $(document).height()
-          console.log(widowHeight)
-        this.hoverBool = true
-        this.style = {
-          'top': (top) + 'px',
-          'width': parent.width() + 'px',
-          'max-height': (widowHeight - top) + 'px',
-        }
-      }
-
-      cell.parentNode.onmouseout = (e) => {
-        if(e.toElement.getAttribute("class") != 'sms-table'){
-          this.hoverBool = false
-        }
-      }
-
-      // 获取子集短信 dom
-      let childSms = $('.sms-table')[0]
-      childSms.onmouseout = (e) => {
-        let obj = e.toElement || e.relatedTarget
-        if(!childSms.contains(obj)){
-          this.hoverBool = false
-        }
-      }
-
-    },
-
-    // 分页方法
-    sizeChange(val){
-      this.pageSize = val
-    },
-    curChange(val){
-      this.pageNum = val
-    }
-  },
-  mounted() {
-    var dom = document.querySelector('.table')
-    this.height = dom.offsetHeight
-  }
-}
+export default smscenter
 </script>
 
 <style scoped lang='less'>
-.smscenter {
-  width: 100%;
-  height: 100%;
+@import url('./smscenter.less');
+</style>
 
-  .sms-func {
-    padding-bottom: 10px;
-    width: 100%;
-  }
+<style lang='less'>
+.singRow {
+  margin-right: 10px;
+  margin-bottom: 5px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
 
-  .sms-body {
-    width: 100%;
-    height: calc(100% - 42px);
-
-    .table {
-      width: 100%;
-      height: calc(100% - 42px);
-    }
-  }
-
-  .sms-table {
-    padding: 10px;
-    box-sizing: border-box;
-    position: fixed;
-    height: 300px;
-    background-color: #fff;
-    box-shadow: 1px 1px 10px 1px #ccc;
-    overflow-y: auto;
-    z-index: 9999;
-  }
+.singRow .el-checkbox__label{
+  width: 80px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: left;
 }
 </style>

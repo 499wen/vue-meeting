@@ -123,7 +123,7 @@
                 </el-col>
               </el-form-item>
 
-              <!-- 餐厅 -->
+              <!-- 餐厅 --> 
               <div class="rest-ct"  v-for="(d, didx) in item.dinner.ct" :key="didx">
                 <el-form-item label="选择餐厅" class="self-form-item">
                   <el-select v-model="d.rest" placeholder="请选择餐厅" size='mini' :disabled='disabled(item.date) || meetIsEnd'>

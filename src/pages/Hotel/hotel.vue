@@ -14,7 +14,6 @@
       </div>
     </div>
 
-    <!-- <router-view /> -->
     <!-- 表格 -->
     <div class="table" >
       <el-table :data="tableData" :height='height' border>
@@ -54,13 +53,26 @@
       </el-pagination>
     </div>
 
+
+    <!-- 楼栋配置 -->
+    <el-dialog title="楼栋配置" :visible.sync="building_child" width="60%" center
+      :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
+      <building ref="building" v-if="building_child"></building>
+      <div class="dialog-btn">
+        <el-button @click="cancel" size="small" type="primary" round>关 闭</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { dataScrollLoad } from '@/plugins/plugins'
+import building from './building/building.vue'
 
 export default {
+  components: {
+    building
+  },
   data() {
     return {
       searchKey: '',
@@ -73,10 +85,17 @@ export default {
       height: null,
       total: 0,
       pageNum: 1,
-      pageSize: 10
+      pageSize: 10,
+
+      // 子组件 开关
+      building_child: false
     }
   },
   methods: {
+    // 楼栋配置
+    addUsers(data){
+      this.building_child = true
+    },
     // 添加酒店
     addHotel(){
       this.$router.push('/addHotel')
@@ -115,6 +134,11 @@ export default {
     },
     curChange(val){
       this.pageNum = val
+    },
+
+    // 关闭所有子组件
+    cancel(){
+      this.building_child = false
     },
 
     // 查询酒店数据

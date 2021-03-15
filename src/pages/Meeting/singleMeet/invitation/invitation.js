@@ -1,6 +1,7 @@
 import $, { data } from "jquery";
 import QRCode from "qrcodejs2";
 import html2canvas from 'html2canvas'
+import { mapState } from 'vuex'
 let qrcodeUrl
 // import selfQrcode from '../../plugins/self-qrcode'
 
@@ -168,18 +169,18 @@ export default {
     };
   },
   created() {
-    // this.loginInfo = JSON.parse(localStorage.getItem('loginInfo'))
+    this.loginInfo = JSON.parse(localStorage.getItem('loginInfo'))
+    this.meetingId = this.meetingData.id
   },
-
+  computed: {
+    ...mapState([
+      'meetingData'
+    ])
+  },
   mounted() {
     console.log(this.$parent.$parent)
-    var _this = this;
-    // var meetingId = _this.meetId;
-    // if (meetingId === undefined) {
-    // 	this.meetId =this.utils.getUrlParma("meetingId");
-    // 	meetingId = this.meetId;
-    // }
-    //
+    // 请求数据
+    this.initPage()
     
     var dom = document.querySelector("#phone-item")
     // 移入事件
@@ -569,42 +570,38 @@ export default {
       // this.addDom()
       $('.phone-item').empty()
 
-      this.meetingId = this.utils.getUrlParma("meetingId") || this.meetId
-
       console.log('-----------------------------------'+this.meetingId)
 
       if(!this.meetingId) return 
       let that = this
 
-      // 背景图片
-      this.initBgImage()
-  
       // 请求模板
       this.initModel()
 
+      // 背景图片
+      this.initBgImage()
+  
+
       // 请求邀请函
-      this.$http
-      .get(
-        this.API.url + this.API.router.findInvitation(this.meetingId))
-      .then(res => {
-        console.log(res);
-        if(res.code == '200' && res.data){
-          // 数据初始化
-          this.id = res.data.id
-          this.dataCollection = JSON.parse(res.data.dataVal)
-          this.curPage = 1
-          console.log(this.dataCollection)
-          // 还原元素
-          reduction(this)
-        }
-        
-      });
+      this.$http.get(this.API.selectInvitationByMeetingId(this.meetingId))
+        .then(res => {
+          console.log(res);
+          if(res.code == '200' && res.data){
+            // 数据初始化
+            this.id = res.data.id
+            this.dataCollection = JSON.parse(res.data.dataVal)
+            this.curPage = 1
+            console.log(this.dataCollection)
+            // 还原元素
+            reduction(this)
+          }
+        });
     },
     initBgImage(){
       var that = this
-      this.$http.get(this.API.url + this.API.router.selectCompanyByBackGroup).then(res => {
+      this.$http.get(this.API.selectCompanyByBackGroup).then(res => {
         console.log(res)
-        if(res.code == '200' && res.data.length){
+        if(res.code == '000' && res.data.length){
           that.bgImage = res.data
           console.log( that.bgImage)
           // that.dataCollection[that.curPage - 1].model.img = res.data[0].imgId
@@ -666,7 +663,7 @@ export default {
         type: 'warning'
       }).then(() => {
         loading.show()
-        this.$http.post(this.API.url + this.API.router.delectCompanyByBackGroup, [this.selectImg.imgId]).then(res => {
+        this.$http.post(this.API.delectCompanyByBackGroup, [this.selectImg.imgId]).then(res => {
           console.log(res)
           try{
             if(res.code == '200'){
@@ -715,7 +712,7 @@ export default {
       }).then(() => {
         loading.show()
         // 确认
-        this.$http.post(this.API.url + this.API.router.delectInvitationTemplate, [id]).then(res => {
+        this.$http.post(this.API.delTemplate, [id]).then(res => {
           console.log(res)
           try{
             that.$message.success('删除成功！')
@@ -819,7 +816,7 @@ export default {
               console.log(result)
               meetingInviteTemplates.imgId = result.data.id + '.' + result.data.fileType
                 // return
-                that.$http.post(that.API.url + that.API.router.SaveInvitationTemplate, meetingInviteTemplates).then(res => {
+                that.$http.post(that.API.saveTemplate, meetingInviteTemplates).then(res => {
                   try{
                     console.log(res)
                     that.$message.success('保存成功！')
@@ -865,7 +862,7 @@ export default {
         let meetingInviteImgs = {imgId: res.data.id + '.' + res.data.fileType}
         that.bgImage.push({imgId: res.data.id + '.' + res.data.fileType})
   
-        this.$http.post(this.API.url + this.API.router.SaveCompanyByBackGroup, meetingInviteImgs).then(res => {
+        this.$http.post(this.API.saveCompanyByBackGroup, meetingInviteImgs).then(res => {
           console.log(res)
           if(res.code == '200'){
             // that.bgImage.push(...res.data)
@@ -1334,7 +1331,7 @@ export default {
 
       if(data.id){
         this.$http
-        .post(this.API.url + this.API.router.updateInvitation,  data)
+        .post(this.API.updateInvitation,  data)
         .then(res => {
           console.log(res);
           try{
@@ -1361,7 +1358,7 @@ export default {
         });
       } else {
         this.$http
-        .post(this.API.url + this.API.router.SaveInvitation,  data)
+        .post(this.API.saveInvitation,  data)
         .then(res => {
           console.log(res);
 
@@ -1433,9 +1430,9 @@ export default {
     initModel(){
       let that = this
       console.log('initModel')
-      this.$http.get(this.API.url + this.API.router.selectInvitationTemplate).then(res => {
+      this.$http.get(this.API.getTemplate).then(res => {
         console.log(res)
-        if(res.code == '200')
+        if(res.code == '000')
           that.invitaModel = res.data
       }).catch(err => {
         console.log(err)
