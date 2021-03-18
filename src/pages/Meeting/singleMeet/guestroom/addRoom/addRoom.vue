@@ -9,7 +9,7 @@
     <!-- table -->
     <div class="data-atte">
       <div class="table">
-        <el-table ref="singleTable"
+        <el-table ref="singleTable" @selection-change="batchDel"
           :data="tableData" border :height="height">
           <el-table-column align="center" :resizable='false' type="selection" width="50"></el-table-column>
           <el-table-column :prop="item.props" :label="item.label" :width="item.width"
@@ -37,6 +37,9 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+let load
+
 export default {
   data() {
     return {
@@ -47,14 +50,14 @@ export default {
       tableData: [],
       tableCate: [
         { label: "房间号", props: "roomNumber", width: '' },
-        { label: "房间类型", props: "typeName", width: '' },
+        { label: "房间类型", props: "roomType", width: '' },
         { label: "房间等级", props: "roomGrade", width: '' }
       ],
 
       // 分页
       total: 0,
       pageNum: 1,
-      pageSize: 10,
+      pageSize: 1000,
 
       // 表单验证
       addRoomForm:{
@@ -69,6 +72,14 @@ export default {
           { required: true, message: "请选择酒店大楼", trigger: 'blur' }
         ],
       },
+
+      // 选中的酒店
+      selectedData: {
+        hotelBuildingId: '',
+        hotelId: ''
+      },
+      // 选中的table row
+      selectRoom: [],
 
       // 联级选择
       options: [{value: 1, label: '指南'}],
@@ -121,19 +132,109 @@ export default {
       },
     }
   },
+  computed: {
+    ...mapState([
+      'meetingData'
+    ])
+  },
   methods: {
+    // table 勾选回调
+    batchDel(val){
+      this.selectRoom = val
+    },
+
+    // 选择下拉框
+    setHotelRoomId(val){
+      // 选中的数据 id依次往后推
+      console.log(val)
+      if(val){
+        this.selectedData.hotelBuildingId = val[1]
+        this.addRoomForm.floor = val[2]
+        // console.log(this.selectedData)
+        this.getRoom(val[2])
+      }
+
+    },
+    // 查询 大楼 
+    levelChild(id, callBack){
+      var url = this.API.findByHotelIdAndPage(id)
+      
+      callBack(url)
+    },
+    // 查询大楼层数
+    getFloorCeng(id, callBack){
+      var url = this.API.selectFloorByHotelId(id)
+      
+      callBack(url)
+    },
 
     // 搜索按钮
     searchBtn(){
-      console.log('触发')
+      this.pageNum = 1
+      this.getHotels()
     },
     // 分页方法
     sizeChange(val){
+      this.pageNum = 1
       this.pageSize = val
+      this.getHotels()
     },
     curChange(val){
       this.pageNum = val
-    }
+      this.getHotels()
+    },
+
+    // 获取房间
+    getRoom(id){
+      load = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(255, 255, 255, .7)'
+      })
+      var roomGrade = ['普通套房', '豪华套房', '总统套房']
+      this.$http.get(this.API.accordMeetRoom(this.meetingData.id, id,  this.pageNum, this.pageSize))
+        .then(res => {
+          console.log(res)
+          if(res.code == '000' && res.data){
+            res.data.filter(item => {
+              item.roomType = item.hotelRoomType == 1 ? '单人房' : '双人房'
+              item.roomGrade = roomGrade[item.hotelRoomGrade]
+            })
+            this.tableData = res.data
+            this.total = res.total
+            load.close()
+            load = null
+          } else {
+            this.$message.error(res.msg)
+            this.tableData = []
+            this.total = 0
+            load.close()
+            load = null 
+          }
+        }).catch(err=> {
+          load.close()
+          load = null 
+        })
+    },
+    // 获取酒店数据
+    getHotels() {
+      this.options = []
+      this.$http.get(this.API.findHotelByCompanyId(1, 999))
+        .then(res => {
+          if(res.code == '000' && res.data) {
+            res.data.filter(item => {
+              item.label = item.hotelName
+              item.value = item.id
+              this.options.push(item)
+            })
+          } 
+        })
+    },
+  },
+  created() {
+    this.props.vue = this
+    this.getHotels()
   },
   mounted() {
     var dom = document.querySelector('.table')

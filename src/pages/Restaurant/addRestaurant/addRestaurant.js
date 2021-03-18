@@ -58,7 +58,7 @@ export default {
     },
     // 上传封面 
     uploadSuccess(res){
-
+      console.log(res)
     },
     // 上传状态
     beforeAvatarUpload(){

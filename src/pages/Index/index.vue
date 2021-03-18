@@ -16,7 +16,7 @@
           background-color="#234060"
           text-color="#fff"
           active-text-color="#ffd04b">
-          <el-submenu index="1">
+          <!-- <el-submenu index="1">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>导航一</span>
@@ -25,7 +25,7 @@
               <template slot="title">选项4</template>
               <el-menu-item index="1-4-1">选项1</el-menu-item>
             </el-submenu>
-          </el-submenu>
+          </el-submenu> -->
           <el-menu-item index="/home">
             <i class="el-icon-menu"></i>
             <span slot="title">首页</span>
@@ -183,6 +183,7 @@ export default {
     },
     // 公司信息
     company_info() {
+      return 
       this.companyInfo_child = true
     },
     // 展开导航
@@ -256,6 +257,8 @@ export default {
     display: flex;
     justify-content: flex-start;
     overflow: hidden;
+    min-width: 1700px;
+    // overflow-x: auto;
 
     .left-nav {
         width: 200px;
@@ -282,6 +285,7 @@ export default {
         width: calc(100% - 200px);
         height: 100%;
         box-sizing: border-box;
+        // overflow: auto;
 
         .header {
             width: 100%;
@@ -358,10 +362,12 @@ export default {
         }
 
         .body {
-            width: 100%;
+            // width: 100%;
+            min-width: 1500px;
             height: calc(100% - 80px);
             padding: 10px;
             box-sizing: border-box;
+            // overflow-x: auto;
         }
     }
 }

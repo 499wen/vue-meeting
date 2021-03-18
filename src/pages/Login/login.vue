@@ -1,73 +1,73 @@
 <template>
-    <div class="login">
-        <!-- logo -->
-        <img class='login-logo' src='../../assets/images/login-logo.png' />
-        
-        <!-- text -->
-        <div class="text">
-            <img class='login-text' src='../../assets/images/login-text.png' />
-        </div>
-
-        <!-- card -->
-        <div class="login-card">
-            <el-tabs v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane label="验证码登录" name="verCode">
-                    <el-input placeholder="请输入手机号" prefix-icon="el-icon-phone" v-model="ruleForm.phone">
-                    </el-input>
-                    <el-input placeholder="请输入验证码" class="auto-hight" prefix-icon="el-icon-paperclip" @keyup.native.enter="login" v-model="ruleForm.smsCheckCode">
-                        <el-button slot="append" class="btn" @click="getVerCode">{{ verCodeText }}</el-button>
-                    </el-input>
-                   
-                </el-tab-pane>
-                <el-tab-pane label="用户名登录" name="userName">
-                    <el-input placeholder="请输入用户名" prefix-icon="el-icon-user" v-model="ruleForm.userName">
-                    </el-input>
-                    <el-input placeholder="请输入密码" class="auto-hight" prefix-icon="el-icon-lock" v-model="ruleForm.password">
-                    </el-input>
-                </el-tab-pane>
-            </el-tabs>
-
-            <!-- 自动登录 -->
-            <el-checkbox v-model="autoLogin">自动登录(7天)</el-checkbox>
-
-            <!-- 登录按钮 -->
-            <div class="login-btn">
-                <el-button class="login-btn-b" @click="login()">登 录</el-button>
-            </div>
-
-            <!-- 其它功能 -->
-            <div class="login-func">
-                <span class="regist" @click="goRegist">注册账号</span>
-                <span class="other" @click="downApp">下载APP</span>
-                <span class="other" @click="openH5">H5移动端</span>
-            </div>
-
-            <!-- 显示二维码 弹出框 -->
-            <div class="eject-box" v-if="qrcodeOpen">
-                <show-qrcode v-if='qrcodeOpen' :title='title' :showType='type' @close='close'></show-qrcode>
-            </div>
-        </div>
-        
-        <!-- 底部 -->
-        <div class="login-button">
-            <div class="company">
-                <span class="info">广州会智智能科技有限公司</span>
-                <span class="info">https://www.hzics.com</span>
-                <span class="info">TEL:020-34798277</span>
-            </div>
-            <div>
-                <span class="keep-on-record">版权所有:广州会智智能科技有限公司</span>
-                <span class="keep-on-record">粤ICP备案:75558621-4</span>
-            </div>
-        </div>
-
-        <!-- 防止浏览器 保存密码机制 -->
-        <div class="hidden">
-            <input type="text" name="" id="" autocomplete="off">
-            <input type="password" name="" id="" autocomplete="off">
-        </div>
-
+  <div class="login">
+    <!-- logo -->
+    <img class='login-logo' src='../../assets/images/login-logo.png' />
+    
+    <!-- text -->
+    <div class="text">
+      <img class='login-text' src='../../assets/images/login-text.png' />
     </div>
+
+    <!-- card -->
+    <div class="login-card">
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+          <el-tab-pane label="验证码登录" name="verCode">
+              <el-input placeholder="请输入手机号" prefix-icon="el-icon-phone" v-model="ruleForm.phone">
+              </el-input>
+              <el-input placeholder="请输入验证码" class="auto-hight" prefix-icon="el-icon-paperclip" @keyup.native.enter="login" v-model="ruleForm.smsCheckCode">
+                  <el-button slot="append" class="btn" @click="getVerCode">{{ verCodeText }}</el-button>
+              </el-input>
+              
+          </el-tab-pane>
+          <el-tab-pane label="用户名登录" name="userName">
+              <el-input placeholder="请输入用户名" prefix-icon="el-icon-user" v-model="ruleForm.userName">
+              </el-input>
+              <el-input type="password" placeholder="请输入密码" class="auto-hight" prefix-icon="el-icon-lock" @keyup.native.enter="login" v-model="ruleForm.password">
+              </el-input>
+          </el-tab-pane>
+      </el-tabs>
+
+      <!-- 自动登录 -->
+      <el-checkbox v-model="autoLogin">自动登录(7天)</el-checkbox>
+
+      <!-- 登录按钮 -->
+      <div class="login-btn">
+        <el-button class="login-btn-b" @click="login()">登 录</el-button>
+      </div>
+
+      <!-- 其它功能 -->
+      <div class="login-func">
+        <span class="regist" @click="goRegist">注册账号</span>
+        <span class="other" @click="downApp">下载APP</span>
+        <span class="other" @click="openH5">H5移动端</span>
+      </div>
+
+      <!-- 显示二维码 弹出框 -->
+      <div class="eject-box" v-if="qrcodeOpen">
+        <show-qrcode v-if='qrcodeOpen' :title='title' :showType='type' @close='close'></show-qrcode>
+      </div>
+    </div>
+    
+    <!-- 底部 -->
+    <div class="login-button">
+      <div class="company">
+        <span class="info">广州会智智能科技有限公司</span>
+        <span class="info">https://www.hzics.com</span>
+        <span class="info">TEL:020-34798277</span>
+      </div>
+      <div>
+        <span class="keep-on-record">版权所有:广州会智智能科技有限公司</span>
+        <span class="keep-on-record">粤ICP备案:75558621-4</span>
+      </div>
+    </div>
+
+    <!-- 防止浏览器 保存密码机制 -->
+    <div class="hidden">
+      <input type="text" name="" id="" autocomplete="off">
+      <input type="password" name="" id="" autocomplete="off">
+    </div>
+
+  </div>
 </template>
 
 <script>
@@ -75,141 +75,141 @@ import ShowQrcode from './showQrcode/showQrcode'
 import { setCookie, delCookie, getCookie } from '../../plugins/cookie'
 
 export default {
-    components: {
-        'show-qrcode': ShowQrcode
-    },
-    data() {
-        return {
-            activeName: 'verCode',
-            ruleForm: {
-                phone: '',
-                smsCheckCode: '',
-                userName: '',
-                password: ''
-            },
-            autoLogin: false,
-            qrcodeOpen: false,
-            title: '',
-            type: '',
-            verCodeText: '获取验证码'
-        }
-    },
-    methods: {
-      handleClick(tab, event) {
-        console.log(this.activeName);
+  components: {
+    'show-qrcode': ShowQrcode
+  },
+  data() {
+    return {
+      activeName: 'verCode',
+      ruleForm: {
+        phone: '',
+        smsCheckCode: '',
+        userName: '',
+        password: ''
       },
-      // 获取验证码
-      getVerCode(){
-        let s = 60
-        if (!(/^1[0-9]{10}$/.test(this.ruleForm.phone))) { 
+      autoLogin: false,
+      qrcodeOpen: false,
+      title: '',
+      type: '',
+      verCodeText: '获取验证码'
+    }
+  },
+  methods: {
+    handleClick(tab, event) {
+      console.log(this.activeName);
+    },
+    // 获取验证码
+    getVerCode(){
+      let s = 60
+      if (!(/^1[0-9]{10}$/.test(this.ruleForm.phone))) { 
+        this.$message.error('请输入正确的手机号')
+        return false
+      }
+
+      this.$http.get( this.API.verificationCode(this.ruleForm.phone))
+        .then(res => {
+          if(res.code == '000'){
+            this.$message.success('验证码发送成功！')
+            this.verCodeText = s + 'S 后重试'
+            let handle = setInterval(() => {
+                s--
+                this.verCodeText = s + 'S 后重试'
+                if(s <= 0){
+                    clearInterval(handle);
+                    s = 60
+                    this.verCodeText = '获取验证码'
+                }
+            },1000)
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
+    },
+
+    // 登录
+    login (){
+      let url = null, data = null,
+      {phone, smsCheckCode, userName, password} = this.ruleForm
+      // 验证表单
+      if(!this.veriForm()) return 
+      
+      if(this.activeName == 'verCode'){
+          url =  this.API.loginByPhone
+          data = {phone, smsCheckCode}
+      } else {
+          url =  this.API.loginByLoginNameAndPassword
+          data = {userName, password}
+      }
+      this.$http.post(url, data)
+        .then(res => {
+          if(res.code == '000'){
+            if(this.autoLogin){
+              setCookie('autoLogin', 1, 7)
+            }
+            // 保存token本地
+            localStorage.setItem('token', res.data.token)
+
+            this.$router.push('/')
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
+    },
+    // 验证
+    veriForm(){
+      let {phone, smsCheckCode, userName, password} = this.ruleForm
+
+      if(this.activeName == 'verCode'){
+        if (!(/^1[0-9]{10}$/.test(phone))) { 
           this.$message.error('请输入正确的手机号')
           return false
         }
-
-        this.$http.get( this.API.verificationCode(this.ruleForm.phone))
-          .then(res => {
-            if(res.code == '000'){
-              this.$message.success('验证码发送成功！')
-              this.verCodeText = s + 'S 后重试'
-              let handle = setInterval(() => {
-                  s--
-                  this.verCodeText = s + 'S 后重试'
-                  if(s <= 0){
-                      clearInterval(handle);
-                      s = 60
-                      this.verCodeText = '获取验证码'
-                  }
-              },1000)
-            } else {
-              this.$message.error(res.msg)
-            }
-          })
-      },
-
-      // 登录
-      login (){
-        let url = null, data = null,
-        {phone, smsCheckCode, userName, password} = this.ruleForm
-        // 验证表单
-        if(!this.veriForm()) return 
-        
-        if(this.activeName == 'verCode'){
-            url =  this.API.loginByPhone
-            data = {phone, smsCheckCode}
-        } else {
-            url =  this.API.loginByPhone
-            data = {userName, password}
+        if(!smsCheckCode.trim()){
+          this.$message.error('请输入验证码')
+          return false
         }
-        this.$http.post(url, data)
-            .then(res => {
-                if(res.code == '000'){
-                    if(this.autoLogin){
-                        setCookie('autoLogin', 1, 7)
-                    }
-                    // 保存token本地
-                    localStorage.setItem('token', res.data.token)
-
-                    this.$router.push('/')
-                } else {
-                    this.$message.error(res.msg)
-                }
-            })
-      },
-      // 验证
-      veriForm(){
-        let {phone, smsCheckCode, userName, password} = this.ruleForm
-
-        if(this.activeName == 'verCode'){
-          if (!(/^1[0-9]{10}$/.test(phone))) { 
-            this.$message.error('请输入正确的手机号')
-            return false
-          }
-          if(!smsCheckCode.trim()){
-            this.$message.error('请输入验证码')
-            return false
-          }
-        } else {
-          if(!userName.trim()){
-            this.$message.error('请输入用户名')
-            return false
-          }
-          if(!password.trim()){
-            this.$message.error('请输入密码')
-            return false
-          }
+      } else {
+        if(!userName.trim()){
+          this.$message.error('请输入用户名')
+          return false
         }
-
-        return true
-      },
-      // 下载App
-      downApp(){
-          this.title = '扫码下载App'
-          this.type = 'App'
-          this.qrcodeOpen = true
-      },
-      // 进入H5
-      openH5(){
-          this.title = '扫码进入H5移动端'
-          this.type = 'H5'
-          this.qrcodeOpen = true
-      },
-      // 关闭
-      close(){
-          this.qrcodeOpen = false
-      },
-      // 去注册
-      goRegist(){
-          this.$router.push('/regist')
+        if(!password.trim()){
+          this.$message.error('请输入密码')
+          return false
+        }
       }
+
+      return true
     },
-    mounted() {
-        // 判断是否存在cookie
-        setTimeout(() => {
-            if(getCookie('autoLogin') == 1){
-                this.$router.push('/')
-            }
-        }, 3000)
+    // 下载App
+    downApp(){
+        this.title = '扫码下载App'
+        this.type = 'App'
+        this.qrcodeOpen = true
+    },
+    // 进入H5
+    openH5(){
+        this.title = '扫码进入H5移动端'
+        this.type = 'H5'
+        this.qrcodeOpen = true
+    },
+    // 关闭
+    close(){
+        this.qrcodeOpen = false
+    },
+    // 去注册
+    goRegist(){
+        this.$router.push('/regist')
     }
+  },
+  mounted() {
+    // 判断是否存在cookie
+    setTimeout(() => {
+      if(getCookie('autoLogin') == 1){
+        this.$router.push('/')
+      }
+    }, 3000)
+  }
 }
 </script>
 

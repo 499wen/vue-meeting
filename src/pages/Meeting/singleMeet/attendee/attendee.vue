@@ -7,6 +7,7 @@
         :data="data"
         :props="treeProps" 
         node-key="id"
+        default-expand-all
         :highlight-current="true"
         :expand-on-click-node="false"
         @node-click='treeClick'
@@ -20,18 +21,17 @@
         <div class="data-add" v-show='!curAttenGroup.parentId'>
           <el-button round size='small' type="primary" @click="addAtteBtn">添加参会人</el-button>
           <el-button round size='small' type="danger">移除参会人</el-button>
-          <el-button round size='small' type="primary">手动录入</el-button>
+          <el-button round size='small' type="primary" v-show="false">手动录入</el-button>
         </div>
-        <div class="data-query">
+        <div class="data-query" v-show="false">
           <el-button class="spacing" size='small' @click="exportAtten">导出参会人</el-button>
           <!-- 条件组查询 -->
-          <el-dropdown trigger="click" class="spacing" v-show='!curAttenGroup.parentId'>
+          <el-dropdown trigger="click" class="spacing" @command='clickCondi' placement='bottom'>
             <el-button size="small">
               条件组查询<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item icon="el-icon-plus">黄金糕</el-dropdown-item>
-              <el-dropdown-item icon="el-icon-circle-plus">狮子头</el-dropdown-item>
+              <el-dropdown-item v-for="(item, idx) in condiData" :key="idx" :command='idx'>{{ item.groupName }}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <el-input size="small" placeholder="请输入会议名称" v-model="searchKey" @keyup.native.enter="searchBtn" v-show='!curAttenGroup.parentId'>

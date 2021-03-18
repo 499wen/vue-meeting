@@ -248,10 +248,13 @@ export default {
 
     // 分页方法
     sizeChange(val){
+      this.pageNum = 1
       this.pageSize = val
+      this.getProsonData()
     },
     curChange(val){
       this.pageNum = val
+      this.getProsonData()
     },
     // 打开自定义条件组
     openBox(){
@@ -259,6 +262,7 @@ export default {
     },
     // 输入框搜索
     searchBtn() {
+      this.pageNum = 1
       this.getProsonData()
     },
     // 自定匹配

@@ -49,12 +49,13 @@ export default {
       height: null,
       total: 0,
       pageNum: 1,
-      pageSize: 10
+      pageSize: 1000
     }
   },
   methods: {
     // 分页
     sizeChange(val){
+      this.pageNum = 1 
       this.pageSize = val
     },
     curChange(val){

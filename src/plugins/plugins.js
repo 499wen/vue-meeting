@@ -5,6 +5,7 @@ import { Loading } from 'element-ui'
  * @param date 时间戳(ms) 
  * @param complete 返回日期是否包含时间 (默认不包含)
  * @param chinese 中文格式
+ * @param minusOne eg: 1615651200000 - 1617120000000 -> 2021-03-14 00:00 至 23:59
  */
 
 export function selfTime(date, complete = false, chinese = false, minusOne = false) {

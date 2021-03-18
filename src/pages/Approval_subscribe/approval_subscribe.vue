@@ -71,7 +71,7 @@ export default {
       // 分页
       total: 0,
       pageNum: 1,
-      pageSize: 10,
+      pageSize: 1000,
 
       meetRoomTypeEnum:['方形','椭圆','菱形'], //会议室类型
       stateEnum:['待审批','通过','未通过'], //状态
@@ -84,10 +84,23 @@ export default {
     },
     // 分页方法
     sizeChange(val){
+      this.pageNum = 1
       this.pageSize = val
+
+      if(this.tabIndex == 0) {
+        this.getApproval()
+      } else {
+        this.getType(this.tabIndex - 1)
+      }
     },
     curChange(val){
       this.pageNum = val
+
+      if(this.tabIndex == 0) {
+        this.getApproval()
+      } else {
+        this.getType(this.tabIndex - 1)
+      }
     },
 
     // 未审批 - 已审批
@@ -105,6 +118,10 @@ export default {
             })
 
             this.tableData = res.data
+            this.total = res.total
+          } else {
+            this.tableData = []
+            this.total = 0
           }
         })
     },
@@ -123,6 +140,10 @@ export default {
             })
 
             this.tableData = res.data
+            this.total = res.total
+          } else {
+            this.tableData = []
+            this.total = 0
           }
         })
     }

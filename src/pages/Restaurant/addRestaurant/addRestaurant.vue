@@ -8,7 +8,7 @@
       </div>
     </div>
 
-    <div class="form">
+    <div class="form"> 
       <!-- 表单 -->
       <div class="form-left">
         <div class="newly-build">
@@ -37,7 +37,7 @@
               </el-form-item> 
               <el-form-item label="餐厅图片" prop='capacity'>
                 <el-upload
-                  :action="`API.url + API.router.uploadHotelImage`" 
+                  :action="`/cdapi/release/acassc`" 
                   :on-success="uploadSuccess"
                   :before-upload="beforeAvatarUpload"
                   :show-file-list="false"

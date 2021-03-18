@@ -6,17 +6,17 @@ export default {
     return {
       searchKey: '',
       navList: [
-        {name: '全部会议', select: true, tips: ''},
-        {name: '未发布', select: false, tips: ''},
-        {name: '已发布', select: false, tips: ''},
-        {name: '进行中', select: false, tips: ''},
-        {name: '已结束', select: false, tips: ''}
+        {name: '全部会议', select: true, tips: '1'},
+        {name: '未发布', select: false, tips: '3'},
+        {name: '已发布', select: false, tips: '4'},
+        {name: '进行中', select: false, tips: '0'},
+        {name: '已结束', select: false, tips: '2'}
       ],
 
       // 分页
       total: 0,
       pageNum: 1,
-      pageSize: 10,
+      pageSize: 1000,
 
       // icon
       funcBtnUse: [
@@ -48,10 +48,27 @@ export default {
     ]),
     // 选择会议功能
     meet_func(data, func){
-      if(!func.scription.trim()){
+      if(!func.scription.trim()){ 
         this.$message.info('暂不开放')
         return 
       }
+      let meetType
+
+      // 多级会议
+      if(data.isMultistage == '1'){
+        meetType = '/multiMeet'
+      } else {
+        meetType = '/singleMeet'
+      }
+
+      this.$router.push({
+        path: meetType,
+        query: {
+          meetingId: data.id,
+          select: func.scription
+        }
+      })
+      return
 
       // 获取会议数据
       this.$http.get(this.API.singleMeeting(data.id))
@@ -88,24 +105,75 @@ export default {
     },
     // 新建多级会议 - 按钮
     multi_stage(){
-
+      // 清空 vuex 中的会议数据
+      this.setMeetingData({})
+      this.$router.push('/multiMeet')
     },
     // 选择 nav列表
     tab_list(index){
       this.navList.filter((item, idx) => idx == index ? item.select = true : item.select = false)
+      let tips = this.navList[index].tips
+      if(tips == 1) {
+        this.pageNum = 1
+        this.getAllMeet()
+      } else {
+        this.accordTypeGetmeet(tips)
+      }
     },
 
     // 分页方法
     sizeChange(val){
+      this.pageNum = 1
       this.pageSize = val
+
+      this.getAllMeet()
     },
     curChange(val){
       this.pageNum = val
+
+      this.getAllMeet() 
     },
 
     // 搜索按钮
     searchBtn(){
+      this.pageNum = 1
       this.getAllMeet()
+    },
+
+    // 根据分类获取会议
+    accordTypeGetmeet(code) {
+      this.$http.get(this.API.meetingsPageAndStateCode(code, this.pageNum, this.pageSize, this.searchKey))
+        .then(res => {
+          if(res.code == '000' && res.data){
+            let curTime = new Date().getTime()
+            res.data.filter(item => {
+              // if(item.beginDate < curTime && item.endDate > curTime){
+              //   item.tips = item.releaseCode == 1 ? '进行中' : '未发布'
+              // } else if(item.endDate < curTime){
+              //   item.tips = item.releaseCode == 1 ? '已结束' : '未发布'
+              // } else {
+              //   item.tips = item.releaseCode == 1 ? '已发布' : '未发布'
+              // }
+              switch(code){
+                case '0': item.tips = '进行中'; break;
+                case '2': item.tips = '已结束'; break;
+                case '3': item.tips = '未发布'; break;
+                case '4': item.tips = '已发布'; break;
+              }
+
+              item.beginTime = selfTime(item.beginDate, true)
+              item.endTime = selfTime(item.endDate, true)
+            })
+            this.tableData = res.data
+            this.total = res.total
+          } else {
+            this.tableData = []
+            this.total = 0
+          }
+        }).catch(err => {
+          this.tableData = []
+          this.total = 0
+        })
     },
 
     // 获取全部会议
@@ -126,12 +194,15 @@ export default {
               item.beginTime = selfTime(item.beginDate, true)
               item.endTime = selfTime(item.endDate, true)
             })
-            this.tableData = res.data
+            this.tableData = res.data 
             this.total = res.total
           } else {
             this.tableData = []
-            this.total = res.total
+            this.total = 0
           }
+        }).catch(err => {
+          this.tableData = []
+          this.total = 0
         })
     }
   },

@@ -20,10 +20,26 @@ export default {
         path: '/info_more',
         query: { msg: '会议信息'}
       })
+    },
+
+    // 获取参会人报到数据
+    getAttenData(){
+      this.$http.get(this.API.findMeetingStatistical(1, 10, ''))
+        .then(res => {
+          if(res.code == '000' && res.data){
+            this.tableData = res.data
+          } else {
+            this.tableData = []
+          }
+        })
     }
   },
   mounted() {
+    // 获取表格高度
     var dom = document.querySelector('.table')
     this.height = dom.offsetHeight
+
+    // 获取参会人报到数据
+    this.getAttenData()
   }
 }

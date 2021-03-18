@@ -48,7 +48,14 @@ const routes = [
         name: '会议管理-单级会议',
         component: () => import(/* webpackChunkName: "home" */ '../pages/Meeting/singleMeet/singleMeet.vue'),
       },
-
+      {
+        path: '/multiMeet',
+        name: '会议管理-多级会议',
+        component: () => import(/* webpackChunkName: "home" */ '../pages/Meeting/multiMeet/multiMeet.vue'),
+      },
+      /**
+       * 权限管理
+       */
       {
         path: '/role',
         name: '权限',

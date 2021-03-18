@@ -69,7 +69,7 @@ this.height = dom.offsetHeight
  * :close-on-click-modal='false' 
  * :close-on-press-escape='false'
  * custom-class='dialog' top='80px'
- * 
+ * append-to-body 嵌套时使用
  * 注：按钮不与组件一起写
  *    <el-dialog title="添加人员" :visible.sync="addPeroson_child" width="60%" center
         :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
@@ -102,10 +102,11 @@ this.height = dom.offsetHeight
   js
     total: 0,
     pageNum: 1,
-    pageSize: 10
+    pageSize: 1000
 
     // 分页方法
     sizeChange(val){
+      this.pageNum = 1
       this.pageSize = val
     },
     curChange(val){
@@ -130,7 +131,8 @@ this.height = dom.offsetHeight
 
  /**
   * el-tree  树形结构
-  * 
+  * default-expand-all 默认展开
+  * this.$refs.tree.setCurrentKey(Id值) 默认高亮
   * html 
       <el-tree
         :data="data"
@@ -154,7 +156,7 @@ this.height = dom.offsetHeight
       },
 
       // tree - 点击触发
-      treeClick(node, data){
+      treeClick(data, node){
         
       },
       // tree - 树结构
@@ -204,3 +206,9 @@ this.height = dom.offsetHeight
         console.log('触发')
       },
  */
+
+
+ /**
+  * 会议
+  * 
+  */

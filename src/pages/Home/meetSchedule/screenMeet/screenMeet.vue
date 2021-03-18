@@ -5,14 +5,14 @@
     </div>
   </div>
 </template>
-
+ 
 <script>
 export default {};
 </script>
 
 <style scoped lang='less'>
 .box {
-  border: 1px solid rgb(226, 226, 226);
+  border: 1px solid rgb(226, 226, 226); 
   border-radius: 5px;
   box-sizing: border-box;
 }

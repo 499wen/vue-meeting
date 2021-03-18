@@ -40,7 +40,7 @@
     </div>
 
     <!-- 分页 -->
-    <div class="pagin" >
+    <div class="pagin">
       <el-pagination
         background
         @size-change="sizeChange"
@@ -57,7 +57,7 @@
     <!-- 楼栋配置 -->
     <el-dialog title="楼栋配置" :visible.sync="building_child" width="60%" center
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
-      <building ref="building" v-if="building_child"></building>
+      <building ref="building" v-if="building_child" :hotel='curHotel'></building>
       <div class="dialog-btn">
         <el-button @click="cancel" size="small" type="primary" round>关 闭</el-button>
       </div>
@@ -85,15 +85,20 @@ export default {
       height: null,
       total: 0,
       pageNum: 1,
-      pageSize: 10,
+      pageSize: 1000,
+
+      // 当前处理的酒店
+      curHotel: null,
 
       // 子组件 开关
-      building_child: false
+      building_child: false,
+
     }
   },
   methods: {
     // 楼栋配置
     addUsers(data){
+      this.curHotel = data
       this.building_child = true
     },
     // 添加酒店
@@ -130,10 +135,13 @@ export default {
     },
     // 分页方法
     sizeChange(val){
+      this.pageNum = 1
       this.pageSize = val
+      this.getHotelData()
     },
     curChange(val){
       this.pageNum = val
+      this.getHotelData()
     },
 
     // 关闭所有子组件
@@ -156,7 +164,8 @@ export default {
     },
     // 搜索按钮
     searchBtn(){
-      console.log('触发')
+      this.pageNum = 1
+      this.getHotelData()
     }
   },
   mounted() {

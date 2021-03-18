@@ -17,6 +17,7 @@
           :data="data"
           :props="treeProps"
           node-key="id"
+          default-expand-all
           @node-click='treeClick'
           :expand-on-click-node="false"
           :highlight-current="true"
@@ -69,7 +70,7 @@
     <el-dialog title="短信详情" :visible.sync="smsDetail_child" width="60%" center
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <detail ref="detail" v-if="smsDetail_child" :detail='detail'></detail>
-      <div class="dialog-btn">
+      <div class="dialog-btn" v-show="detail.configurable != 0">
         <el-button type="primary" @click="submitForm" size="small" round>保 存</el-button>
       </div>
     </el-dialog>

@@ -38,7 +38,7 @@
           <el-table-column prop="arrivalRate" label="到会率" align='center' :resizable='false'>
           </el-table-column>
         </el-table-column>
-      </el-table>
+      </el-table> 
     </div>
     </div>
 
@@ -59,6 +59,8 @@
 </template>
 
 <script>
+import { selfTime } from '@/plugins/plugins.js'
+
 export default {
   data() {
     return {
@@ -69,16 +71,43 @@ export default {
       // 分页
       total: 0,
       pageNum: 1,
-      pageSize: 10
+      pageSize: 1000
     }
   },
   methods: {
     // 分页方法
     sizeChange(val){
+      this.pageNum = 1
       this.pageSize = val
+
+      this.getAttenData()
     },
     curChange(val){
       this.pageNum = val
+
+      this.getAttenData()
+    },
+
+    // 获取参会人报到数据
+    getAttenData(){
+      this.$http.get(this.API.findMeetingStatistical(this.pageNum, this.pageSize, ''))
+        .then(res => {
+          if(res.code == '000' && res.data){
+            res.data.filter((item, idx) => {
+              var time = selfTime(new Date(item.beginDate).getTime())
+              var st = selfTime(new Date(item.beginDate).getTime(), true, true)
+              var et = selfTime(new Date(item.endDate).getTime(), true, true, true)
+              item.number = idx + 1
+              item.time = time
+              item.beginAndEndDate = st + ' - ' + et;
+            })
+            this.tableData = res.data
+            this.total = res.total
+          } else {
+            this.tableData = []
+            this.total = 0
+          }
+        })
     }
   },
   mounted() {
@@ -86,6 +115,7 @@ export default {
     var dom = document.querySelector('.table')
     this.height = dom.offsetHeight
 
+    this.getAttenData()
   }
 }
 </script>

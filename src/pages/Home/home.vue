@@ -1,14 +1,14 @@
 <template>
-  <div class="home">
+  <div class="home" v-if="show">
     <div class="meet-about">
       <!-- 会议信息 -->
       <div class="meet-info">
         <meetInfo></meetInfo>
       </div>
-
+ 
       <!-- 会议日程 -->
       <div class="meet-schedule">
-        <meetSchedule></meetSchedule>
+        <meetSchedule></meetSchedule> 
       </div>
     </div> 
     <div class="bottom">

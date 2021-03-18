@@ -72,7 +72,7 @@ export default {
       height: null,
       total: 0,
       pageNum: 1,
-      pageSize: 10 
+      pageSize: 1000 
     }
   },
   methods: {
@@ -110,10 +110,13 @@ export default {
     },
     // 分页方法
     sizeChange(val){
+      this.pageNum = 1
       this.pageSize = val
+      this.getRestaurant()
     },
     curChange(val){
       this.pageNum = val
+      this.getRestaurant()
     },
 
     // 获取餐厅数据
@@ -132,7 +135,8 @@ export default {
 
     // 搜索按钮
     searchBtn(){
-      console.log('触发')
+      this.pageNum = 1
+      this.getRestaurant()
     }
   },
   mounted() {

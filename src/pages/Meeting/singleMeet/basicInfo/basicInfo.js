@@ -520,6 +520,8 @@ export default {
     this.loginInfo = JSON.parse(localStorage.getItem('loginInfo'))
     this.addForm.departmentId = this.loginInfo.companyId
 
+    console.log(this.meetingData)
+
     // 获取地图
     this.map()
 

@@ -49,6 +49,7 @@ body {
 .el-table--group:after,
 .el-table:before {
   background-color: #999 !important;
+  z-index: 99 !important;
 }
 
 .el-table--border,
@@ -75,7 +76,7 @@ body {
 .dialog {
   max-height: calc(100vh - 160px);
   box-sizing: border-box;
-  min-width: 650px;
+  min-width: 500px;
 }
 
 .el-dialog__body {
@@ -219,7 +220,7 @@ body {
 }
 
 // 
-.el-button--small, .el-button--small.is-round {
-  padding: 7px 15px !important;
+.el-button--small.is-round {
+  padding: 7px 18px !important;
 }
 </style>

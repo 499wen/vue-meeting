@@ -15,4 +15,76 @@
       height: 100%;
     }
   }
+
+  .screen-meet {
+    border: 1px solid rgb(226, 226, 226);
+    border-radius: 5px;
+    box-sizing: border-box;
+
+    .title { 
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      border-bottom: 1px solid rgb(226, 226, 226);
+    
+      .content {
+        width: 100%;
+        height: 33px;
+        line-height: 33px;
+        box-sizing: border-box;
+        text-align: center;
+        font-size: 15px;
+        color: #fff;
+        border-radius: 5px;
+        background-color: #e6a23c;
+      }
+    
+      .meet-cte {
+        width: 100%;
+        height: calc(100% - 43px);
+        margin-top: 10px;
+        box-sizing: border-box;
+        overflow-y: auto;
+        padding: 10px;
+
+        .single-meet {
+          width: 100%;
+          background-color: #6bddc5;
+          padding: 5px 10px;
+          box-sizing: border-box;
+          color: #333;
+          font-size: 14px;
+          border-radius: 3px;
+          margin-bottom: 5px;
+
+          .row-meet {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+
+            .tips-cte {
+              flex: 1;
+              text-overflow: ellipsis;
+              overflow: hidden;
+              white-space: nowrap;
+            }
+          }
+        }
+
+        .single-meet:nth-last-child(1) {
+          margin-bottom: 0;
+        }
+      }
+
+      .no-meet {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 16px;
+        color: rgb(165, 165, 165);
+        letter-spacing: 1px;
+      }
+    }
+
+  }
 }

@@ -3,7 +3,7 @@
     <div class="header-opera">
       <div class="tap">
         <span>会议管理</span>
-      </div>
+      </div> 
 
       <div class="opera">
         <el-input size="small" placeholder="请输入会议名称" v-model="searchKey" @keyup.native.enter="searchBtn">
@@ -33,7 +33,10 @@
 
               <!-- 提示
                未发布: #2ba2ff 默认, 已发布: #60cfb9 .published, 进行中: #ffd04b .ongoing, 已结束: #6f6f6f .over -->
-              <div class="meet-tips">未发布</div>
+              <div :class="['meet-tips', 
+              item.tips == '已发布' && 'published',
+              item.tips == '进行中' && 'ongoing', 
+              item.tips == '已结束' && 'over']">{{ item.tips }}</div>
             </div>
 
             <!-- 会议基本信息 -->
@@ -51,7 +54,7 @@
               <div class="icon" v-show="data.isShow == '1'"
                 v-for="(data, idx) in funcBtnUse" :key="idx" :style="data.isUse != '1' && `cursor: not-allowed;color: #aaa;`"
                 @click="meet_func(item, data)"
-              >
+              > 
                 <img :src="imgIcon(data.icon)" alt />
                 {{ data.name }}
               </div>
@@ -90,7 +93,7 @@
           <el-button @click="multi_stage" size="small" type="danger" round>多级会议</el-button>
         </div>
       </el-dialog>
-    </div>
+    </div> 
   </div>
 </template>
 

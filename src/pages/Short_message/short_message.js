@@ -29,7 +29,7 @@ export default {
       // 分页
       total: 0,
       pageNum: 1,
-      pageSize: 20,
+      pageSize: 1000,
 
       // 子集组件 开关
       smsDetail_child: false,
@@ -83,15 +83,39 @@ export default {
 
     // 子组件方法
     submitForm(){
-      
+      let child = this.$refs.detail
+      , item = { ...child.item }
+      , time = (item.triggerTime && typeof item.triggerTime != 'number') ? item.triggerTime.split(':') : null
+      item.triggerTime = time && (Number(time[0]) * 60 + Number(time[1])) * 1000
+
+      child.$refs['form'].validate((valid) => {
+        if (valid) {
+          this.$http.post(this.API.saveCompanySmsTemplateConfig, item)
+            .then(res => {
+              console.log(res)
+              if (res.code == '000') {
+                this.$message.success('保存成功!')
+                this.getSms()
+                this.smsDetail_child = false
+              } else {
+                this.$message.info(res.msg)
+              }
+            })
+        }
+      })
     },
 
     // 分页方法
     sizeChange(val){
+      this.pageNum = 1
       this.pageSize = val
+
+      this.getSms()
     },
     curChange(val){
       this.pageNum = val
+
+      this.getSms()
     },
 
     // 获取短信分类

@@ -57,6 +57,7 @@ export default {
         { name: '事由', description: 'leaveReason' },
         { name: '审批状态', description: 'stateCode' },
       ],
+      tips: '2',
 
       // table
       tableData: [],
@@ -65,21 +66,53 @@ export default {
       // 分页
       total: 0,
       pageNum: 1,
-      pageSize: 10
+      pageSize: 1000
     }
   },
   methods: {
     // 切换list
     tabList(index){
       this.list.filter((item, idx) => idx == index ? item.select = true : item.select = false)
+      this.tips = this.list[index].tips
+
+      this.getLeave()
     },
 
     // 分页方法
     sizeChange(val){
+      this.pageNum = 1
       this.pageSize = val
+
+      this.getLeave()
     },
     curChange(val){
       this.pageNum = val
+
+      this.getLeave()
+    },
+
+    // 获取请假数据
+    getLeave() {
+      this.$http.get(this.API.findleaveInfo(this.tips, this.pageNum, this.pageSize))
+        .then(res => {
+          if(res.code == '000' && res.data){
+            let content = res.data;
+            for (let i = 0; i < content.length; i++) {
+              let obj = content[i];
+              obj.userName = obj.user.userName
+              obj.meetingName = obj.meeting.meetingName
+              if (!obj.leaveReason) {
+                obj.leaveReason = "(无)"
+              }
+              obj.stateCode = obj.approvalState == 0 ? arr[obj.approvalState] : arr[obj.approvalResultCode]
+            }
+            this.tableData = content
+            this.total = res.total
+          } else {
+            this.tableData = []
+            this.total = 0
+          }
+        })
     }
   },
   mounted() {
@@ -87,6 +120,8 @@ export default {
     var dom = document.querySelector('.table')
     this.height = dom.offsetHeight
 
+    // 获取数据
+    this.getLeave()
   }
 }
 </script>

@@ -19,16 +19,17 @@ let dsQi = null, s = 0,
 //显示loading
 axios.defaults.timeout=5000
 function showLoading(target) {
+  // console.log('加载。。。。。')
   // 后面这个判断很重要，因为关闭时加了抖动，此时loading对象可能还存在，
   // 但needLoadingRequestCount已经变成0.避免这种情况下会重新创建个loading
   if (needLoadingRequestCount === 0 && !loading) {
     loading = Loading.service({
       lock: true,
       text: "Loading...",
-      background: 'rgba(255, 255, 255, 0.5)',
-      target: target || "body" 
+      background: 'rgba(0, 0, 0, 0.5)',
+      target: target || "body"
     });
-    // setTimeout(() => {
+    // setTimeout(() => { 
     //   hideLoading()
     //   alert('加载时间过长。请刷新页面再进行请求！')
     // }, 5000)
@@ -73,29 +74,17 @@ instance.interceptors.request.use(
     let token=localStorage.getItem('token')
     if(token){
       //每次请求前，如果token存在则在请求头上添加token
-      config.headers.token=token
-      config.headers.Authorization=token
+      config.headers.token = token
+      config.headers.Authorization = token
     }
-    if(config.headers.showLoading !== false){
 
-          showLoading(config.headers.loadingTarget);
-             // console.log('定时器的位置')
-          
-            //   console.log('500000服务器'); 
-            //   dsQi = setTimeout(() => {
-            //       s += 1
-            //        if(s ){
-            //         // clearInterval(dsQi)
-            //         toHideLoading()
-            //         Message.error('加载超时。请重新刷新页面111！')
-                    
-            //        }
-            // }, 3000)
-     
-    }
+    // console.log(config)
+    showLoading()
     return config;
   },
   err=>{
+    // console.log('err', err)
+    hideLoading()
     if(err.headers.showLoading !== false){
       hideLoading();
         s += 1
@@ -114,21 +103,18 @@ instance.interceptors.response.use(
     // console.log(response)
     // 判断是否过期
     if(response.data.code == -1){
-      console.dir(router)
       delCookie('autoLogin')
       router.push('/login')
     }
-
-     //判断当前请求是否设置了不显示Loading（不显示自然无需隐藏）
-    if(response.config.headers.showLoading !== false){
-      toHideLoading();
-     
+    
+    if(response.status == 200) {
+        hideLoading();
     }
     return response.data
   },
   err=>{
     if(err=="Error: Request failed with status code 500"){
-      toHideLoading()
+      hideLoading()
     //  Message.error('加载超时。请重新刷新页面！')
     }else{
       switch (err.response.status) {

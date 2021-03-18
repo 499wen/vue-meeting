@@ -105,7 +105,7 @@ export default {
       // 分页
       total: 0,
       pageNum: 1,
-      pageSize: 10
+      pageSize: 1000
     }
   },
   methods: {
@@ -140,6 +140,7 @@ export default {
     },
     // 分页方法
     sizeChange(val){
+      this.pageNum = 1
       this.pageSize = val
     },
     curChange(val){

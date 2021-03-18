@@ -94,13 +94,13 @@ export default {
   data() {
     return {
       // table
-      tableData: [{}],
+      tableData: [],
       height: null,
 
       // 分页
       total: 0,
       pageNum: 1,
-      pageSize: 10,
+      pageSize: 1000,
 
       // 子集组件 开关
       clumnLook_child: false,
@@ -118,6 +118,7 @@ export default {
     },
     // 分页方法
     sizeChange(val){
+      this.pageNum = 1
       this.pageSize = val
     },
     curChange(val){

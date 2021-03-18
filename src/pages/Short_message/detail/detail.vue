@@ -90,7 +90,7 @@ export default {
         if(res.code == '000' && res.data){
           let data = res.data, 
             triggerTime = data.triggerTime,
-            item = this.detail
+            item = this.detail 
 
           if (!triggerTime) {
             triggerTime = ''
