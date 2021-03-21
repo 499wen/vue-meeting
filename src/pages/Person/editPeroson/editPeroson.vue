@@ -16,15 +16,17 @@
             </el-form-item>   
           </el-col>  
           <div class="userImage"> 
-            <el-upload class="avatar-uploader" :action="`API.url + API.router.uploadFile`" :show-file-list="false" ref="updateFace"
-            :headers="headers" accept="image/png,image/jpeg,image/jpg" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+            <div class="avatar-uploader">
               <img v-if="user.photoFileSaveName" class="authsrc" id="addUserImg" style="width: 100%;height: 100%;border-radius: 0;" :authsrc="`${api}/${user.companyId}/${user.photoFileSaveName}`" alt="">
 
               <div class="tip" v-else>
                 <div><i class="el-icon-plus avatar-uploader-icon"></i></div>
                 <div>点击上传头像</div>
-              </div>  
-            </el-upload>
+              </div> 
+
+              <!-- 虚拟 标签 -->
+              <input type="file" name="" id="avatar" ref='avatar' @change="upload">
+            </div>
           </div>
         </el-row> 
         <el-row>
@@ -177,11 +179,22 @@ export default editPeroson
 		.avatar-uploader {
       width: 150px;
       height: 188px;
-      display: flex;
+      position: relative;
+      // display: flex;
       justify-content: center;
       align-content: center;
       border: 1px dashed #ccc;
       border-radius: 5px;
+      cursor: pointer;
+
+      #avatar {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        opacity: 0;
+        top: 0;
+        cursor: pointer;
+      }
 
 			.tip {
 				width: 100%;

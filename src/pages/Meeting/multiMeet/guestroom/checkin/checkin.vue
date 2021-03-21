@@ -28,12 +28,12 @@
     <!-- 表格 -->
     <el-table ref="singleTable"
       :data="tableData" border :height="400">
-      <el-table-column label="选择" width="55" :resizable='false' align='center'>
+      <el-table-column :show-overflow-tooltip="true" label="选择" width="55" :resizable='false' align='center'>
         <template slot-scope="scope">
           <el-radio @change="chioce(scope.row)" v-model="radio" :label='scope.row.id'><i></i></el-radio>
         </template>
       </el-table-column>
-      <el-table-column :prop="item.props" :label="item.label" :width="item.width"
+      <el-table-column :show-overflow-tooltip="true" :prop="item.props" :label="item.label" :width="item.width"
         v-for="(item, idx) in tableCate" :key="idx"
         align="center" :resizable="false">
       </el-table-column>
@@ -82,7 +82,7 @@ export default {
       // 分页
       total: 0,
       pageNum: 1,
-      pageSize: 1000,
+      pageSize: 100,
       
     }
   },

@@ -188,8 +188,8 @@
               border
               @selection-change="handleSelectionChange"
               style="width: 100%">
-              <el-table-column type="selection" width="55"></el-table-column>
-              <el-table-column 
+              <el-table-column :show-overflow-tooltip="true" type="selection" width="55"></el-table-column>
+              <el-table-column :show-overflow-tooltip="true" 
                 v-for="(item, idx) in tableCate" :key="idx"
                 :prop="item.description" :label="item.name"
                 width="">
@@ -209,8 +209,8 @@
               height="500"
               border
               style="width: 100%">
-              <el-table-column type="selection" width="55"></el-table-column>
-              <el-table-column 
+              <el-table-column :show-overflow-tooltip="true" type="selection" width="55"></el-table-column>
+              <el-table-column :show-overflow-tooltip="true" 
                 v-for="(item, idx) in tableCate" :key="idx"
                 :prop="item.description" :label="item.name"
                 width="">

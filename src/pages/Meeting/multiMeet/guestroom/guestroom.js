@@ -30,7 +30,7 @@ export default {
       // 分页
       total: 0,
       pageNum: 1,
-      pageSize: 1000,
+      pageSize: 100,
 
       // 当前tree
       curTree: null,
@@ -107,22 +107,6 @@ export default {
           <span class="custom-tree-node">
             <span>{node.label}</span>
           </span>)
-    },
-    // tree - 添加
-    append(data, e){
-      e.preventDefault();
-      e.stopPropagation();
-    },
-    // tree - 删除
-    remove(node, data, e){
-      e.preventDefault();
-      e.stopPropagation();
-    },
-
-    // tree - 编辑
-    edit(node, data, e){
-      e.preventDefault();
-      e.stopPropagation();
     },
 
     // 表格勾选回调

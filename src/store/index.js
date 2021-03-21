@@ -38,6 +38,10 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    // 关于会议数据
+    aboutMeetingData(context, data){
+      context.commit('setMeetingData', data)
+    }
   }, 
   modules: {
   },

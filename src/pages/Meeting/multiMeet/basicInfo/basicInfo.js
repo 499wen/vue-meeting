@@ -354,12 +354,12 @@ export default {
   computed: {
     ...mapState([
       'meetingData'
-    ])
+    ]),
   },
   methods: {
     // vuex --- 
     ...mapMutations([
-      'setMeetingData', 'setTest'
+      'setMeetingData'
     ]),
     // 添加会议议程
     addProduce(){
@@ -471,10 +471,10 @@ export default {
     },
     // 上传封面 
     uploadSuccess(res){
-
     },
     // 上传状态
     beforeAvatarUpload(){
+      console.log(this.meetingData)
 
     },
 
@@ -529,9 +529,12 @@ export default {
 
     if(this.meetingData.id){
       setTimeout(() => {
+        // 复制当前显示数据 (取出 meetings属性)
+        let copyData = JSON.parse(JSON.stringify(this.meetingData))
+        delete copyData.meetings
         // 回显数据
-        this.addForm = this.meetingData
-        this.doesTheNumberLeave = rulesPerson(this.meetingData.doesTheNumberLeave)
+        this.addForm = copyData
+        this.doesTheNumberLeave = rulesPerson(this.addForm.doesTheNumberLeave)
         map.centerAndZoom(this.addForm.address, 18)
         map.addOverlay(new BMap.Marker(this.addForm.address));    // 添加标注
   
@@ -546,7 +549,7 @@ export default {
     //       console.log(res)
     //     })
 // https://service-ij14wquc-1305256445.gz.apigw.tencentcs.com/release/pageAllSuperCustomer
-	
-// https://service-ij14wquc-1305256445.gz.apigw.tencentcs.com/release/conferenceRoomBooking
-  }
+
+  },
+
 }

@@ -101,8 +101,8 @@
       <div class="person-data">
         <div class="table">
           <el-table :data="tableData" border :height="height" @selection-change="batchDel">
-            <el-table-column type="selection" width="55" align="center" :resizable="false"></el-table-column>
-            <el-table-column :resizable="false" align="center" label="头像" width="80">
+            <el-table-column :show-overflow-tooltip="true" type="selection" width="55" align="center" :resizable="false"></el-table-column>
+            <el-table-column :show-overflow-tooltip="true" :resizable="false" align="center" label="头像" width="80">
               <template slot-scope="scope">
                 <img v-lazy="`${scope.row.photoFileSaveName}`" class="avatar" alt="">
                 <!-- <div v-if="!scope.row.photoFileSaveName">
@@ -111,9 +111,9 @@
                 <img v-else class="authsrc" style="width: 40px; height: 40px" :authsrc="`${api}/${scope.row.companyId}/${scope.row.photoFileSaveName}`" alt="" > -->
               </template>
             </el-table-column>
-            <el-table-column :prop="item.prop" :label="item.label" align="center" :resizable="false"
+            <el-table-column :show-overflow-tooltip="true" :prop="item.prop" :label="item.label" align="center" :resizable="false"
               v-for="(item, idx) in tableCate" :key="idx"></el-table-column>
-            <el-table-column :resizable="false" align="center" label="操作" width="100">
+            <el-table-column :show-overflow-tooltip="true" :resizable="false" align="center" label="操作" width="100">
               <template slot-scope="scope">
                 <el-button @click="updateUser(scope.row)" class="edit" round size='small'>编辑</el-button>
               </template>

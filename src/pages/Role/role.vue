@@ -11,13 +11,13 @@
     <!-- 表格 -->
     <div class="table">
       <el-table :data="tableData" :height='height' border>
-        <el-table-column :resizable="false" align='center' type="index" label="序号" width="50"></el-table-column>
-        <el-table-column :resizable="false"  align='center'
+        <el-table-column :show-overflow-tooltip="true" :resizable="false" align='center' type="index" label="序号" width="50"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" :resizable="false"  align='center'
         v-for="(item,index) in tableCate"
         :key="index"
         :prop="item.value" :label="item.label" :width="item.width"
         ></el-table-column>
-        <el-table-column :resizable="false"  align='center' label="操作" width="400">
+        <el-table-column :show-overflow-tooltip="true" :resizable="false"  align='center' label="操作" width="400">
           <template slot-scope="scope">
             <el-button size="small" type="warning" @click="handleEdit(scope.row)" round>编辑</el-button>
             <el-button size="small" type="primary" @click="addUsers(scope.row)" round>添加成员</el-button>

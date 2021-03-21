@@ -11,8 +11,8 @@
         <div class="c-table">
           <el-table :data="preGroup" border :height="height"
             @selection-change="selectionTable" @row-click='handleSelectionChange'>
-            <el-table-column align="center" type="selection" width="55"></el-table-column>
-            <el-table-column align="center" v-for="(item, idx) in tableLable" :key="idx"
+            <el-table-column :show-overflow-tooltip="true" align="center" type="selection" width="55"></el-table-column>
+            <el-table-column :show-overflow-tooltip="true" align="center" v-for="(item, idx) in tableLable" :key="idx"
                   :prop="item.fieldName"  :label="item.name"></el-table-column>
           </el-table>
         </div>  

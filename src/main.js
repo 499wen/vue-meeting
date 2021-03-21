@@ -10,12 +10,17 @@ Vue.use(ElementUI);
 import ResetMessage from './plugins/resetMessage.js'
 Vue.prototype.$message = ResetMessage
 
-// 引入axios
+// 挂载axios
 import $http from './plugins/axios.js'
 Vue.prototype.$http = $http
 
-// 引入axios
-import './API/api.js'
+// 挂载接口对象
+import Api from './API/api.js'
+Vue.prototype.API = Api
+
+// 挂载文件上传服务
+import fileUpload from './plugins/file_upload.js'
+Vue.prototype.fileUpload = fileUpload
 
 // 引入图片懒加载
 import vueLazy from 'vue-lazyload'

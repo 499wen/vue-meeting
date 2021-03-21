@@ -30,18 +30,18 @@
         <div class="table">
           <el-table ref="singleTable" :height='height'
             :data="tableData" border>
-            <el-table-column type="index" width="50" label="序号" align="center" :resizable="false">
+            <el-table-column :show-overflow-tooltip="true" type="index" width="50" label="序号" align="center" :resizable="false">
             </el-table-column>
-            <el-table-column :prop="item.prop" :label="item.label" :width="item.width"
+            <el-table-column :show-overflow-tooltip="true" :prop="item.prop" :label="item.label" :width="item.width"
               v-for="(item, idx) in tableCate" :key="idx"
               align="center" :resizable="false">
             </el-table-column>
-            <el-table-column label="操作" width="120" align="center" :resizable="false">
+            <el-table-column :show-overflow-tooltip="true" label="操作" width="120" align="center" :resizable="false">
               <template slot-scope="scope">
                 <el-button size="small" round @click="smsDetail(scope.row)" :class="scope.row.configurable == 1 && 'tips'">详情</el-button>
               </template>
             </el-table-column>
-            <el-table-column label="启用状态" width="120" align="center" :resizable="false">
+            <el-table-column :show-overflow-tooltip="true" label="启用状态" width="120" align="center" :resizable="false">
               <template slot-scope="scope">
                 <el-switch v-model="scope.row.use" active-color="#006fdf" @change="updateSmsIsUse(scope.row)"></el-switch>
               </template>

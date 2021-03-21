@@ -21,7 +21,7 @@ export default {
       // 分页
       total: 0,
       pageNum: 1, 
-      pageSize: 1000,
+      pageSize: 100,
 
       // 获取人员参数 
       photoFlag: 1, // 1 无头像人员 2 有头像

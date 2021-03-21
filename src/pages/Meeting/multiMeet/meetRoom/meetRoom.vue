@@ -4,12 +4,12 @@
     <div class="table">
       <el-table ref="singleTable"
         :data="tableData" border :height="height">
-        <el-table-column type="index" width="50" label="序号" align="center" :resizable="false"></el-table-column>
-        <el-table-column :prop="item.props" :label="item.label" :width="item.width"
+        <el-table-column :show-overflow-tooltip="true" type="index" width="50" label="序号" align="center" :resizable="false"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" :prop="item.props" :label="item.label" :width="item.width"
           v-for="(item, idx) in tableCate" :key="idx"
           align="center" :resizable="false">
         </el-table-column>
-        <el-table-column
+        <el-table-column :show-overflow-tooltip="true"
           v-if="tableData.length && tableData[0].Is === 3" label="预约"
           width="100px" align="center" prop="stateCode" :resizable='false'>
           <template slot-scope="scope">
@@ -17,7 +17,7 @@
             round :disabled='meetIsEnd' size="small">选择</el-button>
           </template>
         </el-table-column>
-        <el-table-column v-if="tableData.length && tableData[0].Is !== 3"
+        <el-table-column :show-overflow-tooltip="true" v-if="tableData.length && tableData[0].Is !== 3"
           label="状态" width="150px" align="center" prop="stateCode">
           <template slot-scope="scope">
             <div v-if="scope.row.Is == '0'" class="ball-fa">
@@ -71,7 +71,7 @@ export default {
       // 分页
       total: 0,
       pageNum: 1,
-      pageSize: 1000,
+      pageSize: 100,
 
       meetIsEnd: false
     }

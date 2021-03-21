@@ -18,19 +18,19 @@
     <!-- 表格 -->
     <div class="table" >
       <el-table :data="tableData" :height='height' border>
-        <el-table-column :resizable="false" align='center' type="index" label="序号" width="50"></el-table-column>
-        <el-table-column :resizable="false"  align='center' label="会议室封面" width="200">
+        <el-table-column :show-overflow-tooltip="true" :resizable="false" align='center' type="index" label="序号" width="50"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" :resizable="false"  align='center' label="会议室封面" width="200">
           <template slot-scope="scope">
             <img v-if="!scope.row.hotelImageUrl" src="@/assets/images/defaultImg.png" class="hotel-img" />
             <img v-else id="updateUserImg" class="hotel-img" :src="`/zhenapi/fileserve/hotelFile/hotel/hotelImage/${loginInfo.companyId}/${scope.row.hotelImageUrl}`" alt="">
           </template>
         </el-table-column> 
-        <el-table-column :resizable="false" align='center'
+        <el-table-column :show-overflow-tooltip="true" :resizable="false" align='center'
         v-for="(item,index) in tableCate"
         :key="index"
         :prop="item.value" :label="item.label" :width="item.width"
         ></el-table-column>
-        <el-table-column :resizable="false"  align='center' label="操作" width="350">
+        <el-table-column :show-overflow-tooltip="true" :resizable="false"  align='center' label="操作" width="350">
           <template slot-scope="scope">
             <el-button size="small" type="warning" @click="handleEdit(scope.row)" round>修改会议室</el-button>
             <el-button size="small" type="danger" @click="deleteUsers(scope.row)" round>删除会议室</el-button>
@@ -74,7 +74,7 @@ export default {
       height: null,
       total: 0,
       pageNum: 1,
-      pageSize: 1000
+      pageSize: 100
     }
   },
   methods: {

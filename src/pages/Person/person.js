@@ -2,7 +2,7 @@ import AddPerson from './addPeroson/addPeroson.vue' // 添加人员
 import EditPeroson from './editPeroson/editPeroson.vue' // 修改人员
 import NoPhotos from './noPhotos/noPhotos.vue' // 人员无照片匹配
 import conditionGroup from './conditionGroup/conditionGroup.vue' // 条件组
-
+import { dataScrollLoad } from '@/plugins/plugins.js'
 
 export default {
   components: {
@@ -37,7 +37,7 @@ export default {
 
       // 分页
       pageNum: 1,
-      pageSize: 50,
+      pageSize: 100,
       total: 0,
       searchKey: '',
 
@@ -322,17 +322,12 @@ export default {
         .then(res => {
           // console.log(res)
           if (res.code == "000") {
-            let data = res.data;
-            data.filter(item => {
-              if(item.birthday == 0){
-                item.birthday = ''
-              } else {
-                item.birthday = time(+item.birthday)
-              }
+            // 二次分页处理
+            this.total = res.count
+            let table_scroll = document.querySelector('.person .el-table__body-wrapper')
+            dataScrollLoad(table_scroll, res.data, 1, 30, (data) => {
+                this.tableData = data
             })
-            this.total = res.count;
-            this.tableData = data;
-
           } else {
             this.total = 0;
             this.tableData = [];
@@ -449,16 +444,10 @@ export default {
       }
       this.$http.post(this.API.conditionQuerys(this.deparmentId, this.pageNum, this.pageSize, this.externalCode, this.searchKey, this.photoFlag), obj)
         .then(res => {
-          // console.log(res)
+          console.log(res)
           if (res.code == "000") {
             let data = res.data;
-            data.filter(item => {
-              if(item.birthday == 0){
-                item.birthday = ''
-              } else {
-                item.birthday = time(+item.birthday)
-              }
-            })
+            
             this.total = res.count;
             this.tableData = data;
 
@@ -467,6 +456,7 @@ export default {
             this.tableData = [];
           }
         }).catch(res => {
+          console.log(res)
           this.total = 0;
           this.tableData = [];
         })

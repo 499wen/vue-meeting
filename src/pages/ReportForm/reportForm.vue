@@ -3,9 +3,9 @@
     <!-- 表格 -->
     <div class="table">
       <el-table :data="tableData" :height='height' border>
-        <el-table-column type="index" width="80" label="序号" align='center' :resizable='false'></el-table-column>
-        <el-table-column prop="meetingName" label="会议名称" width="300" align='center' :resizable='false'> </el-table-column>
-        <el-table-column  label="会议时间" width="240" :resizable='false' align='center'>
+        <el-table-column :show-overflow-tooltip="true" type="index" width="80" label="序号" align='center' :resizable='false'></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" prop="meetingName" label="会议名称" width="300" align='center' :resizable='false'> </el-table-column>
+        <el-table-column :show-overflow-tooltip="true"  label="会议时间" width="240" :resizable='false' align='center'>
           <template slot-scope="scope">
             <div class="time">
               <span>{{ scope.row.time }}</span>
@@ -14,30 +14,30 @@
           </template>
         </el-table-column>
   
-        <el-table-column label="邀请/通知" align='center' :resizable='false'>
-          <el-table-column prop="inviteNumber" label="邀请/通知" align='center' :resizable='false'>
+        <el-table-column :show-overflow-tooltip="true" label="邀请/通知" align='center' :resizable='false'>
+          <el-table-column :show-overflow-tooltip="true" prop="inviteNumber" label="邀请/通知" align='center' :resizable='false'>
           </el-table-column>
-          <el-table-column prop="confirmAttendanceNum" label="确认参会" align='center' :resizable='false'>
+          <el-table-column :show-overflow-tooltip="true" prop="confirmAttendanceNum" label="确认参会" align='center' :resizable='false'>
           </el-table-column>
-          <el-table-column prop="unconfirmedAttendanceNum" label="未确认参会" align='center' :resizable='false'>
+          <el-table-column :show-overflow-tooltip="true" prop="unconfirmedAttendanceNum" label="未确认参会" align='center' :resizable='false'>
           </el-table-column>
-          <el-table-column prop="leaveNumber" label="请假" align='center' :resizable='false'>
+          <el-table-column :show-overflow-tooltip="true" prop="leaveNumber" label="请假" align='center' :resizable='false'>
           </el-table-column> 
         </el-table-column>  
 
-        <el-table-column prop="reportNumber" label="报到人数" width="" align='center' :resizable='false'> </el-table-column>
+        <el-table-column :show-overflow-tooltip="true" prop="reportNumber" label="报到人数" width="" align='center' :resizable='false'> </el-table-column>
 
-        <el-table-column label="到会签到" align='center' :resizable='false'>
-          <el-table-column prop="shouldArrive" label="应到" align='center' :resizable='false'>
+        <el-table-column :show-overflow-tooltip="true" label="到会签到" align='center' :resizable='false'>
+          <el-table-column :show-overflow-tooltip="true" prop="shouldArrive" label="应到" align='center' :resizable='false'>
           </el-table-column>
-          <el-table-column prop="actualNumberOfPeople" label="实到" align='center' :resizable='false'>
+          <el-table-column :show-overflow-tooltip="true" prop="actualNumberOfPeople" label="实到" align='center' :resizable='false'>
           </el-table-column>
-          <el-table-column prop="notYet" label="未到" align='center' :resizable='false'>
+          <el-table-column :show-overflow-tooltip="true" prop="notYet" label="未到" align='center' :resizable='false'>
           </el-table-column>
-          <el-table-column prop="arrivalRate" label="到会率" align='center' :resizable='false'>
+          <el-table-column :show-overflow-tooltip="true" prop="arrivalRate" label="到会率" align='center' :resizable='false'>
           </el-table-column>
         </el-table-column>
-        <el-table-column align="center" :resizable='false' label="操作" width='180'>
+        <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' label="操作" width='180'>
           <template slot-scope="scope">
             <el-button round size='small' type="primary" @click="clumnLook(scope.row)">查看</el-button>
             <el-button round size='small' type="primary" @click="detailed(scope.row)">明细</el-button>
@@ -100,7 +100,7 @@ export default {
       // 分页
       total: 0,
       pageNum: 1,
-      pageSize: 1000,
+      pageSize: 100,
 
       // 子集组件 开关
       clumnLook_child: false,

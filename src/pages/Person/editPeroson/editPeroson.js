@@ -1,7 +1,7 @@
 // 添加人员js
 function User() {
 	return { 
-		userName: '', //姓名
+		userName: '', //姓名 
 		sex: '男', //性别
 		birthday: 0, //生日
 		nation: '', //民族 
@@ -26,7 +26,7 @@ function User() {
 		attribute3: '', //属性3
 		attribute4: '', //属性4
 		externalCode: '0',
-		photoFileSaveName: ''
+		photoFileSaveName: '', // 头像 (包含后缀)
 	}
 }
 
@@ -104,11 +104,20 @@ export default {
     }
   },
   methods: {
-    handleAvatarSuccess(){
-
-    },
-    beforeAvatarUpload() {
-
+    // 上传头像
+    upload(){
+      let file = this.$refs.avatar.files[0]
+      console.log(file)
+      this.fileUpload(file, res => {
+        console.log(res)
+        if(res.code == '000'){
+          this.$message.success('上传成功！')
+          // this.
+          this.user.photoFileSaveName = res.data.saveFileName
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
     },
 
     // 获取生日

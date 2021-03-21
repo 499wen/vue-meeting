@@ -16,6 +16,7 @@
             :data="data"
             :props="treeProps"
             node-key="id"
+            ref='tree'
             default-expand-all
             @node-click='treeClick'
             :expand-on-click-node="false"
@@ -32,7 +33,7 @@
             :class="item.select && 'select'" @click="choiceTab(item.eng)"> {{ item.name }} </span>
         </div>
 
-        <!-- 内容 -->
+        <!-- 内容 --> 
         <div class="content" v-if="block">
           <!-- 基本信息 -->
           <basicInfo ref='basicInfo' v-if="tabFunc == '基本信息'"></basicInfo>

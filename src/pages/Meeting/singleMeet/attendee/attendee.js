@@ -38,7 +38,7 @@ export default {
       // 分页
       total: 0,
       pageNum: 1,
-      pageSize: 1000,
+      pageSize: 100,
 
       // 当前选中参会人分组
       curAttenGroup: {},

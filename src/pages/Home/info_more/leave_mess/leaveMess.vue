@@ -11,10 +11,10 @@
     <!-- 表格 -->
     <div class="table">
       <el-table :data="tableData" :height='height' border>
-        <el-table-column
+        <el-table-column :show-overflow-tooltip="true"
         :prop="item.description" :label="item.name" :resizable='false' align='center'
           v-for="(item, idx) in tableCate" :key="idx"> </el-table-column> 
-        <el-table-column  label="操作" width="200" :resizable='false' align='center'>
+        <el-table-column :show-overflow-tooltip="true"  label="操作" width="200" :resizable='false' align='center'>
           <template slot-scope="scope">
             <div class="time">
               <span>{{ scope.row.time }}</span>
@@ -66,7 +66,7 @@ export default {
       // 分页
       total: 0,
       pageNum: 1,
-      pageSize: 1000
+      pageSize: 100
     }
   },
   methods: {

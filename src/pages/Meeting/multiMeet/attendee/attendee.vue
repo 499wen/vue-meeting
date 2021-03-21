@@ -20,9 +20,9 @@
         <div class="data-add" v-show='!curAttenGroup.parentId'>
           <el-button round size='small' type="primary" @click="addAtteBtn">添加参会人</el-button>
           <el-button round size='small' type="danger">移除参会人</el-button>
-          <el-button round size='small' type="primary">手动录入</el-button>
+          <el-button round size='small' type="primary" v-if="false">手动录入</el-button>
         </div>
-        <div class="data-query">
+        <div class="data-query" v-if="false">
           <el-button class="spacing" size='small' @click="exportAtten">导出参会人</el-button>
           <!-- 条件组查询 -->
           <el-dropdown trigger="click" class="spacing" @command='clickCondi' placement='bottom'>
@@ -44,9 +44,9 @@
         <div class="table-child">
           <el-table ref="singleTable"
             :data="tableData" border :height="height">
-            <el-table-column align="center" :resizable='false' type="selection" width="50"></el-table-column>
-            <el-table-column type="index" width="50" label="序号" align="center" :resizable="false"></el-table-column>
-            <el-table-column :prop="item.props" :label="item.label" :width="item.width"
+            <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' type="selection" width="50"></el-table-column>
+            <el-table-column :show-overflow-tooltip="true" type="index" width="50" label="序号" align="center" :resizable="false"></el-table-column>
+            <el-table-column :show-overflow-tooltip="true" :prop="item.props" :label="item.label" :width="item.width"
               v-for="(item, idx) in tableCate" :key="idx"
               align="center" :resizable="false">
             </el-table-column>

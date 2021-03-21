@@ -51,13 +51,16 @@ export function selfTime(date, complete = false, chinese = false, minusOne = fal
  * @param num 次数
  * @param size 每次增加数量
  * @param callBack 回调
- * let table_scroll = document.querySelector('.el-table__body-wrapper')
- * dataScrollLoad(table_scroll, res.data, 1, 20, (res) => {
- *   this.tableData = res
- *   this.total = res.total
- * })
+ * // 二次分页处理
+   this.total = res.total
+   let table_scroll = document.querySelector('.aaa .el-table__body-wrapper')
+   dataScrollLoad(table_scroll, res.data, 1, 30, (data) => {
+      this.tableData = data
+   })
  */
 export function dataScrollLoad(_dom, totalData, num, size,  callBack) {
+    // 滚动条重置
+    _dom.scrollTop = 0
     // dom scroll 监听 
     _dom.onscroll = function(){
         // 数据不够 不执行逻辑
@@ -119,8 +122,15 @@ export function map(params) {
 export function tips_blur (){
   let tipsArr = document.querySelectorAll('.tangram-suggestion-main')
   for(let i = 0; i < tipsArr.length; i ++){
-    tipsArr[i].style.display = 'none'
+    tipsArr[i].style.opacity = '0'
   }
+
+  setTimeout(() => {
+    for(let i = 0; i < tipsArr.length; i ++){
+      tipsArr[i].style.opacity = '1'
+      tipsArr[i].style.display = 'none'
+    }
+  }, 1000)
 }
 
 

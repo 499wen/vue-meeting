@@ -3,9 +3,9 @@
     <div class="hide-table">
       <el-table ref="singleTable" @selection-change="batchDel"
         :data="tableData" border :height="height">
-        <el-table-column align="center" :resizable='false' type="selection" width="50"></el-table-column>
-        <el-table-column type="index" width="50" label="序号" align="center" :resizable="false"></el-table-column>
-        <el-table-column :prop="item.props" :label="item.label" :width="item.width"
+        <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' type="selection" width="50"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" type="index" width="50" label="序号" align="center" :resizable="false"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" :prop="item.props" :label="item.label" :width="item.width"
           v-for="(item, idx) in tableCate" :key="idx"
           align="center" :resizable="false">
         </el-table-column>

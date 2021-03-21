@@ -73,6 +73,15 @@ body {
   padding: 7px 0 !important;
 }
 
+.el-table .cell {
+  width: 100%;
+	box-sizing: border-box;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap !important;
+	display: inline-block;
+}
+
 .dialog {
   max-height: calc(100vh - 160px);
   box-sizing: border-box;
@@ -211,7 +220,7 @@ body {
 }
 
 .tangram-suggestion-main {
-  z-index: 999999;
+  z-index: 999;
 }
 
 // 去掉右边框
@@ -223,4 +232,5 @@ body {
 .el-button--small.is-round {
   padding: 7px 18px !important;
 }
+
 </style>

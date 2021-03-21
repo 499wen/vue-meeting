@@ -30,16 +30,17 @@
  * :resizable="false" 禁止拖动表头
  * align="center" 居中
  * @selection-change="batchDel" 勾选回调
+ * :show-overflow-tooltip="true"  溢出显示title
  * html:
  *  <el-table ref="singleTable"
       :data="tableData" border :height="height">
-      <el-table-column align="center" :resizable='false' type="selection" width="50"></el-table-column>
-      <el-table-column type="index" width="50" label="序号" align="center" :resizable="false"></el-table-column>
-      <el-table-column :prop="item.props" :label="item.label" :width="item.width"
+      <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' type="selection" width="50"></el-table-column>
+      <el-table-column :show-overflow-tooltip="true" type="index" width="50" label="序号" align="center" :resizable="false"></el-table-column>
+      <el-table-column :show-overflow-tooltip="true" :prop="item.props" :label="item.label" :width="item.width"
         v-for="(item, idx) in tableCate" :key="idx"
         align="center" :resizable="false">
       </el-table-column>
-      <el-table-column align="center" :resizable='false' label="状态" width='100'>
+      <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' label="状态" width='100'>
         <template slot-scope="scope">
           <span>{{scope.row.status}}</span>
         </template>
@@ -138,6 +139,7 @@ this.height = dom.offsetHeight
         :data="data"
         :props="treeProps"
         node-key="id"
+        ref='tree'
         @node-click='treeClick'
         :expand-on-click-node="false"
         :highlight-current="true"
@@ -173,16 +175,19 @@ this.height = dom.offsetHeight
       },
       // tree - 添加
       append(data, e){
-
+        e.preventDefault();
+        e.stopPropagation();
       },
       // tree - 删除
       remove(node, data, e){
-
+        e.preventDefault();
+        e.stopPropagation();
       },
 
       // tree - 编辑
       edit(node, data, e){
-
+        e.preventDefault();
+        e.stopPropagation();
       },
 
     使tree 默认高亮

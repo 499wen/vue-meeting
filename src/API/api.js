@@ -1,10 +1,10 @@
-import Vue from 'vue'
 const gzKey = '/gzapi' // 广州
-const Api = {
+export default {
   /**
    * 模块之外
    */
   getCustomer: `${gzKey}/release/getCustomer`, // 获取公司信息
+  uploadFile: `${gzKey}/release/uploadFile?`, // 上传文件
 
   /**
    * 注册
@@ -102,7 +102,7 @@ const Api = {
   findByMeetingIdAndPage: (groupId, pageNum, pageSize) => `${gzKey}/release/findByMeetingIdAndPage?confereeGroupId=${groupId}&pageNum=${pageNum}&pageSize=${pageSize}`, // 参会分组查询人员  
   addWholeatten: groupId => `${gzKey}/release/addByConfereeGroupIdAndUserIds?confereeGroupId=${groupId}`, // 添加人员至全体参会人分组中
 
-  selectConditionGroup: type => `${gzKey}/release/selectConditionGroup?type=${type}`, // 查询条件组 adduser：参会人  persons: 人员 
+  selectConditionGroup: type => `${gzKey}/release/selectConditionGroup?type=${type}`, // 查询条件组 adduser：参会人  persons: 人员  error
   updateConditionGroup: `${gzKey}/release/updateConditionGroup`, // 修改条件组 
   saveConditionGroup: `${gzKey}/release/saveConditionGroup`, // 添加条件组  
   delectConditionGroup: `${gzKey}/release/delectConditionGroup`, // 删除条件组
@@ -156,4 +156,3 @@ const Api = {
 
 } 
 
-Vue.prototype.API = Api

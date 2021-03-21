@@ -1,4 +1,5 @@
 import conditionGroup from '../conditionGroup/conditionGroup.vue'
+import { dataScrollLoad } from '@/plugins/plugins.js'
 
 export default {
   props: ['groupId'],
@@ -21,7 +22,7 @@ export default {
       // 分页
       total: 0,
       pageNum: 1, 
-      pageSize: 1000,
+      pageSize: 100,
 
       // 获取人员参数 
       photoFlag: 1, // 1 无头像人员 2 有头像
@@ -98,14 +99,19 @@ export default {
                 item.birthday = time(+item.birthday)
               }
             })
-            this.total = res.count;
-            this.tableData = data;
+
+            // 二次分页处理
+            let table_scroll = document.querySelector('.addAtte .el-table__body-wrapper')
+            this.total = res.count
+            dataScrollLoad(table_scroll, data, 1, 30, (res) => {
+              this.tableData = res
+            })
 
           } else {
             this.total = 0;
             this.tableData = [];
           }
-        }).catch(res => {
+        }).catch(err => {
           this.total = 0;
           this.tableData = [];
         })

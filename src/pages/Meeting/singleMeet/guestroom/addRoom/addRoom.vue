@@ -11,8 +11,8 @@
       <div class="table">
         <el-table ref="singleTable" @selection-change="batchDel"
           :data="tableData" border :height="height">
-          <el-table-column align="center" :resizable='false' type="selection" width="50"></el-table-column>
-          <el-table-column :prop="item.props" :label="item.label" :width="item.width"
+          <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' type="selection" width="50"></el-table-column>
+          <el-table-column :show-overflow-tooltip="true" :prop="item.props" :label="item.label" :width="item.width"
             v-for="(item, idx) in tableCate" :key="idx"
             align="center" :resizable="false">
           </el-table-column>
@@ -57,7 +57,7 @@ export default {
       // 分页
       total: 0,
       pageNum: 1,
-      pageSize: 1000,
+      pageSize: 100,
 
       // 表单验证
       addRoomForm:{
@@ -186,12 +186,6 @@ export default {
 
     // 获取房间
     getRoom(id){
-      load = this.$loading({
-        lock: true,
-        text: 'Loading',
-        spinner: 'el-icon-loading',
-        background: 'rgba(255, 255, 255, .7)'
-      })
       var roomGrade = ['普通套房', '豪华套房', '总统套房']
       this.$http.get(this.API.accordMeetRoom(this.meetingData.id, id,  this.pageNum, this.pageSize))
         .then(res => {
@@ -203,19 +197,14 @@ export default {
             })
             this.tableData = res.data
             this.total = res.total
-            load.close()
-            load = null
+
           } else {
             this.$message.error(res.msg)
             this.tableData = []
             this.total = 0
-            load.close()
-            load = null 
+ 
           }
-        }).catch(err=> {
-          load.close()
-          load = null 
-        })
+        }).catch(err=> {})
     },
     // 获取酒店数据
     getHotels() {

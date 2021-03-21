@@ -1,9 +1,3 @@
-  let token = localStorage.getItem('token')
-
-function G(id) {
-  return document.getElementById(id);
-}
-
 export default {
   data() {
     return {
@@ -15,7 +9,7 @@ export default {
         restaurantType: '', // 类型
         restaurantPresentation: '', // 介绍
         gpsLat: 32.013, // 
-        gpsLng: 24.1123,
+        gpsLng: 24.1123, 
         planeFigure: '', // 平面图
       },
       cover: '',
@@ -36,7 +30,10 @@ export default {
           { required: true, message: '请添加餐厅封面', trigger: 'blur' }
         ]
       },
-      headers: {}
+      headers: {
+        'Content-Type':'image/png',
+        token: localStorage.getItem('token')
+      }
     }
   },
   methods: {
@@ -56,12 +53,47 @@ export default {
         }
       })
     },
+    bolb(localData) {
+        // var localData= 'data:image/png...'; //假定dataUrl为base64位
+        let base = atob(localData.substring(localData.indexOf(',') + 1)); // base是将base64编码解码，去掉data:image/png;base64部分
+        let length = base.length;
+        let url = new Uint8Array(length);
+        while (length--) {
+            url[length] = base.charCodeAt(length);
+        }
+        let file = new File([url], 'a.jpg', {
+            type: 'image/jpg'
+        })
+        //最后将file，通过ajax请求做为参数传给服务器就可以了
+     return file 
+      
+    },
+    file(e){
+      // 文件数据
+      let file = this.$refs.img.files[0];
+
+      this.fileUpload(file, 'HeadFile', res => {
+        console.log(res)
+      })
+    },
+
     // 上传封面 
     uploadSuccess(res){
       console.log(res)
     },
     // 上传状态
-    beforeAvatarUpload(){
+    beforeAvatarUpload(data){
+      console.log(data, this.$refs.img)
+      
+      // let formData = new FormData()
+      // formData.append('file', 'data')
+      // return  false
+      // this.$http.post('/cdapi/release/acassc', formData)
+      //   .then(res => {
+      //     console.log(res)
+      //   })
+
+      //   return false
 
     },
     map() {
@@ -106,3 +138,4 @@ export default {
     //     })
   }
 }
+

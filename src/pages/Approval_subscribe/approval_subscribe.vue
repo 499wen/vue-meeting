@@ -18,14 +18,14 @@
     <div class="table">
       <el-table ref="multipleTable" :data="tableData" border :height='height'
         @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55" align="center"></el-table-column>
-        <el-table-column 
+        <el-table-column :show-overflow-tooltip="true" type="selection" width="55" align="center"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" 
           v-for="(item, idx) in tableCate" :key="idx"
           :prop="item.prop" :label="item.label" :width="item.width" align="center"></el-table-column>
-        <el-table-column label="状态" width="200" align="center">
+        <el-table-column :show-overflow-tooltip="true" label="状态" width="200" align="center">
           <template slot-scope="scope">{{ scope.row.date ? '已通过' : '未通过' }}</template>
         </el-table-column>
-        <el-table-column label="操作" width="200" align="center">
+        <el-table-column :show-overflow-tooltip="true" label="操作" width="200" align="center">
           <template slot-scope="scope">{{ scope.row.date ? '通过' : '不通过' }}</template>
         </el-table-column>
       </el-table>
@@ -71,7 +71,7 @@ export default {
       // 分页
       total: 0,
       pageNum: 1,
-      pageSize: 1000,
+      pageSize: 100,
 
       meetRoomTypeEnum:['方形','椭圆','菱形'], //会议室类型
       stateEnum:['待审批','通过','未通过'], //状态

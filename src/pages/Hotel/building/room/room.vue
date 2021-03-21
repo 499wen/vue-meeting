@@ -27,13 +27,13 @@
         <!-- table -->
         <el-table ref="singleTable"
           :data="tableData" border :height="400">
-          <el-table-column align="center" :resizable='false' type="selection" width="50"></el-table-column>
-          <el-table-column type="index" width="50" label="序号" align="center" :resizable="false"></el-table-column>
-          <el-table-column :prop="item.props" :label="item.label" :width="item.width"
+          <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' type="selection" width="50"></el-table-column>
+          <el-table-column :show-overflow-tooltip="true" type="index" width="50" label="序号" align="center" :resizable="false"></el-table-column>
+          <el-table-column :show-overflow-tooltip="true" :prop="item.props" :label="item.label" :width="item.width"
             v-for="(item, idx) in tableCate" :key="idx"
             align="center" :resizable="false">
           </el-table-column>
-          <el-table-column align="center" :resizable='false' label="操作" width='160'>
+          <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' label="操作" width='160'>
             <template slot-scope="scope">
               <el-button @click="editRoomBtn(scope.row)" type="primary" size="small" round>编辑</el-button>
               <el-button @click="delRoom(scope.row.id)" type="danger" size="small" round>删除</el-button>
@@ -114,7 +114,7 @@ export default {
       // 分页
       total: 0,
       pageNum: 1,
-      pageSize: 1000,
+      pageSize: 100,
 
       // 当前处理的楼层
       curFloor: null,

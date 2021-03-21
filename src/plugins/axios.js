@@ -113,11 +113,15 @@ instance.interceptors.response.use(
     return response.data
   },
   err=>{
+    if(err == 'Error: timeout of 5000ms exceeded at createError'){
+      hideLoading()
+      Message.error('已超时，请检查网络是否流畅！')
+    } else 
     if(err=="Error: Request failed with status code 500"){
       hideLoading()
     //  Message.error('加载超时。请重新刷新页面！')
     }else{
-      switch (err.response.status) {
+      switch (err.response && err.response.status) {
         // case 500:
         //     console.log('500服务器'); 
         //       dsQi2 = setTimeout(() => {

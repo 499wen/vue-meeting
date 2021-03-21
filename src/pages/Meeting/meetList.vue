@@ -7,11 +7,11 @@
 
       <div class="opera">
         <el-input size="small" placeholder="请输入会议名称" v-model="searchKey" @keyup.native.enter="searchBtn">
-          <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
+          <el-button slot="append" icon="el-icon-search" @click="searchBtn" type="primary"></el-button>
         </el-input>
         <el-button size="small" @click="addMeeting = true" type="primary" plain class="add-hotel"> 新建会议 </el-button>
       </div> 
-    </div>
+    </div> 
 
     <!-- 主体 -->
     <div class="meet-body">

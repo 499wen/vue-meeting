@@ -36,18 +36,18 @@
         <div class="table-child">
           <el-table ref="singleTable" @selection-change="batchDel"
             :data="tableData" border :height="height">
-            <el-table-column align="center" :resizable='false' type="selection" width="50"></el-table-column>
-            <el-table-column type="index" width="50" label="序号" align="center" :resizable="false"></el-table-column>
-            <el-table-column :prop="item.props" :label="item.label" :width="item.width"
+            <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' type="selection" width="50"></el-table-column>
+            <el-table-column :show-overflow-tooltip="true" type="index" width="50" label="序号" align="center" :resizable="false"></el-table-column>
+            <el-table-column :show-overflow-tooltip="true" :prop="item.props" :label="item.label" :width="item.width"
               v-for="(item, idx) in tableCate" :key="idx"
               align="center" :resizable="false">
             </el-table-column>
-            <el-table-column align="center" :resizable='false' label="状态" width='240'>
+            <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' label="状态" width='240'>
               <template slot-scope="scope">
                 <span>{{scope.row.personStr}}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" :resizable='false' label="操作" width='200'>
+            <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' label="操作" width='200'>
               <template slot-scope="scope">
                 <el-button size="mini" @click="btnSetCheckIn(scope.row)" type="primary" round>入住安排</el-button>
                 <el-button size="mini" @click="btnClearUser(scope.row)" type="danger" round>清空</el-button>

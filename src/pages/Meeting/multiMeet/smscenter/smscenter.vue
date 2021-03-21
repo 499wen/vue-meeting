@@ -12,11 +12,11 @@
       <div class="table">
         <el-table ref="singleTable" @cell-mouse-enter='mouseTable'
           :data="tableData" border :height="height">
-          <el-table-column :prop="item.props" :label="item.label" :width="item.width"
+          <el-table-column :show-overflow-tooltip="true" :prop="item.props" :label="item.label" :width="item.width"
             v-for="(item, idx) in tableCate" :key="idx"
             align="center" :resizable="false">
           </el-table-column>
-          <el-table-column align="center" :resizable='false' label="参会人分组" width='500'>
+          <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' label="参会人分组" width='500'>
             <template slot-scope="scope">
               <div v-if="scope.row.allData" class="check-person">
                 <div>

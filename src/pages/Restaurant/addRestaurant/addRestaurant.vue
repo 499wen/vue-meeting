@@ -12,7 +12,7 @@
       <!-- 表单 -->
       <div class="form-left">
         <div class="newly-build">
-          <div class="form-title">新建餐厅</div>
+          <div class="form-title">新建餐厅</div> 
           <div class="form-body">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
               <el-form-item label="餐厅名称" prop="restaurantName">
@@ -25,7 +25,7 @@
                   <el-option label="西餐厅" value="西餐厅"></el-option>
                   <el-option label="自助餐" value="自助餐"></el-option>
                 </el-select>
-              </el-form-item> 
+              </el-form-item>
               <el-form-item label="容纳人数" prop='maxPeopleNumber'>
                 <el-select v-model="ruleForm.maxPeopleNumber" placeholder="请选择容纳人数">
                   <el-option label="100" :value="100"></el-option>
@@ -36,7 +36,9 @@
                 </el-select>
               </el-form-item> 
               <el-form-item label="餐厅图片" prop='capacity'>
+                <input type="file" name="" id="" ref="img" value="上传" @change="file">
                 <el-upload
+                  
                   :action="`/cdapi/release/acassc`" 
                   :on-success="uploadSuccess"
                   :before-upload="beforeAvatarUpload"

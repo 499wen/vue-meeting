@@ -1,7 +1,7 @@
 import addAtte from './addAtte/addAtte.vue' // 添加参会人
 import operconditionGroup from './operconditionGroup/operconditionGroup.vue' // 条件组
 import { mapState } from 'vuex'
-import { toTree, exportToExcel, Load } from '@/plugins/plugins.js'
+import { toTree, exportToExcel, Load, dataScrollLoad } from '@/plugins/plugins.js'
 
 export default {
   components: {
@@ -38,7 +38,7 @@ export default {
       // 分页
       total: 0,
       pageNum: 1,
-      pageSize: 1000,
+      pageSize: 100,
 
       // 当前选中参会人分组
       curAttenGroup: {},
@@ -85,7 +85,7 @@ export default {
               loading.close()
             })
           } else {
-
+            loading.close()
           }
         })
     },
@@ -328,8 +328,11 @@ export default {
               item.statusCode = item.statusCode == '' ? 0 : item.statusCode
               item.status = !item.leaveState ? arr[item.statusCode] : arr2[item.leaveState]
             })
-            this.tableData = res.data
             this.total = res.total
+            let table_scroll = document.querySelector('.attendee .el-table__body-wrapper')
+            dataScrollLoad(table_scroll, res.data, 1, 30, (data) => {
+                this.tableData = data
+            })
           } else {
             this.tableData = []
             this.total = 0

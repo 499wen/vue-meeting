@@ -9,9 +9,9 @@
 
     <div class="member-table">
       <el-table :data="tableData" :height='height' border>
-        <el-table-column type="selection" width="50" align='center'></el-table-column>
-        <el-table-column :resizable="false" align='center' type="index" label="序号" width="50"></el-table-column>
-        <el-table-column :resizable="false"  align='center'
+        <el-table-column :show-overflow-tooltip="true" type="selection" width="50" align='center'></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" :resizable="false" align='center' type="index" label="序号" width="50"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" :resizable="false"  align='center'
         v-for="(item,index) in tableCate"
         :key="index"
         :prop="item.value" :label="item.label" :width="item.width"
@@ -49,7 +49,7 @@ export default {
       height: null,
       total: 0,
       pageNum: 1,
-      pageSize: 1000
+      pageSize: 100
     }
   },
   methods: {

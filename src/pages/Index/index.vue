@@ -8,7 +8,7 @@
       <div>
         <el-col :span="24">
           <el-menu
-          default-active="2"
+          :default-active="defaultActive"
           class="el-menu-vertical-demo"
           router
           @open="handleOpen" 
@@ -163,6 +163,9 @@ export default {
       // 公司信息
       loginInfo: {},
 
+      // 默认选中menu
+      defaultActive: '',
+
       // 子集组件 开关
       companyInfo_child: false
     }
@@ -246,6 +249,8 @@ export default {
   },
   mounted() {
     // this.listenPage()
+    console.log(this.$route)
+    this.defaultActive = this.$route.meta
   }
 }
 </script>

@@ -6,7 +6,8 @@ import invitation from './invitation/invitation.vue' // 邀请函
 import guestroom from './guestroom/guestroom.vue' // 住宿管理
 import restaurant from './restaurant/restaurant.vue' // 餐饮管理
 
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
+import { defaultMeetData } from './default.js'
 
 export default {
   components: {
@@ -39,14 +40,15 @@ export default {
 
       // tree
       data: [
-        { id: 1, label: '一级 1',
-          children: []
+        { id: 1, meetingName: '一级 1',
+          meetings: []
         }
       ],
       treeProps: {
-        children: 'children',
-        label: 'label'
+        children: 'meetings',
+        label: 'meetingName'
       },
+      curTree: {}
     }
 
   },
@@ -59,6 +61,9 @@ export default {
     // vuex 保存会议数据
     ...mapMutations([
       'setMeetingData'
+    ]),
+    ...mapActions([
+      'aboutMeetingData'
     ]),
     // 选择tab
     choiceTab(eng) {
@@ -80,6 +85,18 @@ export default {
     // tree - 点击触发
     treeClick(data, node){
       console.log(data, node)
+      // 复制当前显示数据 (取出 meetings属性)
+      let copyData = JSON.parse(JSON.stringify(data))
+      delete copyData.meetings
+
+      this.aboutMeetingData(copyData)
+      let name = this.tabFunc
+      setTimeout(() => {
+        this.tabFunc += '123'
+        setTimeout(() => {
+          this.tabFunc = name
+        }, 200)
+      }, 200)
     },
     // tree - 树结构
     renderContent(h, { node, data, store }) {
@@ -100,6 +117,31 @@ export default {
     },
     // tree - 添加
     append(data, e){
+      e.preventDefault();
+      e.stopPropagation();
+      console.log(this.curTree)
+
+      if(this.tabFunc == '基本信息'){
+        let child = this.$refs.basicInfo
+        console.log(child.addForm)
+        
+        if(JSON.stringify(this.curTree) != JSON.stringify(child.addForm)){
+          this.$confirm('是否清空当前信息?', '提示', {  
+            closeOnPressEscape: false,
+            closeOnClickModal: false,
+            cancelButtonClass: 'btn_custom_cancel',
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            // 会议上级id
+            child.addForm = defaultMeetData(this.data[0].id)
+          }).catch(() => {})
+        } else {
+          // 会议上级id
+          child.addForm = defaultMeetData(this.data[0].id)
+        }
+      }
 
     },
 
@@ -112,14 +154,20 @@ export default {
           res.data.sponsorArrJsonStr = JSON.parse(res.data.sponsorArrJsonStr);
           res.data.contactJson = JSON.parse(res.data.contactJson);
           res.data.meetingProduce = JSON.parse(res.data.meetingProduce) 
-
+          res.data.meetings = res.data.meetings || []
+          this.data = [JSON.parse(JSON.stringify(res.data))]
+          
+          delete res.data.meetings
           // 保存当前会议数据
           this.setMeetingData(res.data)
+
+          this.curTree = res.data
 
           setTimeout(() => {
             // 判断模块
             this.block = true
             this.choiceTab(data.select)
+            this.$refs.tree.setCurrentKey(data.meetingId)
           }, 0)
         }
       })
