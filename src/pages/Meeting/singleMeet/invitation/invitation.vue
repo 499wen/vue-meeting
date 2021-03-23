@@ -76,7 +76,7 @@
       		<div class="pattern" @click="pattern($event, 'longPage')">长页模式</div>
 				</div>
 				<!-- 长页邀请函 background-image: url(/zhenapi/fileserve/invitationFile/invitation/ +loginInfo.companyId+'/'+ dataCollection[curPage - 1].model.img +');' -->
-				<div class="po-r phone-long" :style="'text-align:center;height:'+ dataCollection[curPage - 1].model.height +'px;'" v-if="isLongPage">
+				<div class="po-r phone-long" :style="'text-align:center;height:'+ dataCollection[curPage - 1].model.height +'px;background-image: url(' + API.echoImage(dataCollection[curPage - 1].model.img) +');'" v-if="isLongPage">
 					<div id="mc">
 						<div id="phonecontent">
 							<div class="phone-item" id="phone-item" :style="'height:'+ dataCollection[curPage - 1].model.height +'px;'" @drop="dropTest($event)"
@@ -247,7 +247,7 @@
 
 									</div>
 								</div>
-								<div class="flex invite-progress" style="margin-left: 10px">
+								<div class="flex invite-progress" style="margin-left: 10px;justify-content: center;">
 									<el-button size='mini' @click="dengWidth">等宽</el-button>
 								</div>
 								<div class="flex invite-progress">
@@ -402,7 +402,7 @@
 								</div>
 							</div>
 							<div class="flex invite-progress">
-								<span class="mr15 style_label" style="width: 52px">水平</span>
+								<span class="mr15 style_label">水平</span>
 								<div style="display: inline-block;width: 100px">
 									<!-- <el-slider v-model="defaultStyle.shadowDirectionV" :min="-50/1.0" :max="50/1.0"></el-slider> -->
 									<el-input-number v-model="defaultStyle.shadowDirectionV" size="mini" style="width:100px;" controls-position="right" :min="-50" :max="50"></el-input-number>
@@ -410,7 +410,7 @@
 								</div>
 							</div>
 							<div class="flex invite-progress">
-								<span class="mr15 style_label" style="width: 52px">垂直</span>
+								<span class="mr15 style_label">垂直</span>
 								<div style="display: inline-block;width: 100px">
 									<el-input-number v-model="defaultStyle.shadowDirectionH" size="mini" style="width:100px;" controls-position="right" :min="-50" :max="50"></el-input-number>
 									<!-- <el-slider v-model="defaultStyle.shadowDirectionH" :min="-50/1.0" :max="50/1.0"></el-slider> -->
@@ -490,7 +490,7 @@
 					<el-collapse-item title="基本样式" name="1" style="padding-right: 0px;">
 						<div class="layui-colla-content layui-show">
 							<div style="display: flex; justify-content: space-between; align-items: center">
-								<div class="flex invite-progress" style="margin-left: 10px">
+								<div class="flex invite-progress" style="margin-left: 10px;justify-content: center;">
 									<el-button size='mini' @click="dengWidth">等宽</el-button>
 								</div>
 								<div class="flex invite-progress">
@@ -819,19 +819,15 @@
 				</div>
 				<div class="popup_bg-func">
 					<el-button size="small" type="danger" style="margin-right: 10px" @click="delBgimg">删除背景</el-button>
-					<el-upload
-						class="upload-demo"
-						:headers="headers"
-						:action="'API.url + API.router.imgupload'"
-						accept="image/*" :show-file-list="false"
-						:on-success='bgiUpload'>
+					<div class="upload-demo">
 						<el-button size="small" type="primary">上传背景</el-button>
-					</el-upload>
+          	<input type="file" name="" id="" class="hide" @change="bgiUpload" ref="file">
+					</div>
 
 				</div>
 				<div class="popup_cente"> 
 					<div class="popup_item" v-for="(item, idx) in bgImage" :key="idx">
-						<img :src="`/zhenapi/fileserve/invitationFile/invitation/${loginInfo.companyId}/` + item.imgId" alt="">
+						<img :src="API.echoImage(item.imgId)" alt="">
 						<div>
 							<input type="radio" name="bgImgRadio" class="bgimage" id="bgimage" @click="changeBgImg(idx)">
 						</div>
@@ -860,7 +856,7 @@
 				<div class="popup_cente">
 
 					<div class="popup_item" v-for="(item, idx) in invitaModel" :key="idx">
-						<img :src="`/zhenapi/fileserve/invitationFile/invitation/${loginInfo.companyId}/${item.imgId}`" alt="">
+						<img :src="API.echoImage(item.imgId)" alt="">
 						<div>
 							<input type="radio" name="bgImgRadio" class="radio" id="model" @click="changeBgModel(idx)">
 						</div>

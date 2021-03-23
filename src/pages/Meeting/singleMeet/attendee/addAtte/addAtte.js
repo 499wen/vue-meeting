@@ -1,4 +1,5 @@
 import conditionGroup from '../conditionGroup/conditionGroup.vue'
+import { dataScrollLoad } from '@/plugins/plugins.js'
 
 export default {
   props: ['groupId'],
@@ -91,15 +92,13 @@ export default {
         .then(res => {
           if (res.code == "000") {
             let data = res.data;
-            data.filter(item => {
-              if(item.birthday == 0){
-                item.birthday = ''
-              } else {
-                item.birthday = time(+item.birthday)
-              }
+
+            // 二次分页处理
+            let table_scroll = document.querySelector('.addAtte .el-table__body-wrapper')
+            this.total = res.count
+            dataScrollLoad(table_scroll, data, 1, 30, (res) => {
+              this.tableData = res
             })
-            this.total = res.count;
-            this.tableData = data;
 
           } else {
             this.total = 0;

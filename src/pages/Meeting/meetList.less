@@ -58,11 +58,11 @@
       .meet-single {
         min-width: 1200px;
         width: 100%;
-        height: 140px;
+        height: 180px;
         border: 1px solid #ccc;
         border-radius: 5px;
         margin-bottom: 5px;
-        padding: 5px 10px;
+        padding: 10px 10px;
         box-sizing: border-box;
         display: flex;
 
@@ -89,7 +89,7 @@
   display: flex;
 
   .meet-cover {
-    width: 120px;
+    width: 140px;
     height: 100%;
     text-align: center;
     padding: 5px 0;
@@ -98,7 +98,7 @@
     position: relative;
 
     & > img {
-      width: 80px;
+      width: 100px;
       height: 100%;
     }
 
@@ -163,7 +163,7 @@
 
     .icon {
       width: 140px;
-      height: 25px;
+      height: 30px;
       display: flex;
       justify-content: flex-start;
       align-items: center;
@@ -182,11 +182,16 @@
   .meet-btn {
     width: 100px;
     height: 100%;
+    // padding: 10px 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-around;
 
     .btn {
       width: 90px;
       margin-left: 0;
-      margin-bottom: 5px;
+      // margin-bottom: 5px;
     }
   }
 }

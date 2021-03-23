@@ -7,6 +7,7 @@ import guestroom from './guestroom/guestroom.vue' // 住宿管理
 import restaurant from './restaurant/restaurant.vue' // 餐饮管理
 
 import { mapState, mapMutations } from 'vuex'
+import handle from '../public.js'
 
 export default {
   components: {
@@ -67,22 +68,23 @@ export default {
     },
 
     // 获取会议信息
-    getMeetInfo(data){
-      this.$http.get(this.API.singleMeeting(data.meetingId))
+    getMeetInfo(info){
+      this.$http.get(this.API.singleMeeting(info.meetingId))
       .then(res => {
         if(res.code == '000'){
-          // 处理数据
-          res.data.sponsorArrJsonStr = JSON.parse(res.data.sponsorArrJsonStr);
-          res.data.contactJson = JSON.parse(res.data.contactJson);
-          res.data.meetingProduce = JSON.parse(res.data.meetingProduce) 
+          let data = res.data
+          // 处理数据 App创建会议 以下属性为空字符串
+          data.sponsorArrJsonStr = data.sponsorArrJsonStr ? JSON.parse(data.sponsorArrJsonStr) : handle('sponsorArrJsonStr')
+          data.contactJson = data.contactJson ? JSON.parse(data.contactJson) : handle('contactJson')
+          data.meetingProduce = data.meetingProduce ? JSON.parse(data.meetingProduce) : handle('meetingProduce')
 
           // 保存当前会议数据
-          this.setMeetingData(res.data)
+          this.setMeetingData(data)
 
           setTimeout(() => {
             // 判断模块
             this.block = true
-            this.choiceTab(data.select)
+            this.choiceTab(info.select)
           }, 0)
         }
       })

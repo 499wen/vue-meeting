@@ -8,6 +8,7 @@ import restaurant from './restaurant/restaurant.vue' // 餐饮管理
 
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { defaultMeetData } from './default.js'
+import handle from '../public.js'
 
 export default {
   components: {
@@ -92,7 +93,8 @@ export default {
       this.aboutMeetingData(copyData)
       let name = this.tabFunc
       setTimeout(() => {
-        this.tabFunc += '123'
+        // 点击其它会议  触发过渡效果
+        this.tabFunc += '  '
         setTimeout(() => {
           this.tabFunc = name
         }, 200)
@@ -150,10 +152,10 @@ export default {
       this.$http.get(this.API.multiMeeting(data.meetingId))
       .then(res => {
         if(res.code == '000'){
-          // 处理数据
-          res.data.sponsorArrJsonStr = JSON.parse(res.data.sponsorArrJsonStr);
-          res.data.contactJson = JSON.parse(res.data.contactJson);
-          res.data.meetingProduce = JSON.parse(res.data.meetingProduce) 
+          // 处理数据 App创建会议 以下属性为空字符串
+          data.sponsorArrJsonStr = data.sponsorArrJsonStr ? JSON.parse(data.sponsorArrJsonStr) : handle('sponsorArrJsonStr')
+          data.contactJson = data.contactJson ? JSON.parse(data.contactJson) : handle('contactJson')
+          data.meetingProduce = data.meetingProduce ? JSON.parse(data.meetingProduce) : handle('meetingProduce')
           res.data.meetings = res.data.meetings || []
           this.data = [JSON.parse(JSON.stringify(res.data))]
           

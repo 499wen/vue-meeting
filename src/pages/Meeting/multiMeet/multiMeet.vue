@@ -5,7 +5,7 @@
         <span>会议管理(多)</span>
         <span v-if="meetingData.meetingName">{{meetingData.meetingName}}</span>
         <span>{{tabFunc}}</span>
-      </div>
+      </div> 
     </div>
     <div class="multi-meet">
 

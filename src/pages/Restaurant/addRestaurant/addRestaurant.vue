@@ -36,9 +36,9 @@
                 </el-select>
               </el-form-item> 
               <el-form-item label="餐厅图片" prop='capacity'>
-                <input type="file" name="" id="" ref="img" value="上传" @change="file">
+                <input type="file" name="" id="" ref="file" value="上传" @change="updateLoad">
+                
                 <el-upload
-                  
                   :action="`/cdapi/release/acassc`" 
                   :on-success="uploadSuccess"
                   :before-upload="beforeAvatarUpload"

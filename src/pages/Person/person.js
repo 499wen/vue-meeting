@@ -1,5 +1,6 @@
 import AddPerson from './addPeroson/addPeroson.vue' // 添加人员
 import EditPeroson from './editPeroson/editPeroson.vue' // 修改人员
+import UpdatePhoto from './updatePhoto/updatePhoto.vue' // 上传图片
 import NoPhotos from './noPhotos/noPhotos.vue' // 人员无照片匹配
 import conditionGroup from './conditionGroup/conditionGroup.vue' // 条件组
 import { dataScrollLoad } from '@/plugins/plugins.js'
@@ -9,7 +10,8 @@ export default {
     AddPerson,
     EditPeroson,
     NoPhotos,
-    conditionGroup
+    conditionGroup,
+    UpdatePhoto
   },
   data() {
     return {
@@ -58,6 +60,7 @@ export default {
       editPeroson_child: false,
       noPhotos_child: false,
       condi_child: false,
+      updatePhoto_child: false,
 
       // 子组件参数
       editPersonId: ''
@@ -306,7 +309,9 @@ export default {
     },
     // 相片管理 - 下拉
     handleCommand(command){
-      if(command == 'c'){
+      if(command == 'a'){
+        this.updatePhoto_child = true
+      } else if(command == 'c'){
         this.noPhotos_child = true
       }
     },
@@ -393,6 +398,7 @@ export default {
       this.addPeroson_child = false
       this.editPeroson_child = false
       this.noPhotos_child = false
+      this.updatePhoto_child = false
     },
     close() {
       this.condi_child = false
@@ -446,10 +452,12 @@ export default {
         .then(res => {
           console.log(res)
           if (res.code == "000") {
-            let data = res.data;
-            
-            this.total = res.count;
-            this.tableData = data;
+            // 二次分页处理
+            this.total = res.count
+            let table_scroll = document.querySelector('.person .el-table__body-wrapper')
+            dataScrollLoad(table_scroll, res.data, 1, 30, (data) => {
+                this.tableData = data
+            })
 
           } else {
             this.total = 0;

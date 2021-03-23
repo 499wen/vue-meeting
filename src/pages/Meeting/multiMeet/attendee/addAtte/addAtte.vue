@@ -1,6 +1,6 @@
 <template>
   <div class="addAtte">
-    <div class="head">
+    <div class="head" v-if="!meetingData.parentMeetingId">
       <div class="head-left">
         <!-- 条件组查询 -->
         <el-button-group autofocus>

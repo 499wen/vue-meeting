@@ -94,7 +94,11 @@
       <div class="header">
         <!-- 公司信息 -->
         <div class="company-info">
-          <span class="company-name">{{ loginInfo.companyName }}</span>
+          <div class="company-row">
+            <span class="company-name">{{ loginInfo.companyName }}</span>
+            <span class="company-download" @click="open('H5')">H5移动端</span>
+            <span class="company-download" @click="open('APP')">下载APP</span>
+          </div>
           <div class="login-user" @click="company_info">
             <img src="@/assets/images/hztLogo.png" alt="">
             <span>{{ loginInfo.loginName }}</span>
@@ -138,242 +142,41 @@
     <el-dialog title="公司信息" :visible.sync="companyInfo_child" width="10%" center
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <companyInfo ref="companyInfo" v-if="companyInfo_child"></companyInfo>
-      <!-- <div class="dialog-btn">
-        <el-button type="primary" size="small" round>关 闭</el-button>
-      </div> -->
+    </el-dialog>
+
+    <!-- 设置登录信息 -->
+    <el-dialog title="初始化登录名和密码" :visible.sync="init_child" width="10%" center
+      :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
+      <init ref="init" v-if="init_child"></init>
+      <div class="dialog-btn">
+        <el-button type="primary" @click="submitForm()" size="small" round>保 存</el-button>
+      </div>  
+    </el-dialog>
+
+    <!-- H5 - APP -->
+    <el-dialog :title="H5title" :visible.sync="H5_app" width="480px" center
+      :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
+      <div class="ls-image">
+        <img src="@/assets/images/H5.png" alt="" v-if="H5_type == 'H5'">
+        <img src="@/assets/images/qrcode.png" alt="" v-else>
+      </div>
+      <div class="dialog-btn"></div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import companyInfo from './companyInfo/companyInfo.vue'
-import { selfTime } from '@/plugins/plugins'
-import { delCookie } from '@/plugins/cookie.js'
+import index from './index.js'
 
-export default {
-  components: {
-    companyInfo
-  },
-  data(){
-    return {
-      date: '',
-      days: '',
-      router: [],
-      
-      // 公司信息
-      loginInfo: {},
-
-      // 默认选中menu
-      defaultActive: '',
-
-      // 子集组件 开关
-      companyInfo_child: false
-    }
-  },
-  methods: {
-    // 监听刷新页面
-    listenPage() {
-      let that = this
-      window.onbeforeunload = function (e) {
-        e = e || window.event;
-        // that.$router.push('/')
-        location.href = '/'
-        if (e) {
-          e.returnValue = '关闭提示';
-        }
-        return '关闭提示';
-      };
-    },
-    // 公司信息
-    company_info() {
-      return 
-      this.companyInfo_child = true
-    },
-    // 展开导航
-    handleOpen(data){
-      console.log('handleOpen', data)
-    },
-    // 关闭导航
-    handleClose(data){
-      console.log('handleClose', data)
-    },
-
-    // 退出登录
-    logout(){
-      this.$confirm('是否推出该账号?', '提示', {  
-        closeOnPressEscape: false,
-        closeOnClickModal: false,
-        cancelButtonClass: 'btn_custom_cancel',
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        delCookie('autoLogin')
-        this.$router.push('/login')
-      }).catch(() => {})
-      
-    }
-  },
-  created() {
-    let curSj = new Date().getTime()
-    this.date = selfTime(curSj, false)
-    switch(new Date().getDay()){
-      case 1: 
-          this.days = '星期一'; break
-      case 2: 
-          this.days = '星期二'; break
-      case 3: 
-          this.days = '星期三'; break
-      case 4: 
-          this.days = '星期四'; break
-      case 5: 
-          this.days = '星期五'; break
-      case 6: 
-          this.days = '星期六'; break
-      case 0: 
-          this.days = '星期日'; break
-    }
-
-
-    let routes = this.$router.options.routes
-    routes.filter(item => item.name == '框架' && this.router.push(...item.children))
-
-    // 获取公司信息
-    this.$http.get(this.API.getCustomer)
-      .then(res => {
-        if(res.code == '000'){
-          this.loginInfo = res.data
-          localStorage.setItem('loginInfo', JSON.stringify(res.data))
-        }
-      })
-  },
-  mounted() {
-    // this.listenPage()
-    console.log(this.$route)
-    this.defaultActive = this.$route.meta
-  }
-}
+export default index
 </script>
 
 <style scoped lang='less'>
-.index {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: flex-start;
-    overflow: hidden;
-    min-width: 1700px;
-    // overflow-x: auto;
+@import url('./index.less');
+</style>
 
-    .left-nav {
-        width: 200px;
-        height: 100%;
-        box-sizing: border-box;
-        background-color: #234060;
-
-        .logo {
-            width: 100%;
-            height: 110px;
-            border-bottom: 2px solid #000;
-            text-align: center;
-            line-height: 110px;
-
-            img {
-                width: 138px;
-                height: 63px;
-                vertical-align: middle;
-            }
-        }
-    }
-
-    .right-info {
-        width: calc(100% - 200px);
-        height: 100%;
-        box-sizing: border-box;
-        // overflow: auto;
-
-        .header {
-            width: 100%;
-            height: 80px;
-            box-sizing: border-box;
-            background: linear-gradient(to right, #234060,  #064592);
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            padding: 0 50px;
-
-            .company-info {
-                flex: 1;
-                height: 100%;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-right: 50px;
-
-                .company-name {
-                    font-size: 28px;
-                    color: #fff;
-                }
-
-                .login-user {
-                    height: 100%;
-                    display: flex;
-                    align-items: center;
-                    font-size: 18px;
-                    color: #fff;
-                    cursor: pointer;
-
-                    img {
-                        width: 40px;
-                        height: 40px;
-                        border-radius: 50%;
-                        margin-right: 10px;
-                    }
-                }
-            }
-
-            .calendar-logout {
-                width: 200px;
-                height: 100%;
-                display: flex;
-                align-items: center;
-                font-size: 16px;
-
-                .calendar {
-                    display: flex;
-                    flex-wrap: wrap;
-                    text-align: center;
-                    width: 100%;
-                    color: #fff;
-
-                    span {
-                        width: 100%;
-                    }
-                }
-
-                .main-setting-menu {
-                    border-bottom: 0 !important;
-                    height: 80px;
-
-                    .main-setting-submenu {
-                        margin-top: 10px;
-
-                        .el-icon-setting {
-                            color: #fff;
-                        }
-                    }
-                }
-            }
-        }
-
-        .body {
-            // width: 100%;
-            min-width: 1500px;
-            height: calc(100% - 80px);
-            padding: 10px;
-            box-sizing: border-box;
-            // overflow-x: auto;
-        }
-    }
+<style lang="less">
+.left-nav .el-menu-item {
+  font-size: 16px;
 }
 </style>

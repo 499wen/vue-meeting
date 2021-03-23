@@ -359,6 +359,35 @@ export default {
     ...mapMutations([
       'setMeetingData', 'setTest'
     ]),
+
+    // 上传图片
+    updateLoad() {
+      // 文件数据
+      let file = this.$refs.file.files[0];
+
+      this.fileUpload(file, res => {
+        if(res.code == '000') {
+          this.$message.success(res.msg)
+          this.addForm.photoFileId = res.data.saveFileName
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
+    // 上传平面图
+    updateLoad_pml() {
+      // 文件数据
+      let file = this.$refs.file_pmt.files[0];
+
+      this.fileUpload(file, res => {
+        if(res.code == '000') {
+          this.$message.success(res.msg)
+          this.addForm.meetingRoomId = res.data.saveFileName
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
     // 添加会议议程
     addProduce(){
       this.addForm.meetingProduce.push({ value: "" })

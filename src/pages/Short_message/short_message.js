@@ -16,6 +16,7 @@ export default {
         children: 'children',
         label: 'groupName'
       },
+      curTree: {},
 
       // table
       height: null,
@@ -46,6 +47,7 @@ export default {
     // tree - 点击触发
     treeClick(data, node){
       console.log(data)
+      this.curTree = data
       // 查询全部
       if(node.level == 1){
         this.getSms()
@@ -69,7 +71,11 @@ export default {
           console.log(res)
           if(res.code == '000'){
             this.$message.success('状态修改成功！')
-            this.getSms()
+            if(this.curTree.groupName == '全部短信'){
+              this.getSms()
+            } else {
+              this.getSms(this.curTree.typeCode)
+            }
           } else {
             this.$message.error(res.msg)
           }
@@ -95,7 +101,12 @@ export default {
               console.log(res)
               if (res.code == '000') {
                 this.$message.success('保存成功!')
-                this.getSms()
+                if(this.curTree.groupName == '全部短信'){
+                  this.getSms()
+                } else {
+                  this.getSms(this.curTree.typeCode)
+                }
+                
                 this.smsDetail_child = false
               } else {
                 this.$message.info(res.msg)

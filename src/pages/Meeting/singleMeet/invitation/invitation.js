@@ -783,23 +783,46 @@ export default {
 
       console.log(this.dataCollection)
       var meetingInviteTemplates = {
-          dataVal: JSON.stringify(this.dataCollection), // 
-        }
+        dataVal: JSON.stringify(this.dataCollection), // 
+      }
       // return 
       // HTML5canvas 生成图片
       var that = this
       var opts = {
           logging: true, // 启用日志记录以进行调试 (发现加上对去白边有帮助)
-          allowTaint: true, // 否允许跨源图像污染画布
+          allowTaint: false, // 否允许跨源图像污染画布
           backgroundColor: null, // 解决生成的图片有白边
           useCORS: true // 如果截图的内容里有图片,解决文件跨域问题
       }
-      // eslint-disable-next-line no-undef
+      // eslint-disable-next-line no-undef   https://mybucket-resized-1305256445.cos.ap-guangzhou.myqcloud.com/356642515878678528/HeadFile/c1ctdhjj8oj09lkqspqg.png
       html2canvas($('.phone-long')[0], opts).then((canvas) => {
         var ImageURL = canvas.toDataURL('image/png')
         var myfile = that.dataURLtoFile(ImageURL, Date.now() + '.png');
 
-        // return
+        this.fileUpload(myfile, res => {
+          console.log(res)
+          if(res.code == '000') {
+            meetingInviteTemplates.imgId = res.data.saveFileName
+            that.$http.post(that.API.saveTemplate, meetingInviteTemplates).then(resu => {
+              try{
+                console.log(resu)
+                that.$message.success('保存成功！')
+                that.initModel()
+
+              }catch(err) {
+                that.$message.info('网络繁忙！请刷新重试')
+              }
+              
+            }).catch(err => {
+              console.log(err)
+
+            })
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
+        // console.log(myfile)
+        return
         var formFile = new FormData();
         formFile.append('file', myfile);
         $.ajax({
@@ -855,22 +878,27 @@ export default {
       })
     },
     // 上传背景图片
-    bgiUpload(res){
-      console.log(res)
-      if(res.statusCode == '000'){
-        let that = this
-        let meetingInviteImgs = {imgId: res.data.id + '.' + res.data.fileType}
-        that.bgImage.push({imgId: res.data.id + '.' + res.data.fileType})
-  
-        this.$http.post(this.API.saveCompanyByBackGroup, meetingInviteImgs).then(res => {
-          console.log(res)
-          if(res.code == '200'){
-            // that.bgImage.push(...res.data)
-          }
-        })
-      } else {
-        this.$message.info(res.msg)
-      }
+    bgiUpload(){
+      // 文件数据
+      let file = this.$refs.file.files[0];
+
+      this.fileUpload(file, res => {
+        if(res.code == '000'){
+          this.$message.success(res.msg)
+          let meetingInviteImgs = {imgId: res.data.saveFileName}
+          this.bgImage.push({imgId: res.data.saveFileName})
+    
+          this.$http.post(this.API.saveCompanyByBackGroup, meetingInviteImgs).then(resu => {
+            if(resu.code == '200'){
+              // that.bgImage.push(...res.data)
+            }
+          })
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+
+      
     },
     changeZindex: function(val) {
       console.log('置顶， 置底')

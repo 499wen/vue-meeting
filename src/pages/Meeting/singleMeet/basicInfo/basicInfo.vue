@@ -11,23 +11,21 @@
               <div class="a-part">
                 <el-form-item label="会议名称" prop="meetingName">
                   <el-input size="small" v-model="addForm.meetingName" placeholder="请输入会议名称"></el-input>
-                </el-form-item> 
+                </el-form-item>
                 <el-form-item label="会议图片" prop='capacity'>
-                  <el-upload
-                    :action="`API.url + API.router.uploadHotelImage`" 
-                    :on-success="uploadSuccess"
-                    :before-upload="beforeAvatarUpload"
-                    :show-file-list="false"
-                    :headers="headers"
-                    class="avatar-uploader"
-                  >
-                    <img v-if="addForm.restaurantPhoto" :src="cover" class="avatar" />
-                    <img v-else src="@/assets/images/defaultImg.png" class="avatar" alt="">
+                  <div class="avatar-uploader">
+                    <div class="avatar">
+                      <img v-if="addForm.photoFileId" :src="API.echoImage(addForm.photoFileId)" />
+                      <img v-else src="@/assets/images/defaultImg.png" alt="">
+                      <input type="file" name="" id="" class="hide" @change="updateLoad" ref="file">
+                    </div>
+                    
                     <div class="self-explain" style="">
                       <div>建议尺寸：564*376</div>
                       <div>大小：300KB以下</div>
                     </div>
-                  </el-upload>
+                  </div>
+
                 </el-form-item> 
                 <el-form-item label="会议地址" prop="address">
                   <el-input id="suggestId" size="small" v-model="addForm.address" @input="addressFact" placeholder="请输入会议地址"></el-input>
@@ -228,24 +226,15 @@
       <div class="form-right">
         <div class="right-box">
           <div class="intro-duce">会议平面图</div>
-          <div class="img">
-            <el-upload
-              :action="`API.url + API.router.uploadHotelImage`" 
-              :on-success="uploadSuccess"
-              :before-upload="beforeAvatarUpload"
-              :show-file-list="false"
-              :headers="headers"
-              class="avatar-uploader"
-            >
-              <img v-if="addForm.planeFigure" :src="cover" class="avatar-duce" />
-              <img v-else src="@/assets/images/defaultPmt.png" class="avatar-duce" alt="">
-            </el-upload>
+          <div class="img-pmt">
+            <img v-if="addForm.meetingRoomId" :src="API.echoImage(addForm.meetingRoomId)" class="avatar-duce" />
+            <img v-else src="@/assets/images/defaultPmt.png" class="avatar-duce" alt="">
+            <input type="file" name="" id="" class="hide" @change="updateLoad_pml" ref="file_pmt">
           </div>
         </div>
         <div class="right-box">
           <div class="intro-duce">会议地址</div>
           <div class="img" id="baidu-map">
-            
           </div>
         </div>
       </div>
@@ -265,38 +254,7 @@ export default basicInfo
 </style>
 
 <style lang='less'>
-.avatar-uploader {
-  height: 100%;
-  width: 100%;
-}
 
-.avatar-uploader .el-upload {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: flex-start;
-  align-content: flex-start;
-
-  .self-explain {
-    display: flex;
-    align-content: flex-start;
-    flex-wrap: wrap;
-
-    div {
-      width: 100%;
-      text-align: left;
-      line-height: 25px;
-    }
-  }
-}
-
-.avatar {
-  width: 200px;
-  height: 132px;
-  border-radius: 5px;
-  margin-right: 20px;
-  border: 1px dashed #999;
-}
 
 .textarea {
   .el-textarea__inner{ //el_input中的隐藏属性

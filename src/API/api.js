@@ -1,10 +1,17 @@
 const gzKey = '/gzapi' // 广州
+// const gzKey = `https://service-ij14wquc-1305256445.gz.apigw.tencentcs.com`
+
 export default {
   /**
    * 模块之外
    */
   getCustomer: `${gzKey}/release/getCustomer`, // 获取公司信息
   uploadFile: `${gzKey}/release/uploadFile?`, // 上传文件
+  echoImage: id => {
+    let loginInfo = JSON.parse(localStorage.getItem('loginInfo')),
+      url = `https://mybucket-resized-1305256445.cos.ap-guangzhou.myqcloud.com`
+    return `${url}/${loginInfo.companyId}/HeadFile/${id}`
+  }, // 回显图片
 
   /**
    * 注册
@@ -18,6 +25,8 @@ export default {
   loginByPhone: `${gzKey}/release/loginByPhone`, // 验证码 - 登录
   verificationCode: phone => `${gzKey}/release/verificationCode?phone=${phone}`, // 获取登录验证码
   loginByLoginNameAndPassword: `${gzKey}/release/loginByLoginNameAndPassword`, // 账号密码登录
+
+  initLoginNameAndPassword: `/hzbase/customer/initLoginNameAndPassword`, // 提交修改后用户信息
 
   /**
    * 首页
@@ -98,6 +107,8 @@ export default {
   updateConfereeGroup: `${gzKey}/release/updateConfereeGroup`, // 修改参会人分组
   addByParentId: `${gzKey}/release/addByParentId`, // 添加参会人分组
   deleteConfereeGroup: id => `${gzKey}/release/deleteConfereeGroup?id=${id}`, // 删除参会人分组
+
+  saveSuperiorMeetingInvite: groupId => `${gzKey}/release/saveSuperiorMeetingInvite?confereeGroupId=${groupId}`, // 多级会议 添加参会人
 
   findByMeetingIdAndPage: (groupId, pageNum, pageSize) => `${gzKey}/release/findByMeetingIdAndPage?confereeGroupId=${groupId}&pageNum=${pageNum}&pageSize=${pageSize}`, // 参会分组查询人员  
   addWholeatten: groupId => `${gzKey}/release/addByConfereeGroupIdAndUserIds?confereeGroupId=${groupId}`, // 添加人员至全体参会人分组中

@@ -1,5 +1,6 @@
 import conditionGroup from '../conditionGroup/conditionGroup.vue'
 import { dataScrollLoad } from '@/plugins/plugins.js'
+import { mapState } from 'vuex'
 
 export default {
   props: ['groupId'],
@@ -12,7 +13,7 @@ export default {
       height: null,
       tableData: [],
       tableCate: [
-        {props: 'userName', label: '姓名', width: ''},
+        {props: 'userName', label: '姓名', width: ''}, 
         {props: 'phone', label: '手机号', width: ''},
         {props: 'departmentName', label: '部门', width: ''},
         {props: 'characterId', label: '角色', width: ''},
@@ -40,6 +41,11 @@ export default {
       // 子集组件开关
       condi_child: false
     }
+  },
+  computed: {
+    ...mapState([
+      'meetingData'
+    ])
   },
   methods: {
     // 自定义条件 
@@ -87,34 +93,48 @@ export default {
         contanUserIdArr: [],
         ifContanUserIdArr: false,
         queryConditionArr: this.queryConditionArr
-      }
-      this.$http.post(this.API.conditionQuerys(this.deparmentId, this.pageNum, this.pageSize, this.externalCode, this.searchKey, this.photoFlag), obj)
+      }, api, parentMeetingId
+
+      // 一级会议
+      if(!this.meetingData.parentMeetingId){
+        api = this.API.conditionQuerys(this.deparmentId, this.pageNum, this.pageSize, this.externalCode, this.searchKey, this.photoFlag)
+        this.$http.post(api, obj)
         .then(res => {
-          if (res.code == "000") {
-            let data = res.data;
-            data.filter(item => {
-              if(item.birthday == 0){
-                item.birthday = ''
-              } else {
-                item.birthday = time(+item.birthday)
-              }
-            })
-
-            // 二次分页处理
-            let table_scroll = document.querySelector('.addAtte .el-table__body-wrapper')
-            this.total = res.count
-            dataScrollLoad(table_scroll, data, 1, 30, (res) => {
-              this.tableData = res
-            })
-
-          } else {
-            this.total = 0;
-            this.tableData = [];
-          }
+          this.hdPerson(res)
         }).catch(err => {
           this.total = 0;
           this.tableData = [];
         })
+      } else {
+        // 子级会议
+        parentMeetingId = this.meetingData.parentMeetingId
+        api = this.API.findByMeetingIdAndPage(parentMeetingId, this.pageNum, this.pageSize)
+        this.$http.get(api)
+        .then(res => {
+          this.hdPerson(res)
+        }).catch(err => {
+          this.total = 0;
+          this.tableData = [];
+        })
+      }
+      
+    },
+    // 人员数据处理
+    hdPerson(res){
+      if (res.code == "000") {
+        let data = res.data;
+
+        // 二次分页处理
+        let table_scroll = document.querySelector('.addAtte .el-table__body-wrapper')
+        this.total = res.count || res.total
+        dataScrollLoad(table_scroll, data, 1, 30, (res) => {
+          this.tableData = res
+        })
+
+      } else {
+        this.total = 0;
+        this.tableData = [];
+      }
     },
 
     // 获取条件组 数据

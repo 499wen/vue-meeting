@@ -53,24 +53,9 @@ export default {
         }
       })
     },
-    bolb(localData) {
-        // var localData= 'data:image/png...'; //假定dataUrl为base64位
-        let base = atob(localData.substring(localData.indexOf(',') + 1)); // base是将base64编码解码，去掉data:image/png;base64部分
-        let length = base.length;
-        let url = new Uint8Array(length);
-        while (length--) {
-            url[length] = base.charCodeAt(length);
-        }
-        let file = new File([url], 'a.jpg', {
-            type: 'image/jpg'
-        })
-        //最后将file，通过ajax请求做为参数传给服务器就可以了
-     return file 
-      
-    },
-    file(e){
+    updateLoad(e){
       // 文件数据
-      let file = this.$refs.img.files[0];
+      let file = this.$refs.file.files[0];
 
       this.fileUpload(file, 'HeadFile', res => {
         console.log(res)

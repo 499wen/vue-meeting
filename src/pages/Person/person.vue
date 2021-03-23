@@ -7,7 +7,7 @@
       </div>
     </div>
 
-    <div class="operat">
+    <div class="operat"> 
       <!-- 人员查询 - 条件组  --> 
       <el-button-group autofocus>
         <el-button size="small" @click="custom">自定义条件</el-button> 
@@ -154,6 +154,15 @@
       <div class="dialog-btn">
         <el-button type="primary" @click="editSave()" size="small" round>保 存</el-button>
         <el-button @click="cancel" size="small" type="danger" round>取 消</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 上传相片 -->
+    <el-dialog title="上传相片" :visible.sync="updatePhoto_child" width="60%" center
+      :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
+      <UpdatePhoto ref="UpdatePhoto" v-if="updatePhoto_child"></UpdatePhoto>
+      <div class="dialog-btn">
+        <el-button @click="cancel" size="small" type="danger" round>关 闭</el-button>
       </div>
     </el-dialog>
 

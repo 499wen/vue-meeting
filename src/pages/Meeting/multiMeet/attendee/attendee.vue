@@ -7,6 +7,7 @@
         :data="data"
         :props="treeProps" 
         node-key="id"
+        default-expand-all
         :highlight-current="true"
         :expand-on-click-node="false"
         @node-click='treeClick'

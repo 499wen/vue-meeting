@@ -29,7 +29,8 @@
           <div class="box-left">
             <!-- 会议封面 -->
             <div class="meet-cover">
-              <img src="../../assets/images/avatar.png" alt="">
+              <img :src="API.echoImage(item.photoFileId)" alt="" v-if="item.photoFileId">
+              <img src="../../assets/images/avatar.png" alt="" v-else>
 
               <!-- 提示
                未发布: #2ba2ff 默认, 已发布: #60cfb9 .published, 进行中: #ffd04b .ongoing, 已结束: #6f6f6f .over -->

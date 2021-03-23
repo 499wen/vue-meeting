@@ -209,7 +209,7 @@ export default {
       // 处理数据
       selectData.filter(item => ids.push(item.id))
 
-      this.$http.post(this.API.addWholeatten(this.curAttenGroup.id), ids)
+      this.$http.post(this.API.saveSuperiorMeetingInvite(this.curAttenGroup.id), ids)
         .then(res => {
           console.log(res)
           if(res.code == '000'){

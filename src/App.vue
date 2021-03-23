@@ -233,4 +233,57 @@ body {
   padding: 7px 18px !important;
 }
 
+// 上传图片
+.avatar-uploader {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-content: flex-start;
+
+  .self-explain {
+    display: flex;
+    align-content: flex-start;
+    flex-wrap: wrap;
+
+    div {
+      width: 100%;
+      text-align: left;
+      line-height: 25px;
+    }
+  }
+
+  .avatar {
+    width: 200px;
+    height: 132px;
+    border-radius: 5px;
+    margin-right: 20px;
+    border: 1px dashed #999;
+    cursor: pointer;
+    position: relative;
+
+    & > img {
+      width: 100%;
+      height: 100%;
+      border: 7px;
+    }
+  }
+}
+
+.img-pmt {
+  display: inline-block;
+  width: 480px;
+  height: calc(100% - 50px);
+  border: 1px dashed #999;
+  position: relative;
+}
+.hide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
 </style>

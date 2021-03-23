@@ -217,3 +217,67 @@ this.height = dom.offsetHeight
   * 会议
   * 
   */
+
+  /**
+   * 图片回显
+   *    API.echoImage(addForm.photoFileId)
+   * 上传图片
+   * html：
+   * <div class="avatar-uploader">
+        <div class="avatar">
+          <img v-if="addForm.restaurantPhoto" :src="cover" />
+          <img v-else src="@/assets/images/defaultImg.png" alt="">
+          <input type="file" name="" id="" class="hide" @change="updateLoad" ref="file">
+        </div>
+        
+        <div class="self-explain" style="">
+          <div>建议尺寸：564*376</div>
+          <div>大小：300KB以下</div>
+        </div>
+      </div>
+
+      js: 
+        // 上传图片
+        updateLoad(e){
+          // 文件数据
+          let file = this.$refs.file.files[0];
+
+          this.fileUpload(file, res => {
+            console.log(res)
+            if(res.code == '000'){
+              this.addForm.photoFileId = res.data.saveFileName
+            } else {
+              this.$message.error(res.msg)
+            }
+          })
+        },
+   */
+
+  /**
+   * 图片回显
+   *    API.echoImage(addForm.photoFileId)
+   * 
+   * 上传平面图
+   *  html:
+   *    <div class="img-pmt">
+          <img v-if="addForm.meetingRoomId" :src="cover" class="avatar-duce" />
+          <img v-else src="@/assets/images/defaultPmt.png" class="avatar-duce" alt="">
+          <input type="file" name="" id="" class="hide" @change="updateLoad_pml" ref="file_pmt">
+        </div>
+
+      js:
+        // 上传平面图
+        updateLoad_pml() {
+          // 文件数据
+          let file = this.$refs.file_pmt.files[0];
+
+          this.fileUpload(file, res => {
+            if(res.code == '000') {
+              this.$message.success(res.msg)
+              this.addForm.meetingRoomId = res.data.saveFileName
+            } else {
+              this.$message.error(res.msg)
+            }
+          })
+        },
+   */
