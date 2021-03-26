@@ -220,12 +220,12 @@ this.height = dom.offsetHeight
 
   /**
    * 图片回显
-   *    API.echoImage(addForm.photoFileId)
+   *    API.echoImage(addForm.photoFileId, 'HeadFile')
    * 上传图片
    * html：
    * <div class="avatar-uploader">
         <div class="avatar">
-          <img v-if="addForm.restaurantPhoto" :src="cover" />
+          <img v-if="name" :src="API.echoImage(name, 'HeadFile')" @error="errImg(name, 'HeadFile', $event)"/>
           <img v-else src="@/assets/images/defaultImg.png" alt="">
           <input type="file" name="" id="" class="hide" @change="updateLoad" ref="file">
         </div>
@@ -240,27 +240,30 @@ this.height = dom.offsetHeight
         // 上传图片
         updateLoad(e){
           // 文件数据
-          let file = this.$refs.file.files[0];
+          let file = this.$refs.file, files
+          files = file.files[0]
 
-          this.fileUpload(file, res => {
-            console.log(res)
+          this.fileUpload(files, res => {
             if(res.code == '000'){
+              this.$message.success(res.msg)
               this.addForm.photoFileId = res.data.saveFileName
             } else {
               this.$message.error(res.msg)
             }
+
+            file.value = ''
           })
         },
    */
 
   /**
    * 图片回显
-   *    API.echoImage(addForm.photoFileId)
+   *    API.echoImage(addForm.photoFileId, 'HeadFile')
    * 
    * 上传平面图
    *  html:
    *    <div class="img-pmt">
-          <img v-if="addForm.meetingRoomId" :src="cover" class="avatar-duce" />
+          <img v-if="name" :src="API.echoImage(name, 'HeadFile')" class="avatar-duce" @error="errImg(name, 'HeadFile', $event)"/>
           <img v-else src="@/assets/images/defaultPmt.png" class="avatar-duce" alt="">
           <input type="file" name="" id="" class="hide" @change="updateLoad_pml" ref="file_pmt">
         </div>
@@ -269,15 +272,18 @@ this.height = dom.offsetHeight
         // 上传平面图
         updateLoad_pml() {
           // 文件数据
-          let file = this.$refs.file_pmt.files[0];
+          let file = this.$refs.file_pmt, files
+          files = file.files[0]
 
-          this.fileUpload(file, res => {
+          this.fileUpload(files, res => {
             if(res.code == '000') {
               this.$message.success(res.msg)
               this.addForm.meetingRoomId = res.data.saveFileName
             } else {
               this.$message.error(res.msg)
             }
+
+            file.value = ''
           })
         },
    */

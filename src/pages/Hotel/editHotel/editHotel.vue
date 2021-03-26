@@ -28,21 +28,18 @@
                 </el-select>
               </el-form-item> 
               <el-form-item label="酒店图片" prop='capacity'>
-                <el-upload
-                  :action="`API.url + API.router.uploadHotelImage`" 
-                  :on-success="uploadSuccess"
-                  :before-upload="beforeAvatarUpload"
-                  :show-file-list="false"
-                  :headers="headers"
-                  class="avatar-uploader"
-                >
-                  <img v-if="ruleForm.hotelImageUrl" :src="cover" class="avatar" />
-                  <img v-else src="@/assets/images/defaultImg.png" class="avatar" alt="">
+                <div class="avatar-uploader">
+                  <div class="avatar">
+                    <img v-if="ruleForm.hotelImageUrl" :src="API.echoImage(ruleForm.hotelImageUrl, 'HotelImage')" @error="errImg(ruleForm.hotelImageUrl, 'HotelImage', $event)"/>
+                    <img v-else src="@/assets/images/defaultImg.png" alt="">
+                    <input type="file" name="" id="" class="hide" @change="updateLoad" ref="file">
+                  </div>
+                  
                   <div class="self-explain" style="">
                     <div>建议尺寸：564*376</div>
                     <div>大小：300KB以下</div>
                   </div>
-                </el-upload>
+                </div>
               </el-form-item> 
 
               <el-form-item label="酒店地址" prop="address">
@@ -64,18 +61,10 @@
       <div class="form-right">
         <div class="right-box">
           <div class="intro-duce">酒店平面图</div>
-          <div class="img">
-            <el-upload
-              :action="`API.url + API.router.uploadHotelImage`" 
-              :on-success="uploadSuccess"
-              :before-upload="beforeAvatarUpload"
-              :show-file-list="false"
-              :headers="headers"
-              class="avatar-uploader"
-            >
-              <img v-if="ruleForm.hotelImageUrl" :src="cover" class="avatar-duce" />
-              <img v-else src="@/assets/images/defaultPmt.png" class="avatar-duce" alt="">
-            </el-upload>
+          <div class="img-pmt">
+            <img v-if="ruleForm.hotelPlaneImageUrl" :src="API.echoImage(ruleForm.hotelPlaneImageUrl, 'HotelPlane')" class="avatar-duce"  @error="errImg(ruleForm.hotelPlaneImageUrl, 'HotelPlane', $event)"/>
+            <img v-else src="@/assets/images/defaultPmt.png" class="avatar-duce" alt="">
+            <input type="file" name="" id="" class="hide" @change="updateLoad_pml" ref="file_pmt">
           </div>
         </div>
         <div class="right-box">

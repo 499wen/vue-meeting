@@ -96,10 +96,16 @@
         <div class="company-info">
           <div class="company-row">
             <span class="company-name">{{ loginInfo.companyName }}</span>
-            <span class="company-download" @click="open('H5')">H5移动端</span>
-            <span class="company-download" @click="open('APP')">下载APP</span>
           </div>
           <div class="login-user" @click="company_info">
+            <div class="company-download" @click="open('H5')">
+              <img src="@/assets/images/qrcodelogo.png" alt="">
+              <span>H5移动端</span>
+            </div>
+            <div class="company-download" @click="open('APP')">
+              <img src="@/assets/images/qrcodelogo.png" alt="">
+              <span>会务通APP</span>
+            </div>
             <img src="@/assets/images/hztLogo.png" alt="">
             <span>{{ loginInfo.loginName }}</span>
           </div>

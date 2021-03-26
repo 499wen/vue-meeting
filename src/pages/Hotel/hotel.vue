@@ -21,7 +21,7 @@
         <el-table-column :show-overflow-tooltip="true" :resizable="false"  align='center' label="酒店封面" width="200">
           <template slot-scope="scope">
             <img v-if="!scope.row.hotelImageUrl" src="@/assets/images/defaultImg.png" class="hotel-img" />
-            <img v-else id="updateUserImg" class="hotel-img" :src="`/zhenapi/fileserve/hotelFile/hotel/hotelImage/${loginInfo.companyId}/${scope.row.hotelImageUrl}`" alt="">
+            <img v-else id="updateUserImg" class="hotel-img" :src="API.echoImage(scope.row.hotelImageUrl, 'HotelImage')" alt="">
           </template>
         </el-table-column> 
         <el-table-column :show-overflow-tooltip="true" :resizable="false" align='center'
@@ -126,6 +126,7 @@ export default {
           .then(res => {
             if(res.code == '000'){
               this.$message.success('删除成功！')
+              this.pageNum = 1
               this.getHotelData()
             } else {
               this.$message.error(res.msg)

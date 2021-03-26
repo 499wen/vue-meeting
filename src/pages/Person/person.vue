@@ -104,7 +104,7 @@
             <el-table-column :show-overflow-tooltip="true" type="selection" width="55" align="center" :resizable="false"></el-table-column>
             <el-table-column :show-overflow-tooltip="true" :resizable="false" align="center" label="头像" width="80">
               <template slot-scope="scope">
-                <img v-lazy="`${scope.row.photoFileSaveName}`" class="avatar" alt="">
+                <img v-lazy="`${ API.echoImage(scope.row.photoFileSaveName, 'HeadFile') }`" class="avatar" alt="">
                 <!-- <div v-if="!scope.row.photoFileSaveName">
                   <el-avatar :key="scope.row.id" src="../assets/tareve.png"></el-avatar> 
                 </div>
@@ -147,6 +147,15 @@
       </div>
     </el-dialog>
 
+    <!-- 导入人员 -->
+    <el-dialog title="Excel导入人员" :visible.sync="importPeroson_child" width="60%" center
+      :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
+      <ExcelImportPeroson ref="ExcelImportPeroson" v-if="importPeroson_child" @close='closeComponent'></ExcelImportPeroson>
+      <div class="dialog-btn">
+        <el-button @click="cancel" size="small" type="danger" round>关 闭</el-button>
+      </div>
+    </el-dialog>
+
     <!-- 修改人员 -->
     <el-dialog title="修改人员" :visible.sync="editPeroson_child" width="60%" center
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
@@ -160,8 +169,10 @@
     <!-- 上传相片 -->
     <el-dialog title="上传相片" :visible.sync="updatePhoto_child" width="60%" center
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
-      <UpdatePhoto ref="UpdatePhoto" v-if="updatePhoto_child"></UpdatePhoto>
+      <UpdatePhoto ref="UpdatePhoto" v-if="updatePhoto_child" @setShowNum='setShowNum'></UpdatePhoto>
       <div class="dialog-btn">
+        <span v-if="showNum != 0" style="margin-right: 10px">一共上传{{ showNum }}张</span>
+        <el-button size="small" type="primary" v-if="showNum != 0" round @click="imgUploadAll($event, 0)">提 交</el-button>
         <el-button @click="cancel" size="small" type="danger" round>关 闭</el-button>
       </div>
     </el-dialog>

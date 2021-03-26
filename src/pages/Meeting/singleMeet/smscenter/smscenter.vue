@@ -2,8 +2,8 @@
   <div class="smscenter">
     <!-- 功能 -->
     <div class="sms-func">
-      <el-button round size='small' type="primary">个性短信配置</el-button>
-      <el-button round size='small' type="success">短信发送记录</el-button>
+      <!-- <el-button round size='small' type="primary" @click="dispose">个性短信配置</el-button> -->
+      <!-- <el-button round size='small' type="success" @click="sendRecord">短信发送记录</el-button> -->
     </div>
 
     <!-- 主体 -->
@@ -44,6 +44,25 @@
     <div class="sms-table" :style="style" v-show="hoverBool">
       <hoverTable ref="hoverTable" v-if="hoverBool" :smsRow='smsRow' @update='updateData'></hoverTable>
     </div>
+
+    <!-- 短信配置 -->
+    <el-dialog title="短信配置" :visible.sync="dispose_child" width="60%" center
+      :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
+      <dispose ref="dispose" v-if="dispose_child"></dispose>
+      <div class="dialog-btn">
+        <el-button type="primary" @click="submitForm('userForm')" size="small" round>添 加</el-button>
+        <el-button @click="cancel" size="small" type="danger" round>关 闭</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 短信发送记录 -->
+    <el-dialog title="添加人员" :visible.sync="sendRecord_child" width="60%" center
+      :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
+      <sendRecord ref="sendRecord" v-if="sendRecord_child"></sendRecord>
+      <div class="dialog-btn">
+        <el-button @click="cancel" size="small" type="danger" round>关 闭</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 

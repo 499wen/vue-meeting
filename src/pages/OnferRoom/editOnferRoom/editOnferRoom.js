@@ -118,13 +118,39 @@ export default {
     sj(val){
 			this.ruleForm.time = val
 		},
-    // 上传封面 
-    uploadSuccess(res){
+    // 上传图片
+    updateLoad(e){
+      // 文件数据
+      let file = this.$refs.file, files
+      files = file.files[0]
 
+      this.fileUpload(files, 'MeetingRoomImage', res => {
+        if(res.code == '000'){
+          this.$message.success(res.msg)
+          this.ruleForm.photoFileId = res.data.saveFileName
+        } else {
+          this.$message.error(res.msg)
+        }
+
+        file.value = ''
+      })
     },
-    // 上传状态
-    beforeAvatarUpload(){
+    // 上传平面图
+    updateLoad_pml() {
+      // 文件数据
+      let file = this.$refs.file_pmt, files
+      files = file.files[0]
 
+      this.fileUpload(files, 'MeetingRoomPlane', res => {
+        if(res.code == '000') {
+          this.$message.success(res.msg)
+          this.ruleForm.drawingOfSiteFileId = res.data.saveFileName
+        } else {
+          this.$message.error(res.msg)
+        }
+
+        file.value = ''
+      })
     },
     map() {
       var map = new BMap.Map("baidu-map"), that = this

@@ -1,9 +1,10 @@
 import AddPerson from './addPeroson/addPeroson.vue' // 添加人员
+import ExcelImportPeroson from './excelImportPerson/excelImportPerson.vue' // 添加人员
 import EditPeroson from './editPeroson/editPeroson.vue' // 修改人员
 import UpdatePhoto from './updatePhoto/updatePhoto.vue' // 上传图片
 import NoPhotos from './noPhotos/noPhotos.vue' // 人员无照片匹配
 import conditionGroup from './conditionGroup/conditionGroup.vue' // 条件组
-import { dataScrollLoad } from '@/plugins/plugins.js'
+import { dataScrollLoad, exportToExcel } from '@/plugins/plugins.js'
 
 export default {
   components: {
@@ -11,7 +12,8 @@ export default {
     EditPeroson,
     NoPhotos,
     conditionGroup,
-    UpdatePhoto
+    UpdatePhoto,
+    ExcelImportPeroson
   },
   data() {
     return {
@@ -44,8 +46,8 @@ export default {
       searchKey: '',
 
       // 获取人员参数 
-      photoFlag: 1, // 1 无头像人员 2 有头像
-      externalCode: '', // '' 公司下 1 内部与外部 0内部下部门
+      photoFlag: 2, // 0有头像 1 无头像人员 2 全部
+      externalCode: '', // '' 公司下, 1 外部, 0 内部
       deparmentId: '', // 部门id
 
       // 勾选后数据
@@ -61,13 +63,15 @@ export default {
       noPhotos_child: false,
       condi_child: false,
       updatePhoto_child: false,
+      importPeroson_child: false,
 
       // 子组件参数
-      editPersonId: ''
+      editPersonId: '',
+      showNum: 0
     }
   },
   methods: {
-    // 自定义条件 
+    // 自定义条件
     custom(){
       this.condi_child = true
     },
@@ -78,8 +82,10 @@ export default {
       this.getProsonData()
     },
     // tree - 点击触发
-    treeClick(node, data){
+    treeClick(data, node){
       // console.log(node, data)
+      this.pageNum = 1
+      this.photoFlag = 2
       this.searchKey = ''
       if(node.level == 1){
         this.deparmentId = this.loginInfo.companyId
@@ -92,6 +98,7 @@ export default {
         this.deparmentId = data.id
         this.externalCode = 0
       }
+      
       this.getProsonData()
     },
     // tree - 树结构
@@ -276,6 +283,8 @@ export default {
     addPersonL(command){
       if(command == 'a'){
         this.addPeroson_child = true
+      } else if(command == 'b') {
+        this.importPeroson_child = true
       }
     },
     // 删除人员 - 下拉
@@ -301,10 +310,33 @@ export default {
             .then(res => {
               if(res.code == '000'){
                 this.$message.success('删除成功！')
+                this.pageNum = 1
                 this.getProsonData()
+              } else {
+                this.$message.error(res.msg)
               }
             })
         }).catch(() => {})
+      } else if(command == 'b') {
+        this.$confirm('是否删除所有人员数据?', '提示', {  
+          closeOnPressEscape: false,
+          closeOnClickModal: false,
+          cancelButtonClass: 'btn_custom_cancel',
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(this.API.delectAllUser)
+            .then(res => {
+              if(res.code == '000') {
+                this.$message.success('删除成功！')
+                this.pageNum = 1
+                this.getProsonData()
+              } else {
+                this.$message.error(res.msg)
+              }
+            })
+        })
       }
     },
     // 相片管理 - 下拉
@@ -313,12 +345,43 @@ export default {
         this.updatePhoto_child = true
       } else if(command == 'c'){
         this.noPhotos_child = true
+      } else if(command == 'f') {
+        this.exportPerson()
+      } else if(command == 'b') {
+        this.iptCpdPackage()
       }
+    },
+    // 导出人员
+    exportPerson(){
+      let tHeader = [], filterVal = []
+      this.tableCate.filter(item => {
+        tHeader.push(item.label)
+        filterVal.push(item.prop)
+      })
+      exportToExcel(this.tableData, '人员数据', tHeader, filterVal, res => {
+
+      })
+    },
+    // 导入相片压缩包
+    iptCpdPackage(){
+      let fileDom = document.createElement('input')
+      fileDom.type = 'file'
+      fileDom.onchange = () => {
+        let file = fileDom.files[0]
+        console.log(file)
+      }
+
+      fileDom.click()
     },
     // 筛选 - 下拉
     screenCommand(command) {
+      this.pageNum = 1
       if(command == 'a'){
+        this.photoFlag = 2
         this.queryDuplicate()
+      } else if(command == 'b'){
+        this.photoFlag = 1
+        this.getProsonData()
       }
     },
     // 重名
@@ -356,6 +419,21 @@ export default {
     /**
      * 子集组件 - 按钮
      */
+    setShowNum(num){
+      this.showNum = num
+    },
+    imgUploadAll(e){
+      let child = this.$refs.UpdatePhoto
+      child.imgUploadAll()
+    },
+
+    // 关闭组件
+    closeComponent() {
+      this.importPeroson_child = false
+      this.getProsonData()
+    },
+
+
     // 保存 - 添加人员
     submitForm(){
       let child = this.$refs.AddPerson, from = {...child.user}
@@ -399,6 +477,7 @@ export default {
       this.editPeroson_child = false
       this.noPhotos_child = false
       this.updatePhoto_child = false
+      this.importPeroson_child = false
     },
     close() {
       this.condi_child = false
@@ -482,8 +561,12 @@ export default {
     }
   },
   mounted() {
+    // 表格高度
     var dom = document.querySelector('.table')
     this.height = dom.offsetHeight
+
+    // 公司信息
+    this.loginInfo = JSON.parse(localStorage.getItem('loginInfo'))
 
     // 获取部门
     this.initDepartData()

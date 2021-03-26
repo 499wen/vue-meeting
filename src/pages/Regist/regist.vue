@@ -23,7 +23,7 @@
           <el-input v-model="registerForm.companyName" clearable @focus="focusOut('companyName')" @blur="blurOut"></el-input>
         </el-form-item>
         <el-form-item label="姓 名" prop="customerName">
-          <el-input v-model="registerForm.customerName" clearable @focus="focusOut('companyName')" @blur="blurOut"></el-input>
+          <el-input v-model="registerForm.customerName" clearable @focus="focusOut('customerName')" @blur="blurOut"></el-input>
         </el-form-item>
         <el-form-item label="行 业" prop="trade" >
           <el-select v-model="registerForm.trade">
@@ -32,10 +32,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="手机号码" prop="phone">
-          <el-input v-model="registerForm.phone" clearable></el-input>
+          <el-input v-model="registerForm.phone" clearable @focus="focusOut('phone')" @blur="blurOut"></el-input>
         </el-form-item>
         <el-form-item label="电子邮箱" prop="email" >
-          <el-input v-model="registerForm.email" clearable @focus="focusOut('companyName')" @blur="blurOut"></el-input>
+          <el-input v-model="registerForm.email" clearable @focus="focusOut('email')" @blur="blurOut"></el-input>
         </el-form-item>
         <el-form-item label="验证码" prop="checkCode">
           <el-input v-model="registerForm.checkCode" clearable>

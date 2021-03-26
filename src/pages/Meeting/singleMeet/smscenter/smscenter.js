@@ -1,10 +1,14 @@
 import hoverTable from './hoverTable/hoverTable.vue'
+import dispose from './dispose/dispose.vue'
+import sendRecord from './sendRecord/sendRecord.vue'
 import $ from 'jquery'
 import { mapState, mapMutations } from 'vuex'
  
 export default {
   components: {
-    hoverTable
+    hoverTable,
+    dispose,
+    sendRecord
   },
   data() { 
     return {
@@ -16,14 +20,18 @@ export default {
       ],
 
       style: {},
-      hoverBool: false,
 
       // 全体参会人  其余参会人
       allData: null,
       data: [],
 
       // 选中的row 整条数据
-      smsRow: ''
+      smsRow: '',
+
+      // 子级组件开关
+      hoverBool: false,
+      dispose_child: false,
+      sendRecord_child: false
     }
   },
   computed: {
@@ -37,6 +45,14 @@ export default {
     ...mapMutations([
       'setAttendeeData'
     ]),
+    // 发送记录
+    sendRecord() {
+      this.sendRecord_child = false
+    },
+    // 短信配置
+    dispose() {
+      this.dispose_child = true
+    },
     // 子组件更新 选中短信
     updateData(data){
       let oldData
@@ -144,6 +160,10 @@ export default {
         this.$message.info('请选择短信！')
         return 
       }
+      if(person.length == 0) {
+        this.$message.info('请选择分组！')
+        return 
+      }
 
       // 合成数据
       smsList.filter(item => {
@@ -160,7 +180,21 @@ export default {
         })
       })
 
+      if(saveData.length == 0) {
+        this.$message.info('请根据对应关系选择！')
+        return 
+      }
+
       console.log(JSON.stringify(saveData, false, 2))
+      this.$http.post(this.API.saveSmsByMeetingId(this.meetingData.id), saveData)
+        .then(res => {
+          console.log(res)
+          if(res.code == '000') {
+            this.$message.success('添加成功!')
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
     },
     // 获取短信类型 
     getSmsType(){
@@ -197,6 +231,12 @@ export default {
         })
     },
 
+    // 子组件方法
+    cancel() {
+      this.dispose_child = false
+      this.sendRecord_child = false
+    },
+
     // 获取参会人
     getAtten(){
       // 调用接口获取数据 并更新vuex数据
@@ -220,7 +260,7 @@ export default {
       this.attendeeData.filter(item => {
         item.is_select = false
         if(item.confereeGroupName == '全体参会人'){
-          item.is_select = true
+          item.is_select = false
           this.allData = item
         } else {
           this.data.push(item)

@@ -76,7 +76,7 @@
       		<div class="pattern" @click="pattern($event, 'longPage')">长页模式</div>
 				</div>
 				<!-- 长页邀请函 background-image: url(/zhenapi/fileserve/invitationFile/invitation/ +loginInfo.companyId+'/'+ dataCollection[curPage - 1].model.img +');' -->
-				<div class="po-r phone-long" :style="'text-align:center;height:'+ dataCollection[curPage - 1].model.height +'px;background-image: url(' + API.echoImage(dataCollection[curPage - 1].model.img) +');'" v-if="isLongPage">
+				<div class="po-r phone-long" :style="'text-align:center;height:'+ dataCollection[curPage - 1].model.height +'px;background-image: url(' + API.echoImage(dataCollection[curPage - 1].model.img, 'Invitation') +');'" v-if="isLongPage">
 					<div id="mc">
 						<div id="phonecontent">
 							<div class="phone-item" id="phone-item" :style="'height:'+ dataCollection[curPage - 1].model.height +'px;'" @drop="dropTest($event)"
@@ -302,14 +302,10 @@
 								<div class="flex invite-progress">
 									<el-button size='mini' @click="levelCenter">水平居中</el-button>
 								</div>
-								<el-upload
-									class="upload-demo"
-									 style="margin-right: 20px"
-									:action="'API.url + API.router.imgupload'" :on-success="uploadImage" ref="elupload"
-								 :headers="headers" accept="image/*" :show-file-list="false"
-								 >
+								<div class="upload-demo">
 									<el-button size="mini" type="">点击上传</el-button>
-								</el-upload>
+          				<input type="file" name="" id="" class="hide" @change="uploadImage" ref="file_pmt">
+								</div>
 								
 							
 								<div style="width: 100%; display: flex;margin-top: 10px; justify-content: space-between; align-items: center; flex-wrap: wrap">
@@ -827,7 +823,7 @@
 				</div>
 				<div class="popup_cente"> 
 					<div class="popup_item" v-for="(item, idx) in bgImage" :key="idx">
-						<img :src="API.echoImage(item.imgId)" alt="">
+						<img :src="API.echoImage(item.imgId, 'Invitation')" alt="" @error="errImg(item.imgId, 'Invitation', $event)">
 						<div>
 							<input type="radio" name="bgImgRadio" class="bgimage" id="bgimage" @click="changeBgImg(idx)">
 						</div>
@@ -844,7 +840,7 @@
 		<!-- 背景弹出层end -->
 
 		<!-- 选择模板时的弹出层 -->
-		<div class="popup_bg" v-show="popupModel">
+		<div class="popup_bg" v-if="popupModel">
 			<div class="white_box">
 				<div class="popup_titile">
 					模板库
@@ -856,7 +852,7 @@
 				<div class="popup_cente">
 
 					<div class="popup_item" v-for="(item, idx) in invitaModel" :key="idx">
-						<img :src="API.echoImage(item.imgId)" alt="">
+						<img :src="API.echoImage(item.imgId, 'Invitation')" alt="" @error="errImg(name, 'Invitation', $event)">
 						<div>
 							<input type="radio" name="bgImgRadio" class="radio" id="model" @click="changeBgModel(idx)">
 						</div>
@@ -873,7 +869,7 @@
 		<!-- 模板弹出层end -->
 
 		<!-- 表单弹窗start -->
-		<div class="form_bg" v-show="formConfigVisible">
+		<div class="form_bg" v-if="formConfigVisible">
 			<div class="form_table">
 				<div class="form_switch" >
 					<div class="form_label">启用表单</div>

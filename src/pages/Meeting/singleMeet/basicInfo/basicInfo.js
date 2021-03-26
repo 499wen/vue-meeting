@@ -363,29 +363,33 @@ export default {
     // 上传图片
     updateLoad() {
       // 文件数据
-      let file = this.$refs.file.files[0];
+      let file = this.$refs.file, files
+      files = file.files[0]
 
-      this.fileUpload(file, res => {
+      this.fileUpload(files, 'MeetingImage', res => {
         if(res.code == '000') {
           this.$message.success(res.msg)
           this.addForm.photoFileId = res.data.saveFileName
         } else {
           this.$message.error(res.msg)
         }
+        file.value = ''
       })
     },
     // 上传平面图
     updateLoad_pml() {
       // 文件数据
-      let file = this.$refs.file_pmt.files[0];
+      let file = this.$refs.file_pmt, files
+      files = file.files[0]
 
-      this.fileUpload(file, res => {
+      this.fileUpload(files, 'MeetingPlane', res => {
         if(res.code == '000') {
           this.$message.success(res.msg)
           this.addForm.meetingRoomId = res.data.saveFileName
         } else {
           this.$message.error(res.msg)
         }
+        file.value = ''
       })
     },
     // 添加会议议程

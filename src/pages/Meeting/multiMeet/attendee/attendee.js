@@ -151,6 +151,7 @@ export default {
           .then(res => {
             if(res.code == '000'){
               this.$message.success('删除成功！')
+              this.pageNum = 1
               this.getAttenPerson()
             } else {
               this.$message.error(res.msg)

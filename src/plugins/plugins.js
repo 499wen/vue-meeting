@@ -165,11 +165,13 @@ export function toTree(data) {
  * 导出excel
  * @param {*} personData 导出数据
  * @param {*} title 导出文件名
- * @param {*} tHeader excel标题 
- * @param {*} filterVal 标题对应字段
+ * @param {*} tHeader excel标题  ['名字']
+ * @param {*} filterVal 标题对应字段  ['name']
  * @param {*} callBack 回调 - 处理加载
  */
 export function exportToExcel(personData, title, tHeader, filterVal, callBack) {
+  // 加载过渡
+  let oad = new Load()
   //excel数据导出
   require.ensure([], () => {
     const {
@@ -180,6 +182,8 @@ export function exportToExcel(personData, title, tHeader, filterVal, callBack) {
     export_json_to_excel(tHeader, data, title);
     setTimeout(() => {
       callBack()
+      // 关闭加载
+      oad.close()
     }, 500)
   });
 }
@@ -191,12 +195,13 @@ function formatJson(filterVal, jsonData) {
  * 将el-loading 简化
  */
 export class Load {
-  constructor (){
+  constructor (text){
     this.load = Loading.service({
       lock: true,
-      text: '正在加载中。。。',
+      text: text || '正在加载中。。。',
       spinner: 'el-icon-loading',
-      background: 'rgba(0, 0, 0, 0.6)'
+      background: 'rgba(0, 0, 0, 0.5)',
+      target: document.querySelector('html')
     })
   }
 

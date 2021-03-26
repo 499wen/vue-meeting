@@ -19,7 +19,6 @@ let dsQi = null, s = 0,
 //显示loading
 axios.defaults.timeout=5000
 function showLoading(target) {
-  // console.log('加载。。。。。')
   // 后面这个判断很重要，因为关闭时加了抖动，此时loading对象可能还存在，
   // 但needLoadingRequestCount已经变成0.避免这种情况下会重新创建个loading
   if (needLoadingRequestCount === 0 && !loading) {
@@ -29,10 +28,6 @@ function showLoading(target) {
       background: 'rgba(0, 0, 0, 0.5)',
       target: target || "body"
     });
-    // setTimeout(() => { 
-    //   hideLoading()
-    //   alert('加载时间过长。请刷新页面再进行请求！')
-    // }, 5000)
   }
   needLoadingRequestCount++;
 }
@@ -122,14 +117,6 @@ instance.interceptors.response.use(
     //  Message.error('加载超时。请重新刷新页面！')
     }else{
       switch (err.response && err.response.status) {
-        // case 500:
-        //     console.log('500服务器'); 
-        //       dsQi2 = setTimeout(() => {
-        //           toHideLoading()
-        //           Message.error('加载失败。请重新刷新页面！')
-                
-        //     }, 3000)
-        //   break;
 
         case 400:
             Message.error('请求错误!')
@@ -162,26 +149,7 @@ instance.interceptors.response.use(
           default:
       }
     }
-   
 
-      // http://www.cppcns.com/ruanjian/java/221703.html
-    // if(err.response.hasOwnProperty('status')){
-    //   console.log('500服务器'); 
-    //   toHideLoading()
-    //   Message.error('加载超时。请重新刷新页面！')
-    // }
-    // switch (err.response.status==undefined||) {
-    //   case 500:
-    //     console.log('500服务器'); 
-    //       dsQi2 = setTimeout(() => {
-    //           toHideLoading()
-    //           Message.error('加载超时。请重新刷新页面！')
-            
-    //     }, 3000)
-    //   break;
-    // }
-
-  
     //  设置5S定时 超过给出提示
     if(err.config.headers.showLoading !== false){
       hideLoading();

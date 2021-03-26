@@ -5,6 +5,11 @@ Vue.use(VueRouter);
 
 const routes = [
   {
+    path: '/qrcode',
+    name: '二维码',
+    component: () => import('../components/qrcode/qrcode.vue')
+  },
+  {
     path: '/regist',
     name: '注册',
     component: () => import(/* webpackChunkName: "regist" */ '../pages/Regist/regist.vue'),
@@ -74,7 +79,7 @@ const routes = [
       {
         path: '/hotel',
         name: '酒店',
-        meta: '/meeting',
+        meta: '/hotel',
         component: () => import(/* webpackChunkName: "hotel" */ '../pages/Hotel/hotel.vue'),
         children: []
       },

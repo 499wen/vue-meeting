@@ -57,13 +57,42 @@ export default {
         }
       })
     },
-    // 上传封面 
-    uploadSuccess(res){
-
+    succ(){
+      console.log('成功!')
     },
-    // 上传状态
-    beforeAvatarUpload(){
+    // 上传图片
+    updateLoad(e){
+      // 文件数据
+      let file = this.$refs.file, files
+      files = file.files[0]
 
+      this.fileUpload(files, 'Restaurant', res => {
+        if(res.code == '000'){
+          this.$message.success(res.msg)
+          this.ruleForm.restaurantPhoto = res.data.saveFileName
+        } else {
+          this.$message.error(res.msg)
+        }
+
+        file.value = ''
+      })
+    },
+
+    // 上传平面图
+    updateLoad_pml(){
+      // 文件数据
+      let file = this.$refs.file_pmt, files
+      files = file.files[0]
+
+      this.fileUpload(files, 'RestaurantPlane', res => {
+        if(res.code == '000') {
+          this.$message.success(res.msg)
+          this.ruleForm.planeFigure = res.data.saveFileName
+        } else {
+          this.$message.error(res.msg)
+        }
+        file.value = ''
+      })
     },
     map() {
       var map = new BMap.Map("baidu-map"), that = this

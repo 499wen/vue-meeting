@@ -12,6 +12,7 @@ export default {
         {name: '进行中', select: false, tips: '0'},
         {name: '已结束', select: false, tips: '2'}
       ],
+      tips: '1',
 
       // 分页
       total: 0,
@@ -46,6 +47,10 @@ export default {
     ...mapMutations([
       'setMeetingData'
     ]),
+    // 新建会议
+    createMeet(){
+      this.single_stage()
+    },
     // 选择会议功能
     meet_func(data, func){
       if(!func.scription.trim()){ 
@@ -68,30 +73,6 @@ export default {
           select: func.scription
         }
       })
-      return
-
-      // 获取会议数据
-      this.$http.get(this.API.singleMeeting(data.id))
-      .then(res => {
-        console.log(res)
-        if(res.code == '000'){
-          // 处理数据
-          res.data.sponsorArrJsonStr = JSON.parse(res.data.sponsorArrJsonStr);
-          res.data.contactJson = JSON.parse(res.data.contactJson);
-          res.data.meetingProduce = JSON.parse(res.data.meetingProduce) 
-
-          // 保存当前会议数据
-          this.setMeetingData(res.data)
-
-          this.$router.push({
-            path: '/singleMeet',
-            query: {
-              meetingId: data.id,
-              select: func.scription
-            }
-          })
-        }
-      })
     },
     // 显示logo
     imgIcon(url){
@@ -112,14 +93,168 @@ export default {
     // 选择 nav列表
     tab_list(index){
       this.navList.filter((item, idx) => idx == index ? item.select = true : item.select = false)
-      let tips = this.navList[index].tips
-      if(tips == 1) {
-        this.pageNum = 1
+      this.tips = this.navList[index].tips
+      this.pageNum = 1
+      if(this.tips == 1) {
         this.getAllMeet()
       } else {
-        this.accordTypeGetmeet(tips)
+        this.accordTypeGetmeet(this.tips)
       }
     },
+
+		//发送通知按钮
+		SendingNotice(item, releaseCode, dates) {
+			console.log("dates: ", dates);
+			
+			let _this = this;
+			var dataee = new Date(dates).toJSON();
+			var birthDay = new Date(+new Date(dataee) + 8 * 3600 * 1000)
+				.toISOString()
+				.replace(/T/g, " ")
+				.replace(/\.[\d]{3}Z/, "");
+			var date = new Date(birthDay);
+			var dats = new Date();
+			if (date.getTime() < dats.getTime()) {
+				console.log(date.getTime());
+				_this.$message({
+					type: 'error', 
+					message: "当前时间已超过会议开始时间",
+					center: true
+				});
+			} else if (releaseCode != 0) {
+				_this.$message.info("会议已经发布");
+			} else {
+				this.$confirm('是否发布会议?', '提示', {
+          closeOnPressEscape: false,
+          closeOnClickModal: false,
+          cancelButtonClass: 'btn_custom_cancel',
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				  }).then(() => {
+					  this.is_axist(item)
+				  }).catch(() => {})
+				
+			}
+		}, // SendingNotice
+
+		// 发布会议 - 判断是否有添加短信 ,会议室有被预约
+		is_axist(data){
+			console.log(data)
+			let that = this
+			
+			// 判断是否需要发布邀请函
+			if(data.invitationWay == 1) {
+				this.$http.get(this.API.selectInvitationByMeetingId(data.id))
+					.then(res => {
+						if(!res.data.id) {
+							this.$confirm('您还未保存邀请函?', '提示', {
+								confirmButtonText: '去保存',
+								cancelButtonText: '取消',
+                showClose: false,
+                closeOnPressEscape: false,
+                closeOnClickModal: false,
+                cancelButtonClass: 'btn_custom_cancel',
+								type: 'warning'
+								}).then(() => {
+                  that.meet_func(data, {scription: 'invitation'})
+								}).catch(() => {})
+						} else {
+							this.seeSmsInfo(data)
+						}
+					})
+			} else {
+				this.seeSmsInfo(data)
+			}
+			
+		},
+		seeSmsInfo(data) {
+			let that = this
+			console.log('MeetingAddByMeeting')
+			try{
+
+			// 获取短信信息
+			that.$http.get(that.API.findMeetingAddByMeetingId(data.id))
+			.then(res => {
+				console.log(res)
+				if(res.code == '000'){
+					if(res.total > 0){
+						
+						// 会议室有被预约
+						var obj = {
+							endTime: new Date(data.beginDate).getTime(),
+							meetingId: data.id,
+							startTime: new Date(data.endDate).getTime()
+						}
+						that.$http.post(that.API.selectRoomByBettwnDate(1, 1), obj)
+						.then(info => {
+							console.log(info)
+							if(info.code == '000'){
+								if(info.data && info.data.length && info.data[0].Is == 1){
+									that.meetNotice(data)
+								} else if(info.data && info.data.length && info.data[0].Is == 0) {
+									that.$message.info('当前会议室未被审批，会议不能发布！')
+								} else {
+									that.$confirm('是否预约会议室?', '提示', {
+										confirmButtonText: '确定',
+										cancelButtonText: '取消',
+                    showClose: false,
+                    cancelButtonClass: 'btn_custom_cancel',
+                    closeOnClickModal: false,
+                    closeOnPressEscape: false,
+										type: 'warning'
+										}).then(() => {
+											that.meet_func(data, {scription: 'meetRoom'})
+										}).catch(() => {
+											that.meetNotice(data)
+										})
+
+								}
+							} else {
+								// 发布失败 - 会议室预约接口报错
+								that.$confirm('是否预约会议室?', '提示', {
+									confirmButtonText: '确定',
+									cancelButtonText: '取消',
+									showClose: false,
+                  closeOnClickModal: false,
+                  closeOnPressEscape: false,
+                  cancelButtonClass: 'btn_custom_cancel',
+									type: 'warning'
+									}).then(() => {
+										that.meet_func(data, {scription: 'meetRoom'})
+									}).catch(() => {
+									  that.meetNotice(data)
+									})
+							}
+						})
+
+					} else {
+						that.$message.error('未添加短信!')
+					}
+				} else {
+					// 发布失败 - 短信接口报错
+				}
+			}).catch(err => {
+				console.log(err)
+			})
+		} catch (err){
+				console.log(err)
+			}
+		},
+		meetNotice(data){
+      let that = this
+      
+			// 发布会议
+			that.$http.post(that.API.meetingReleaseById(data.id))
+			.then(resu => {
+				if (resu.statusCode == "000") {
+					that.$message.success('会议发布成功');
+					that.tab_list(this.tips)
+				} else {
+					that.$message.info(resu.msg);
+				}
+			});
+		},
 
     // 分页方法
     sizeChange(val){

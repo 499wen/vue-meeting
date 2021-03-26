@@ -9,7 +9,7 @@
         <el-input size="small" placeholder="请输入会议名称" v-model="searchKey" @keyup.native.enter="searchBtn">
           <el-button slot="append" icon="el-icon-search" @click="searchBtn" type="primary"></el-button>
         </el-input>
-        <el-button size="small" @click="addMeeting = true" type="primary" plain class="add-hotel"> 新建会议 </el-button>
+        <el-button size="small" @click="createMeet" type="primary" plain class="add-hotel"> 新建会议 </el-button>
       </div> 
     </div> 
 
@@ -29,7 +29,7 @@
           <div class="box-left">
             <!-- 会议封面 -->
             <div class="meet-cover">
-              <img :src="API.echoImage(item.photoFileId)" alt="" v-if="item.photoFileId">
+              <img :src="API.echoImage(item.photoFileId, 'MeetingImage')" alt="" v-if="item.photoFileId">
               <img src="../../assets/images/avatar.png" alt="" v-else>
 
               <!-- 提示
@@ -63,8 +63,9 @@
 
             <!-- 会议 - 按钮 -->
             <div class="meet-btn">
-              <el-button class="btn" type="warning" size="mini" round>发布会议</el-button>
-              <el-button class="btn" size="mini" round>发送邀请函</el-button>
+              <el-button class="btn" type="warning" size="mini" v-if="item.releaseCode == 1" round disabled>已发布</el-button>
+              <el-button class="btn" type="warning" size="mini" v-else round @click="SendingNotice(item, item.releaseCode, item.beginDate)">发布会议</el-button>
+              <!-- <el-button class="btn" size="mini" round>发送邀请函</el-button> -->
               <el-button class="btn" size="mini" round>会议驾驶舱</el-button>
               <el-button class="btn" size="mini" round>复制会议</el-button>
             </div>

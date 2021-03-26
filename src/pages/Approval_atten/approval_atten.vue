@@ -74,7 +74,8 @@ export default {
     },
     curChange(val){
       this.pageNum = val
-    }
+    },
+    
   },
   mounted() {
     var dom = document.querySelector('.table')

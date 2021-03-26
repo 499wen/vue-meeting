@@ -15,7 +15,7 @@
                 <el-form-item label="会议图片" prop='capacity'>
                   <div class="avatar-uploader">
                     <div class="avatar">
-                      <img v-if="addForm.photoFileId" :src="API.echoImage(addForm.photoFileId)" />
+                      <img v-if="addForm.photoFileId" :src="API.echoImage(addForm.photoFileId, 'MeetingImage')" @error="errImg(addForm.photoFileId, 'MeetingImage', $event)"/>
                       <img v-else src="@/assets/images/defaultImg.png" alt="">
                       <input type="file" name="" id="" class="hide" @change="updateLoad" ref="file">
                     </div>
@@ -227,7 +227,7 @@
         <div class="right-box">
           <div class="intro-duce">会议平面图</div>
           <div class="img-pmt">
-            <img v-if="addForm.meetingRoomId" :src="API.echoImage(addForm.meetingRoomId)" class="avatar-duce" />
+            <img v-if="addForm.meetingRoomId" :src="API.echoImage(addForm.meetingRoomId, 'MeetingPlane')" class="avatar-duce" @error="errImg(addForm.meetingRoomId, 'MeetingPlane', $event)"/>
             <img v-else src="@/assets/images/defaultPmt.png" class="avatar-duce" alt="">
             <input type="file" name="" id="" class="hide" @change="updateLoad_pml" ref="file_pmt">
           </div>

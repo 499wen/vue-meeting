@@ -5,6 +5,13 @@
       <el-table ref="singleTable"
         :data="tableData" border :height="height">
         <el-table-column :show-overflow-tooltip="true" type="index" width="50" label="序号" align="center" :resizable="false"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" width="300" prop="name" label="会议室名称" align="center" :resizable="false"></el-table-column>
+        <el-table-column :show-overflow-tooltip="true" width="180px" align="center" :resizable='false'>
+          <template slot-scope="scope">
+            <img v-if="!scope.row.photoFileId" src="@/assets/images/defaultImg.png" class="hotel-img" />
+            <img v-else id="updateUserImg" class="hotel-img" :src="API.echoImage(scope.row.photoFileId, 'MeetingRoomImage')" alt="">
+          </template>
+        </el-table-column>
         <el-table-column :show-overflow-tooltip="true" :prop="item.props" :label="item.label" :width="item.width"
           v-for="(item, idx) in tableCate" :key="idx"
           align="center" :resizable="false">
@@ -59,8 +66,6 @@ export default {
       height: null,
       tableData: [],
       tableCate: [
-        {props: 'name', label: '会议室名称', width: '300'},
-        {props: 'photoFileId', label: '会议室图片', width: '180'},
         {props: 'type', label: '会议室类型', width: '150'},
         {props: 'maximumCapacity', label: '容纳人数', width: '150'},
         {props: 'address', label: '地址', width: ''},
@@ -123,7 +128,7 @@ export default {
         this.$http.post(this.API.bookingMeetingRoom, obj)
         .then(res => {
           if(res.code == '000'){
-            this.$$message.success('预约成功, 待审批!')
+            this.$message.success('预约成功, 待审批!')
             this.getRoomData()
           } else {
             this.$message.info(res.msg)
@@ -178,6 +183,11 @@ export default {
   .table {
     width: 100%;
     height: calc(100% - 42px);
+
+    .hotel-img {
+      width: 112px;
+      height: 71px;
+    }
   }
 }
 </style>

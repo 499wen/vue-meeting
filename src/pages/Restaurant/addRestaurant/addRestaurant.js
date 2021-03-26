@@ -53,33 +53,38 @@ export default {
         }
       })
     },
+    // 上传图片
     updateLoad(e){
       // 文件数据
-      let file = this.$refs.file.files[0];
+      let file = this.$refs.file, files
+      files = file.files[0]
 
-      this.fileUpload(file, 'HeadFile', res => {
-        console.log(res)
+      this.fileUpload(files, 'Restaurant', res => {
+        if(res.code == '000'){
+          this.$message.success(res.msg)
+          this.ruleForm.restaurantPhoto = res.data.saveFileName
+        } else {
+          this.$message.error(res.msg)
+        }
+        file.value = ''
       })
     },
 
-    // 上传封面 
-    uploadSuccess(res){
-      console.log(res)
-    },
-    // 上传状态
-    beforeAvatarUpload(data){
-      console.log(data, this.$refs.img)
-      
-      // let formData = new FormData()
-      // formData.append('file', 'data')
-      // return  false
-      // this.$http.post('/cdapi/release/acassc', formData)
-      //   .then(res => {
-      //     console.log(res)
-      //   })
+    // 上传平面图
+    updateLoad_pml(){
+      // 文件数据
+      let file = this.$refs.file_pmt, files
+      files = file.files[0]
 
-      //   return false
-
+      this.fileUpload(files, 'RestaurantPlane', res => {
+        if(res.code == '000') {
+          this.$message.success(res.msg)
+          this.ruleForm.planeFigure = res.data.saveFileName
+        } else {
+          this.$message.error(res.msg)
+        }
+        file.value = ''
+      })
     },
     map() {
       var map = new BMap.Map("baidu-map"), that = this

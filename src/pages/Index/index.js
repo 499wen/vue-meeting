@@ -38,7 +38,7 @@ export default {
       if(type == 'H5'){
         this.H5title = '扫码进入H5移动端'
       } else {
-        this.H5title = '扫码开始下载APP'
+        this.H5title = '扫码开始下载会务通APP'
       }
     },
     // 监听刷新页面

@@ -373,74 +373,21 @@ export default {
     },
     // 下载二维码
     preseQrcode(){
-      // 清除二维码
-      var qrcode = this.$refs.hideImg
-      $(qrcode).empty()
-
-      // qrcodeUrl = 'https://mt.smart-hwt.com/qrcode?data=' + this.meetingId + '&cId=' + this.loginInfo.companyId
-      // console.log(qrcodeUrl)
-      // new QRCode(qrcode, {
-      //   text: qrcodeUrl,
-      //   width: 500,
-      //   height: 500,
-      //   colorDark: '#000000',
-      //   colorLight: '#ffffff'
-      // })
-
-      // var meetingInviteTemplates = {
-      //   dataVal: JSON.stringify(this.dataCollection), // 
-      // }
-    // return 
-    // HTML5canvas 生成图片
-    var that = this
-    var opts = {
-        logging: true, // 启用日志记录以进行调试 (发现加上对去白边有帮助)
-        allowTaint: true, // 否允许跨源图像污染画布
+      html2canvas($('#hideImg')[0], {
+        useCORS: true, // 允许图片跨域
         backgroundColor: null, // 解决生成的图片有白边
-        useCORS: true // 如果截图的内容里有图片,解决文件跨域问题
-    }
-    // eslint-disable-next-line no-undef
-    // html2canvas($('#qrcode')[0], opts).then((canvas) => {
-    //   var ImageURL = canvas.toDataURL('image/png')
-    //   var myfile = that.dataURLtoFile(ImageURL, Date.now() + '.png');
-
-    // })
-    // html2canvas(qrcode, {
-    //   onrendered: function(canvas) {
-    //     console.log(canvas)
-    //       document.body.appendChild(canvas);
-    //   },
-    //   // width: 300,
-    //   // height: 300
-    // });
-
-    html2canvas($('#qrcode')[0], {
-      // canvas: canvas2,
-      useCORS: true, // 允许图片跨域
-      width: 584,  // 绘制图片的宽 2倍
-      dpi: window.devicePixelRatio * 2, // dpi  如果模糊的话 就把dpi和scale缩放的值调大 dpi越高生成的图片越大
-      height: 584 // 绘制图片的高 2倍
-    }).then((canvas) => {
-        
-        $('#hideImg').append(img);
-        console.log(canvas.toDataURL())
+        dpi: window.devicePixelRatio, // dpi  如果模糊的话 就把dpi和scale缩放的值调大 dpi越高生成的图片越大
+      }).then((canvas) => {
         var aDom = document.createElement('a'), src = canvas.toDataURL()
-        , meetName = this.$store.state.createdMeetInfo.meetingName
+        , meetName = this.$store.state.meetingData.meetingName
         aDom.href = src
         aDom.setAttribute('download', meetName + '-邀请函')
         aDom.click()
-    });
 
-      // console.log($(this.$refs.hideImg).find('img'))
-      // $(this.$refs.hideImg).find('img')[0].onload = e => {
-      //   var aDom = document.createElement('a'), src = $(qrcode).find('img')[0].src
-      //   , meetName = this.$store.state.createdMeetInfo.meetingName
-      //   aDom.href = src
-      //   aDom.setAttribute('download', meetName + '-邀请函')
-      //   aDom.click()
-      //   console.log(src, aDom)
-      // }
-
+        // 清除二维码
+        var qrcode = this.$refs.hideImg
+        $(qrcode).empty()
+      });
     },
     addDom(){
       // 引入jquery plugins/self-qrcode
@@ -586,7 +533,7 @@ export default {
       this.$http.get(this.API.selectInvitationByMeetingId(this.meetingId))
         .then(res => {
           console.log(res);
-          if(res.code == '200' && res.data){
+          if(res.code == '000' && res.data){
             // 数据初始化
             this.id = res.data.id
             this.dataCollection = JSON.parse(res.data.dataVal)
@@ -612,26 +559,16 @@ export default {
     },
     // 打开二维码
     openQrcode(){
-      // 请先保存
-      // if(this.)
-      
       // 清除二维码
-      var qrcode = this.$refs.qrcode
+      var qrcode = this.$refs.qrcode, hideImg = this.$refs.hideImg
       $(qrcode).empty()
 
       // 保存邀请函
       var id = this.save(false)
-
-      // return  
-
-      // var obj = {
-      //   meetingId: this.meetingId
-
       qrcodeUrl = 'https://mt.smart-hwt.com/qrcode?data=' + this.meetingId + '&cId=' + this.loginInfo.companyId
-      // var url = 'http://192.168.0.152:9090/qrcode?data=' + this.meetingId + '&cId=' + this.loginInfo.companyId
       console.log('http://192.168.0.241:14444?data=' + this.meetingId + '&cId=' + this.loginInfo.companyId)
-      // console.log(location.origin+'/index/qrcode/?data=' + this.meetingId + '&cId=' + this.loginInfo.companyId)
-      console.log(qrcodeUrl)
+
+      // 生成二维码
       new QRCode(qrcode, {
         text: qrcodeUrl,
         width: 130,
@@ -645,6 +582,20 @@ export default {
       ficDom.style = `width: 30px; height: 30px; position: absolute; top: 50px; left: 50px; `
       qrcode.appendChild(ficDom)
       this.codeVisible = !this.codeVisible
+
+      // 生成一份大的
+      new QRCode(hideImg, {
+        text: qrcodeUrl,
+        width: 300,
+        height: 300,
+        colorDark: '#000000',
+        colorLight: '#ffffff'
+      })
+
+      var bigDom = document.createElement('img')
+      bigDom.src = require('@/assets/images/logo.png')
+      bigDom.style = `width: 60px; height: 60px; position: absolute; top: 120px; left: 120px; `
+      hideImg.appendChild(bigDom)
     },
     // 删除背景图
     delBgimg(){
@@ -662,11 +613,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        loading.show()
         this.$http.post(this.API.delectCompanyByBackGroup, [this.selectImg.imgId]).then(res => {
           console.log(res)
           try{
-            if(res.code == '200'){
+            if(res.code == '000'){
               this.$message.success('删除成功！')
               this.initBgImage()
               // this.bgImage.filter((item, idx) => {
@@ -686,9 +636,7 @@ export default {
               }
               
             }
-            loading.hide() 
           } catch(err){
-            loading.hide()
             this.$message.info('网络繁忙！请刷新重试')
           }
   
@@ -783,23 +731,46 @@ export default {
 
       console.log(this.dataCollection)
       var meetingInviteTemplates = {
-          dataVal: JSON.stringify(this.dataCollection), // 
-        }
+        dataVal: JSON.stringify(this.dataCollection), // 
+      }
       // return 
       // HTML5canvas 生成图片
       var that = this
       var opts = {
           logging: true, // 启用日志记录以进行调试 (发现加上对去白边有帮助)
-          allowTaint: true, // 否允许跨源图像污染画布
+          allowTaint: false, // 否允许跨源图像污染画布
           backgroundColor: null, // 解决生成的图片有白边
           useCORS: true // 如果截图的内容里有图片,解决文件跨域问题
       }
-      // eslint-disable-next-line no-undef
+      // eslint-disable-next-line no-undef   https://mybucket-resized-1305256445.cos.ap-guangzhou.myqcloud.com/356642515878678528/HeadFile/c1ctdhjj8oj09lkqspqg.png
       html2canvas($('.phone-long')[0], opts).then((canvas) => {
         var ImageURL = canvas.toDataURL('image/png')
         var myfile = that.dataURLtoFile(ImageURL, Date.now() + '.png');
 
-        // return
+        this.fileUpload(myfile, 'Invitation', res => {
+          console.log(res)
+          if(res.code == '000') {
+            meetingInviteTemplates.imgId = res.data.saveFileName
+            that.$http.post(that.API.saveTemplate, meetingInviteTemplates).then(resu => {
+              try{
+                console.log(resu)
+                that.$message.success('保存成功！')
+                that.initModel()
+
+              }catch(err) {
+                that.$message.info('网络繁忙！请刷新重试')
+              }
+              
+            }).catch(err => {
+              console.log(err)
+
+            })
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
+        // console.log(myfile)
+        return
         var formFile = new FormData();
         formFile.append('file', myfile);
         $.ajax({
@@ -855,22 +826,29 @@ export default {
       })
     },
     // 上传背景图片
-    bgiUpload(res){
-      console.log(res)
-      if(res.statusCode == '000'){
-        let that = this
-        let meetingInviteImgs = {imgId: res.data.id + '.' + res.data.fileType}
-        that.bgImage.push({imgId: res.data.id + '.' + res.data.fileType})
-  
-        this.$http.post(this.API.saveCompanyByBackGroup, meetingInviteImgs).then(res => {
-          console.log(res)
-          if(res.code == '200'){
-            // that.bgImage.push(...res.data)
-          }
-        })
-      } else {
-        this.$message.info(res.msg)
-      }
+    bgiUpload(){
+      // 文件数据
+      let file = this.$refs.file, files
+      files = file.files[0]
+
+      this.fileUpload(files, 'Invitation', res => {
+        if(res.code == '000'){
+          this.$message.success(res.msg)
+          let meetingInviteImgs = {imgId: res.data.saveFileName}
+          this.bgImage.push({imgId: res.data.saveFileName})
+    
+          this.$http.post(this.API.saveCompanyByBackGroup, meetingInviteImgs).then(resu => {
+            if(resu.code == '200'){
+              // that.bgImage.push(...res.data)
+            }
+          })
+        } else {
+          this.$message.error(res.msg)
+        }
+        file.value = ''
+      })
+
+      
     },
     changeZindex: function(val) {
       console.log('置顶， 置底')
@@ -1242,17 +1220,26 @@ export default {
       }
     }, //updateSubmitForm
 
-    uploadImage: function(res) {
-      console.log(res);
-      if (res.statusCode == "000") {
-        this.defaultStyle.url = `/zhenapi/fileserve/invitationFile/invitation/${this.loginInfo.companyId}/` + res.data.id + '.' + res.data.fileType;
-        // $(this.tNode).find('.invite-text-box-text').css('background-image','url("'+res.src+'")')
-        $(this.tNode).css("background-image", 'url("' + this.defaultStyle.url + '")');
-        $(this.tNode)
-          .find(".tip")
-          .css("display", "none");
-      }
-      this.$refs.elupload.clearFiles();
+    uploadImage: function() {
+      // 文件数据
+      let file = this.$refs.file_pmt, files
+      files = file.files[0]
+      
+      this.fileUpload(files, 'Invitation', res => {
+        if(res.code == '000') {
+          this.defaultStyle.url = this.API.echoImage(res.data.saveFileName, 'Invitation')
+          // $(this.tNode).find('.invite-text-box-text').css('background-image','url("'+res.src+'")')
+          $(this.tNode).css("background-image", 'url("' + this.defaultStyle.url + '")');
+          $(this.tNode)
+            .find(".tip")
+            .css("display", "none");
+        } else {
+          this.$message.error(res.msg)
+        }
+
+        file.value = ''
+      })
+      
     }, //uploadImage
     uploadVedio: function(res) {
       console.log(res);
@@ -1335,7 +1322,7 @@ export default {
         .then(res => {
           console.log(res);
           try{
-            if(res.code == "200"){
+            if(res.code == "000"){
               if(bool){
                 _this.$message.success("保存成功");
               }
@@ -1362,7 +1349,7 @@ export default {
         .then(res => {
           console.log(res);
 
-          if(res.code == "200"){
+          if(res.code == "000"){
             if(bool){
               _this.$message({
                 type: "success",

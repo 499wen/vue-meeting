@@ -21,8 +21,8 @@
         <el-table-column :show-overflow-tooltip="true" :resizable="false" align='center' type="index" label="序号" width="50"></el-table-column>
         <el-table-column :show-overflow-tooltip="true" :resizable="false"  align='center' label="会议室封面" width="200">
           <template slot-scope="scope">
-            <img v-if="!scope.row.hotelImageUrl" src="@/assets/images/defaultImg.png" class="hotel-img" />
-            <img v-else id="updateUserImg" class="hotel-img" :src="`/zhenapi/fileserve/hotelFile/hotel/hotelImage/${loginInfo.companyId}/${scope.row.hotelImageUrl}`" alt="">
+            <img v-if="!scope.row.photoFileId" src="@/assets/images/defaultImg.png" class="hotel-img" />
+            <img v-else id="updateUserImg" class="hotel-img" :src="API.echoImage(scope.row.photoFileId, 'MeetingRoomImage')" alt="">
           </template>
         </el-table-column> 
         <el-table-column :show-overflow-tooltip="true" :resizable="false" align='center'

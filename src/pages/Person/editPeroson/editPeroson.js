@@ -106,17 +106,18 @@ export default {
   methods: {
     // 上传头像
     upload(){
-      let file = this.$refs.avatar.files[0]
-      console.log(file)
-      this.fileUpload(file, res => {
-        console.log(res)
+      let file = this.$refs.avatar, files
+      files = file.files[0]
+      
+      this.fileUpload(files, 'HeadFile', res => {
         if(res.code == '000'){
           this.$message.success('上传成功！')
-          // this.
           this.user.photoFileSaveName = res.data.saveFileName
         } else {
           this.$message.error(res.msg)
         }
+
+        file.value = ''
       })
     },
 

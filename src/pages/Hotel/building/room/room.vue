@@ -218,6 +218,7 @@ export default {
         .then(res => {
           if(res.code == '000'){
             this.$message.success('删除成功!');
+            this.pageNum = 1
             this.getTree()
           } else {
             this.$message.info(res.msg)
@@ -263,6 +264,7 @@ export default {
             console.log(res)
             if(res.code == '000'){
               this.$message.success('删除成功！')
+              this.pageNum = 1
               this.searchData()
             } else {
               this.$message.error(res.msg)

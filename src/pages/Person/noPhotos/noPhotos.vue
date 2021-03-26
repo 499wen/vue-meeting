@@ -30,7 +30,17 @@
 
       <!-- 存放照片 -->
       <div class="deposit-photo">
-        
+        <div class="phtot-box" v-for="(item, idx) in imgList" :key="idx">
+          <!-- 照片 -->
+          <img src="" alt="" class="photo">
+
+          <!-- 名字 -->
+          <span class="photo-name">崖域</span>
+
+          <!-- 选择按钮 -->
+          <el-checkbox v-model="item.checked" class="chioce" @change="imgCheck($event, idx, item.checked)"></el-checkbox>
+
+        </div>
       </div>
 
       <!-- 照片总和 -->
@@ -59,6 +69,11 @@ export default {
       tableCate: [
         {props: 'userName', label: '姓名', width: '80'},
         {props: 'departmentName', label: '部门', width: ''},
+      ],
+
+      // 图片数据
+      imgList: [
+        {checked: false}, {checked: false}, {checked: false}
       ]
     }
   },
@@ -75,13 +90,27 @@ export default {
           console.log(res)
           if(res.code == '000' && res.data){
             res.data.filter(item => !item.departmentName ? item.departmentName = this.loginInfo.companyName : '')
+            this.total = res.total
             let table_scroll = document.querySelector('.el-table__body-wrapper')
             dataScrollLoad(table_scroll, res.data, this.pageNum, this.pageSize, (result) => {
               this.tableData = result
-              this.total = res.count
             })
           }
         })
+    },
+
+    // 
+    imgCheck(val, rowIndex, row){
+      console.log(val, rowIndex, row)
+      const data = this.imgList;
+			for (let index in data) {
+				if (index == rowIndex) {
+					data[index].checked = val;
+				} else {
+					data[index].checked = false;
+				}
+			}
+			this.imgList = data;
     }
   },
 	watch: {
@@ -151,7 +180,6 @@ export default {
   .no-image {
     width: calc(100% - 370px);
     height: 100%;
-    // background-color: #93d543;
 
     .no-title {
       width: 100%;
@@ -159,7 +187,6 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 20px;
       box-sizing: border-box;
       font-size: 16px;
     }
@@ -175,6 +202,43 @@ export default {
       height: calc(100% - 70px);
       border: 1px solid #ccc;
       box-sizing: border-box;
+      padding: 10px;
+      display: flex;
+      justify-content: flex-start;
+      align-content: flex-start;
+      flex-wrap: wrap;
+
+      .phtot-box {
+        width: 100px;
+        height: 190px;
+        position: relative;
+        margin-right: 10px;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        align-content: flex-start;
+
+        .photo {
+          width: 100%;
+          height: 160px;
+        }
+
+        .photo-name {
+          width: 100%;
+          height: 30px;
+          line-height: 30px;
+          text-align: center;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .chioce {
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+      }
     }
 
     .img-total {

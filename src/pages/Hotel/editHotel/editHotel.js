@@ -13,8 +13,9 @@ export default {
         capacity: null, //容纳人数
         gpsLat: "", //纬度
         gpsLng: "", //经度
-        imageUrl: "", //酒店图片
-        remark: "" //描述
+        hotelImageUrl: "", //酒店图片
+        remark: "", //描述
+        hotelPlaneImageUrl: '', // 平面图
       },
       cover: '',
       rules: {
@@ -39,11 +40,13 @@ export default {
     }
   },
   methods: {
-    // 添加酒店
+    // 修改酒店
     save_hotel(){
+      let form = {...this.ruleForm}
+      form.capacity = Number(form.capacity)
       this.$refs['ruleForm'].validate((valid) => {
         if(valid){
-          this.$http.post(this.API.updateHotelByCustomer, this.ruleForm)
+          this.$http.post(this.API.updateHotelByCustomer, form)
             .then((res) => {
               if(res.code == '000') {
                 this.$message.success('修改成功!')
@@ -55,13 +58,39 @@ export default {
         }
       })
     },
-    // 上传封面 
-    uploadSuccess(res){
+    // 上传图片
+    updateLoad(e){
+      // 文件数据
+      let file = this.$refs.file, files
+      files = file.files[0]
 
+      this.fileUpload(files, 'HotelImage', res => {
+        if(res.code == '000'){
+          this.$message.success(res.msg)
+          this.ruleForm.hotelImageUrl = res.data.saveFileName
+        } else {
+          this.$message.error(res.msg)
+        }
+
+        file.value = ''
+      })
     },
-    // 上传状态
-    beforeAvatarUpload(){
+    // 上传平面图
+    updateLoad_pml() {
+      // 文件数据
+      let file = this.$refs.file_pmt, files
+      files = file.files[0]
 
+      this.fileUpload(files, 'HotelPlane', res => {
+        if(res.code == '000') {
+          this.$message.success(res.msg)
+          this.ruleForm.hotelPlaneImageUrl = res.data.saveFileName
+        } else {
+          this.$message.error(res.msg)
+        }
+
+        file.value = ''
+      })
     },
     map() {
       var map = new BMap.Map("baidu-map"), that = this

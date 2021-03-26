@@ -104,11 +104,21 @@ export default {
     }
   },
   methods: {
-    handleAvatarSuccess(){
+    // 上传头像
+    upload(){
+      let file = this.$refs.avatar, files
+      files = file.files[0]
+      
+      this.fileUpload(files, 'HeadFile', res => {
+        if(res.code == '000'){
+          this.$message.success('上传成功！')
+          this.user.photoFileSaveName = res.data.saveFileName
+        } else {
+          this.$message.error(res.msg)
+        }
 
-    },
-    beforeAvatarUpload() {
-
+        file.value = ''
+      })
     },
 
     // 获取生日

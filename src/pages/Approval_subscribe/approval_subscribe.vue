@@ -18,16 +18,67 @@
     <div class="table">
       <el-table ref="multipleTable" :data="tableData" border :height='height'
         @selection-change="handleSelectionChange">
-        <el-table-column :show-overflow-tooltip="true" type="selection" width="55" align="center"></el-table-column>
-        <el-table-column :show-overflow-tooltip="true" 
-          v-for="(item, idx) in tableCate" :key="idx"
-          :prop="item.prop" :label="item.label" :width="item.width" align="center"></el-table-column>
-        <el-table-column :show-overflow-tooltip="true" label="状态" width="200" align="center">
-          <template slot-scope="scope">{{ scope.row.date ? '已通过' : '未通过' }}</template>
-        </el-table-column>
-        <el-table-column :show-overflow-tooltip="true" label="操作" width="200" align="center">
-          <template slot-scope="scope">{{ scope.row.date ? '通过' : '不通过' }}</template>
-        </el-table-column>
+          <!-- 序号 -->
+          <el-table-column :resizable='false' align="center" type="index"  label="序号" width='60'></el-table-column>
+          <el-table-column align="center" label="会议名称" prop="meetingName"></el-table-column>
+          <el-table-column label="时间" width='120' align="center" prop="stateCode">
+            <template slot-scope="scope">
+              <div style="display: block; text-align: center">
+                <div >{{ scope.row.time }} </div>
+                <div>{{ scope.row.st + ' - ' + scope.row.et }} </div>
+              </div>
+              
+            </template>
+          </el-table-column>
+          <!-- 会议室名称 -->
+          <el-table-column :resizable='false' align="center" label="会议室名称" prop="name" width='170'></el-table-column>
+          <!-- 会议室图片 -->
+          <el-table-column :resizable='false' align="center" label="会议室图片" prop="photoFileId" width='150'>
+            <template slot-scope="scope">
+              <img v-if="scope.row.photoFileId" class="photo" :src="API.echoImage(scope.row.photoFileId, 'MeetingRoomImage')"/>
+              <img v-else src="@/assets/images/defaultImg.png" class="photo" alt="">
+            </template>
+          </el-table-column>
+          <!-- 会议室类型 -->
+          <el-table-column :resizable='false' align="center" label="会议室类型" width='100' prop="cate">
+            <template
+              slot-scope="scope">
+              {{scope.row.cate}}
+            </template>
+          </el-table-column>
+          <el-table-column :resizable='false' align="center" label="容量" width='80' prop="maximumCapacity">
+            <template slot-scope="scope">{{scope.row.maximumCapacity}}人</template>
+          </el-table-column>
+          <el-table-column align="center" label="地址" prop="address" width='220'></el-table-column>
+          <el-table-column align="center" label="申请人" width='80' prop="customerName"></el-table-column>
+
+          <el-table-column label="状态" width='80' align="center" prop="stateCode">
+            <template slot-scope="scope">
+              <!-- {{stateEnum[scope.row.stateCode]?stateEnum[scope.row.stateCode]:"未知"}} -->
+              <span v-if="scope.row.stateCode == '0'" style="color:#f19d19;">未审批</span>
+              <span v-if="scope.row.stateCode == '1'" style="color:#01b59c;">已通过</span>
+              <span v-if="scope.row.stateCode == '2'" style="color:#fe0052;">未通过</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" align="center" width='170'>
+            <template slot-scope="scope">
+              <!-- scope.row.stateCode == 0 -->
+              <div v-if="scope.row.stateCode != null">
+                <el-button
+                  size="mini"
+                  class="operation_btn"
+                  style="background-color:#53c6ac;color:#fff;"
+                  @click="agree(scope.row.id)"
+                >同意</el-button>
+                <el-button
+                  size="mini"
+                  class="operation_btn"
+                  type="danger"
+                  @click="disagree(scope.row.id)"
+                >不同意</el-button>
+              </div>
+            </template>
+          </el-table-column>
       </el-table>
     </div>
      
@@ -61,7 +112,7 @@ export default {
       tableData: [],
       tableCate: [
         { prop: 'userName', label: '申请人', width: '150'},
-        { prop: 'phone', label: '手机号', width: '150'},
+        { prop: 'address', label: '地址', width: '150'},
         { prop: 'companyName', label: '单位', width: '200'},
         { prop: 'departmentName', label: '部门', width: ''},
         { prop: 'email', label: '邮件', width: '180'},
@@ -82,6 +133,50 @@ export default {
     handleSelectionChange(val){
 
     },
+		// 同意审批申请
+		agree:function(id){
+			this.$confirm('确认同意申请吗？', '确认', {
+				cancelButtonClass: 'btn_custom_cancel',
+				type: 'success'
+			}).then(() => {
+				var obj = { id: id,  remarks: '', stateCode: 1}
+				this.$http.post(this.API.approvalBinDing, obj)
+				.then(res => {
+					if("000" == res.code){
+						this.$message.success("审批通过");
+						if(this.tabIndex == 0) {
+              this.getApproval()
+            } else {
+              this.getType(this.tabIndex - 1)
+            }
+					}else{
+						this.$message.error("审批出现错误,请重试!");
+					}
+				})
+			}).catch(() => {});
+		},
+		// 不同意审批申请
+		disagree:function(id){
+			this.$confirm('确认拒绝申请吗？', '确认', {
+				cancelButtonClass: 'btn_custom_cancel',
+				type: 'warning'
+			}).then(() => {
+				var obj = { id: id, remarks: '', stateCode: 2}
+				this.$http.post(this.API.approvalBinDing, obj)
+				.then(res => {
+					if("000" == res.code){
+						this.$message.success("已拒绝审批申请");
+						if(this.tabIndex == 0) {
+              this.getApproval()
+            } else {
+              this.getType(this.tabIndex - 1)
+            }
+					}else{
+						this.$message.error("拒绝审批出现错误,请重试!");
+					}
+				})
+			}).catch(() => {});
+		},
     // 分页方法
     sizeChange(val){
       this.pageNum = 1
@@ -193,6 +288,11 @@ export default {
   .table {
     height: calc(100% - 133px);
     width: 100%;
+  }
+
+  .photo {
+    width: 121px;
+    height: 71px;
   }
 }
 </style>

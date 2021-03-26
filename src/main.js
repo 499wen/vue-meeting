@@ -19,8 +19,9 @@ import Api from './API/api.js'
 Vue.prototype.API = Api
 
 // 挂载文件上传服务
-import fileUpload from './plugins/file_upload.js'
+import { fileUpload, errImg } from './plugins/file_upload.js'
 Vue.prototype.fileUpload = fileUpload
+Vue.prototype.errImg = errImg
 
 // 引入图片懒加载
 import vueLazy from 'vue-lazyload'
@@ -28,6 +29,10 @@ Vue.use(vueLazy, {
   error: require('@/assets/images/avatar.png'),
   loading: require('@/assets/images/avatar.png')
 })
+
+// 引入 vue-worker
+import VueWorker from 'vue-worker'
+Vue.use(VueWorker)
 
 new Vue({
   router,

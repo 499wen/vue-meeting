@@ -17,7 +17,7 @@
           </el-col>  
           <div class="userImage"> 
             <div class="avatar-uploader">
-              <img v-if="user.photoFileSaveName" class="authsrc" id="addUserImg" style="width: 100%;height: 100%;border-radius: 0;" :authsrc="`${api}/${user.companyId}/${user.photoFileSaveName}`" alt="">
+              <img v-if="user.photoFileSaveName" :src="API.echoImage(user.photoFileSaveName, 'HeadFile')" class="authsrc" id="addUserImg" alt="" @error="errImg(user.photoFileSaveName, 'HeadFile', $event)">
 
               <div class="tip" v-else>
                 <div><i class="el-icon-plus avatar-uploader-icon"></i></div>
@@ -165,6 +165,12 @@ export default editPeroson
     height: calc(100% - 72px);
     overflow-y: auto;
     padding-right: 20px;
+  }
+
+  .authsrc {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
   }
 
 	.userImage {

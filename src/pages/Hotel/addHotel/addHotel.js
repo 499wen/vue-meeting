@@ -8,13 +8,14 @@ export default {
   data() {
     return {
       ruleForm: {
-        hotelName: "酒店名称2", //酒店名称
-        address: "地址", //详细地址
+        hotelName: "", //酒店名称
+        address: "", //详细地址
         capacity: 30, //容纳人数
         gpsLat: "", //纬度
         gpsLng: "", //经度
-        imageUrl: "ahahhxnuw.png", //酒店图片
-        remark: "描述" //描述
+        hotelImageUrl: "", //酒店图片
+        remark: "", //描述
+        hotelPlaneImageUrl: '', // 平面图
       },
       cover: '',
       rules: {
@@ -54,13 +55,39 @@ export default {
         }
       })
     },
-    // 上传封面 
-    uploadSuccess(res){
+    // 上传图片
+    updateLoad(e){
+      // 文件数据
+      let file = this.$refs.file, files
+      files = file.files[0]
 
+      this.fileUpload(files, 'HotelImage', res => {
+        if(res.code == '000'){
+          this.$message.success(res.msg)
+          this.ruleForm.hotelImageUrl = res.data.saveFileName
+        } else {
+          this.$message.error(res.msg)
+        }
+
+        file.value = ''
+      })
     },
-    // 上传状态
-    beforeAvatarUpload(){
+    // 上传平面图
+    updateLoad_pml() {
+      // 文件数据
+      let file = this.$refs.file_pmt, files
+      files = file.files[0]
 
+      this.fileUpload(files, 'HotelPlane', res => {
+        if(res.code == '000') {
+          this.$message.success(res.msg)
+          this.ruleForm.hotelPlaneImageUrl = res.data.saveFileName
+        } else {
+          this.$message.error(res.msg)
+        }
+
+        file.value = ''
+      })
     },
     map() {
       var map = new BMap.Map("baidu-map"), that = this
