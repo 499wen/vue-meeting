@@ -4,6 +4,7 @@
     <div class="atte-tree">
       <div class="tree-head">全部酒店</div>
       <el-tree
+        ref="guesttree"
         :data="data"
         :props="treeProps"
         node-key="id"

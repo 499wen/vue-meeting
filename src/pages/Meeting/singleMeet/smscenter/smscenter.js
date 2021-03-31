@@ -1,4 +1,3 @@
-import hoverTable from './hoverTable/hoverTable.vue'
 import dispose from './dispose/dispose.vue'
 import sendRecord from './sendRecord/sendRecord.vue'
 import $ from 'jquery'
@@ -6,12 +5,12 @@ import { mapState, mapMutations } from 'vuex'
  
 export default {
   components: {
-    hoverTable,
     dispose,
     sendRecord
   },
   data() { 
     return {
+      test: '1',
       // table
       height: null,
       tableData: [],
@@ -22,14 +21,13 @@ export default {
       style: {},
 
       // 全体参会人  其余参会人
-      allData: null,
+      allData: {},
       data: [],
 
       // 选中的row 整条数据
       smsRow: '',
 
       // 子级组件开关
-      hoverBool: false,
       dispose_child: false,
       sendRecord_child: false
     }
@@ -52,78 +50,6 @@ export default {
     // 短信配置
     dispose() {
       this.dispose_child = true
-    },
-    // 子组件更新 选中短信
-    updateData(data){
-      let oldData
-      this.tableData.filter(item => item.typeCode == this.smsRow.typeCode ? oldData = item.meetingSMSCenters : '')
-
-      for(let i = 0; i < data.length; i ++){
-        for(let j = 0; i < oldData.length; j ++){
-          if(data[i] == oldData[j].id){
-            oldData[j].smsIsUse = 1
-            break;
-          }
-        }
-      }
-    },
-    // 鼠标移动表格中
-    mouseTable(row, column, cell){
-      console.log(row, this.hoverBool)
-      // 防止重复触发
-      if(this.hoverBool) return 
-      this.smsRow = row
-      
-      cell.parentNode.onmousemove = (e) => {
-        let parent = $(cell.parentNode),
-          widowHeight = $(document).height(),
-          top = parent.offset().top + parent.height(),
-          bottom = widowHeight - parent.offset().top
-        
-        // 显示子短信
-        this.hoverBool = true
- 
-        /**
-         * 触摸table-row
-         *    默认
-         *      box向下显示
-         * 
-         *    接近window底部   
-         *      box向上显示
-         */
-        if(widowHeight - top > 450){
-          this.style = {
-            'top': (top) + 'px',
-            'width': parent.width() + 'px',
-            'max-height': (widowHeight - top) + 'px',
-          }
-        } else {
-          this.style = {
-            'bottom': (bottom) + 'px',
-            'width': parent.width() + 'px',
-          }
-        }
-      }
-      
-      /**
-       * contains:
-       *   判断dom包含关系
-       */
-      cell.parentNode.onmouseout = (e) => {
-        if((e.toElement && e.toElement.getAttribute("class") != 'sms-table') && !cell.parentNode.contains(e.toElement)){
-          this.hoverBool = false
-        }
-      }
-
-      // 获取子集短信 dom
-      let childSms = $('.sms-table')[0]
-      childSms.onmouseout = (e) => {
-        let obj = e.toElement || e.relatedTarget
-        if(!childSms.contains(obj)){
-          this.hoverBool = false
-        }
-      }
-
     },
 
     // 选择全体参会人
@@ -153,7 +79,7 @@ export default {
         }
 
         // 获取短信数据
-        item.meetingSMSCenters.filter(i => i.smsIsUse && smsList.push(i))
+        item.meetingSMSCenters.filter(i => i.select && smsList.push(i))
       })
       // 判断是否有勾选
       if(smsList.length == 0){
@@ -196,6 +122,31 @@ export default {
           }
         })
     },
+    // 获取短信
+    getSms() {
+      let map = new Map(), groupName, smsArr = []
+      this.$http.get(this.API.findAllSms(1, 999))
+        .then(res => {
+          if(res.code == '000' && res.data) {
+            res.data.filter(item => {
+              groupName = map.get(item.groupName)
+              if(groupName){
+                groupName.push(item)
+                map.set(item.groupName, groupName)
+              } else {
+                map.set(item.groupName, [item])
+              }
+            })
+
+            console.log(map)
+            map.forEach((val, key) => {
+              smsArr.push({
+
+              })
+            })
+          }
+        })
+    },
     // 获取短信类型 
     getSmsType(){
       this.$http.get(this.API.findSelectSmsAndAll(this.meetingData.id))
@@ -208,19 +159,22 @@ export default {
               // 制造新数据
               item.allData.groupId = item.gid
               if(item.confereeGroupIds && item.confereeGroupIds.includes(item.allData.id)) {
-                  item.allData.is_select = true
+                item.allData.is_select = true
               }
               item.data.filter(i => {
-                  if(item.confereeGroupIds && item.confereeGroupIds.includes(i.id)) {
-                      i.is_select = true
-                  }
+                if(item.confereeGroupIds && item.confereeGroupIds.includes(i.id)) {
+                    i.is_select = true
+                }
 
-                  // 制造新数据
-                  i.groupId = item.gid
+                // 制造新数据
+                i.groupId = item.gid
               })
 
               // 制造新数据
-              item.meetingSMSCenters.filter(i => i.groupId = item.gid)
+              item.meetingSMSCenters.filter(i => {
+                i.groupId = item.gid
+                i.select = i.smsIsUse == 1 ? true : false
+              })
             })
             this.tableData = res.data
           } else {
@@ -281,6 +235,8 @@ export default {
     var dom = document.querySelector('.table')
     this.height = dom.offsetHeight
     
+    // this.getSms()
+
     // 获取短信
     this.getSmsType()
     console.log(this.attendeeData)

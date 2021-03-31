@@ -16,6 +16,7 @@
         <el-tree
           :data="data"
           :props="treeProps"
+          ref='sms-tree'
           node-key="id"
           default-expand-all
           @node-click='treeClick'

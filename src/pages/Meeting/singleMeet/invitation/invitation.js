@@ -566,8 +566,8 @@ export default {
 
       // 保存邀请函
       var id = this.save(false)
-      qrcodeUrl = 'https://mt.smart-hwt.com/qrcode?data=' + this.meetingId + '&cId=' + this.loginInfo.companyId
-      console.log('http://192.168.0.241:14444?data=' + this.meetingId + '&cId=' + this.loginInfo.companyId)
+      qrcodeUrl = ' https://my-website-starter-1305256445.cos-website.ap-guangzhou.myqcloud.com?data=' + this.meetingId + '&cId=' + this.loginInfo.companyId
+      console.log(qrcodeUrl)
 
       // 生成二维码
       new QRCode(qrcode, {
@@ -1395,8 +1395,6 @@ export default {
       obj.title = '';
 
     },
-
-
     getMatchedStrs: function(str, showKey) {
       var pattern = /id=\"(.*?)\"/g;
       var result = str

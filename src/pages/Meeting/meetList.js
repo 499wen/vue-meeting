@@ -249,7 +249,7 @@ export default {
 			.then(resu => {
 				if (resu.statusCode == "000") {
 					that.$message.success('会议发布成功');
-					that.tab_list(this.tips)
+					that.tab_list(0)
 				} else {
 					that.$message.info(resu.msg);
 				}

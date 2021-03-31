@@ -1,5 +1,6 @@
 import conditionGroup from '../conditionGroup/conditionGroup.vue'
 import { dataScrollLoad } from '@/plugins/plugins.js'
+import { mapState } from 'vuex'
 
 export default {
   props: ['groupId'],
@@ -25,7 +26,7 @@ export default {
       pageSize: 100,
 
       // 获取人员参数 
-      photoFlag: 1, // 1 无头像人员 2 有头像
+      photoFlag: 2, // 0有头像 1 无头像人员 2 全部
       externalCode: '', // '' 公司下 1 内部与外部 0内部下部门
       deparmentId: '', // 部门id
       searchKey: '',
@@ -40,6 +41,11 @@ export default {
       // 子集组件开关
       condi_child: false
     }
+  },
+  computed: {
+    ...mapState([
+      'meetingData'
+    ])
   },
   methods: {
     // 自定义条件 
@@ -88,23 +94,16 @@ export default {
         ifContanUserIdArr: false,
         queryConditionArr: this.queryConditionArr
       }
-      this.$http.post(this.API.conditionQuerys(this.deparmentId, this.pageNum, this.pageSize, this.externalCode, this.searchKey, this.photoFlag), obj)
+      this.$http.post(this.API.findMeetingEnableInviteUser(this.meetingData.id, this.pageNum, this.pageSize, this.searchKey), obj)
         .then(res => {
           if (res.code == "000") {
-            let data = res.data;
-
-            // 二次分页处理
-            let table_scroll = document.querySelector('.addAtte .el-table__body-wrapper')
-            this.total = res.count
-            dataScrollLoad(table_scroll, data, 1, 30, (res) => {
-              this.tableData = res
-            })
-
+            this.total = res.total
+            this.tableData = res.data
           } else {
             this.total = 0;
             this.tableData = [];
           }
-        }).catch(res => {
+        }).catch(err => {
           this.total = 0;
           this.tableData = [];
         })
@@ -114,7 +113,6 @@ export default {
     getCondi() {
       this.$http.get(this.API.selectConditionGroup('adduser'))
         .then(res => {
-          console.log(res)
           if(res.code == '000' && res.data){
             res.data.filter(item => item.condition = JSON.parse(item.condition))
             this.condiData = res.data

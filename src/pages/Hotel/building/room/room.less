@@ -1,0 +1,39 @@
+.room {
+  .data-show {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-content: flex-start;
+
+    .data-show-tree {
+      border: 1px solid #ccc;
+      width: 180px;
+      padding-top: 10px;
+      margin-right: 20px;
+      box-sizing: border-box;
+    }
+
+    .data-show-table {
+      border: 1px solid #ccc;
+      padding: 10px;
+      width: calc(100% - 200px);
+      box-sizing: border-box;
+
+      .room-top {
+        width: 100%;
+        padding-left: 50%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+
+        .room-search {
+          width: 30%;
+          display: flex;
+          min-width: 500px;
+        }
+      }
+    }
+  }
+}

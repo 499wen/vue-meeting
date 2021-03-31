@@ -426,6 +426,33 @@ export default {
       let child = this.$refs.UpdatePhoto
       child.imgUploadAll()
     },
+    relation() {
+      let child = this.$refs.NoPhotos,
+      userId = child.userId,
+      fileInfoId = child.fileInfoId
+
+      if(!userId) {
+        this.$message.error('请勾选人员!')
+        return 
+      }
+      if(!fileInfoId) {
+        this.$message.error('请勾选相片!')
+        return 
+      }
+
+      this.$http.post(this.API.matchingUserPhoto(userId, fileInfoId))
+        .then(res => {
+          console.log(res)
+          if(res.code == '000'){
+            this.$message.success('关联成功！')
+            this.noPhotos_child = false
+            this.pageNum = 1
+            this.getProsonData()
+          } else {
+            this.$message.success(res.msg)
+          }
+        })
+    },
 
     // 关闭组件
     closeComponent() {
@@ -494,7 +521,7 @@ export default {
           let arr = []
           res.data.filter(item => {
             if(item.departmentName == item.companyName){
-              this.deparmentId = item.companyId
+              // this.deparmentId = item.companyId
               this.data = [
                 {
                   companyId: item.companyId,
@@ -514,8 +541,8 @@ export default {
           this.data[0].children[0].children = arr;
           
           setTimeout(() => {
-            document.querySelector('.list-tree .el-tree-node__content').click()
-          }, 500)
+            this.$refs['person-tree'].setCurrentKey(this.deparmentId)
+          }, 300)
         }
       })
     },
@@ -531,12 +558,12 @@ export default {
         .then(res => {
           console.log(res)
           if (res.code == "000") {
-            // 二次分页处理
             this.total = res.count
-            let table_scroll = document.querySelector('.person .el-table__body-wrapper')
-            dataScrollLoad(table_scroll, res.data, 1, 30, (data) => {
-                this.tableData = data
-            })
+            this.tableData = res.data
+            // 二次分页处理
+            // let table_scroll = document.querySelector('.person .el-table__body-wrapper')
+            // dataScrollLoad(table_scroll, res.data, 1, 30, (data) => {
+            // })
 
           } else {
             this.total = 0;
@@ -564,12 +591,16 @@ export default {
     // 表格高度
     var dom = document.querySelector('.table')
     this.height = dom.offsetHeight
-
+    
     // 公司信息
     this.loginInfo = JSON.parse(localStorage.getItem('loginInfo'))
+    this.deparmentId = this.loginInfo.companyId
 
     // 获取部门
     this.initDepartData()
+
+    // 获取人员
+    this.getProsonData()
 
     // 获取条件组
     this.getCondit()

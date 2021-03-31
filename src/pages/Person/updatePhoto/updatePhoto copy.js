@@ -331,9 +331,6 @@ export default {
       console.log(arr)
       // return 
       function lx(n = 0, arr) {
-        // let formData = new FormData()
-        // formData.append('file', arr[n]);
-        // console.log(formData)
         try{
           that.loadRequest(arr[n], res => {
             try{

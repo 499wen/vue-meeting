@@ -43,6 +43,7 @@ export default {
       // 当前选中参会人分组
       curAttenGroup: {},
       curEditGroup: {},
+      delData: [],
 
       // 条件组数据
       condiData: [],
@@ -152,7 +153,7 @@ export default {
             if(res.code == '000'){
               this.$message.success('删除成功！')
               this.pageNum = 1
-              this.getAttenPerson()
+              this.getAttenGroup()
             } else {
               this.$message.error(res.msg)
             }
@@ -188,6 +189,39 @@ export default {
       this.getAttenPerson()
     },
 
+    // 移除参会人
+    removeAtte(){
+      if(this.delData.length == 0){
+        this.$message.info('请勾选参会人!')
+        return 
+      }
+
+      this.$confirm('是否移除选中的参会人?', '提示', {  
+        closeOnPressEscape: false,
+        closeOnClickModal: false,
+        cancelButtonClass: 'btn_custom_cancel',
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let data = []
+        this.delData.filter(item => data.push(item.id))
+        this.$http.post(this.API.meetingInviteDeleteByIds, data)
+          .then(res => {
+            console.log(res)
+            if(res.code == '000') {
+              this.$message.success('移除成功!')
+              this.getAttenPerson()
+            } else {
+              this.$message.error(res.msg)
+            }
+          })
+      }).catch(() => {})
+      
+    },
+    batchDel(val){
+      this.delData = val
+    },
     addAtteBtn (){
       this.addAtte_child = true
     },

@@ -87,6 +87,7 @@
       <div class="list-tree">
         <el-tree
           :data="data"
+          ref='person-tree'
           :props="treeProps"
           node-key="id"
           :expand-on-click-node="false"
@@ -105,10 +106,6 @@
             <el-table-column :show-overflow-tooltip="true" :resizable="false" align="center" label="头像" width="80">
               <template slot-scope="scope">
                 <img v-lazy="`${ API.echoImage(scope.row.photoFileSaveName, 'HeadFile') }`" class="avatar" alt="">
-                <!-- <div v-if="!scope.row.photoFileSaveName">
-                  <el-avatar :key="scope.row.id" src="../assets/tareve.png"></el-avatar> 
-                </div>
-                <img v-else class="authsrc" style="width: 40px; height: 40px" :authsrc="`${api}/${scope.row.companyId}/${scope.row.photoFileSaveName}`" alt="" > -->
               </template>
             </el-table-column>
             <el-table-column :show-overflow-tooltip="true" :prop="item.prop" :label="item.label" align="center" :resizable="false"
@@ -182,7 +179,7 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <NoPhotos ref="NoPhotos" v-if="noPhotos_child"></NoPhotos>
       <div class="dialog-btn">
-        <el-button type="primary" @click="editSave()" size="small" round>关联相片</el-button>
+        <el-button type="primary" @click="relation()" size="small" round>关联相片</el-button>
         <el-button @click="cancel" size="small" type="danger" round>取 消</el-button>
       </div>
     </el-dialog>

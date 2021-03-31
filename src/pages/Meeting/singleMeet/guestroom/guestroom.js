@@ -285,7 +285,9 @@ export default {
             res.data.filter((one, i) => {
               one.child.filter((two, index) => {
                 two.child.filter((three, idx) => {
-                  if(i == 0 && index == 0 && idx == 0) this.curTree = three
+                  if(i == 0 && index == 0 && idx == 0){
+                    this.curTree = three
+                  }
                   three.name = three.hotelName
                   three.hotelName = '第' + three.hotelName + '层'
                 })
@@ -302,6 +304,7 @@ export default {
     // 获取住房数据
     getAddRoom(){
       console.log(this.curTree)
+      
       var roomGrade = ['普通套房', '豪华套房', '总统套房']
       this.$http.get(this.API.selectMeetingRoomByFloorId(this.curTree.id, this.pageNum, this.pageSize))
         .then(res => {
@@ -328,6 +331,8 @@ export default {
             this.tableData = []
             this.total = 0
           }
+
+          this.$refs.guesttree.setCurrentKey(this.curTree.id)
         })
     },
   },

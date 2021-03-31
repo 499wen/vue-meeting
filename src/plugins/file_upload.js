@@ -120,20 +120,22 @@ export function fileUpload(file, type, callBack) {
  *        event对象
  */
 export function errImg(name, type, e) {
-  let self = e.target
-  if(!self.dataset.cont) {
-    self.dataset.cont = 1
-  } else {
-    self.dataset.cont++
-  }
-
-  if(self.dataset.cont <= 60){
-    self.src = this.API.echoImage(name, type)
-  } else {
-    self.dataset.cont = 0
-  }
-
-  self.onload = () => {
-    self.dataset.cont = 0
-  }
+  setTimeout(() => {
+    let self = e.target
+    if(!self.dataset.cont) {
+      self.dataset.cont = 1
+    } else {
+      self.dataset.cont++
+    }
+  
+    if(self.dataset.cont <= 60){
+      self.src = this.API.echoImage(name, type)
+    } else {
+      self.dataset.cont = 0
+    }
+  
+    self.onload = () => {
+      self.dataset.cont = 0
+    }
+  }, 1000)
 }

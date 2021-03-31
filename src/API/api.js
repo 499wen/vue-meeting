@@ -33,7 +33,7 @@ export default {
   /**
    * 首页
    */
-  findleaveInfo: (state, pageNum, pageSize) =>  `${gzKey}/release/findByAuthorityOfCompanyAdministratorAndPage?approvalState=${state}&pageNum=${pageNum}&pageSize=${pageSize}`, // 请假消息 state: 0-待审批, 1-已审批, 2-查所有  error
+  findleaveInfo: (state, pageNum, pageSize) => `${gzKey}/release/findByAuthorityOfCompanyAdministratorAndPage?approvalState=${state}&pageNum=${pageNum}&pageSize=${pageSize}`, // 请假消息 state: 0-待审批, 1-已审批, 2-查所有  
   findMeetingStatistical: (pageNum, pageSize, searchKey) => `${gzKey}/release/findMeetingStatisticalData2s?searchKey=${searchKey}&pageNum=${pageNum}pageSize=${pageSize}`, // 会议信息 - 参会人报到数据  code
 
   /**
@@ -93,8 +93,11 @@ export default {
   delectAllUser: `${gzKey}/release/delectAllUser`, // 删除全部人员
   singleClomnData: id => `${gzKey}/release/findPersonById?id=${id}`, // 查询人员 - 单条数据 
 
+  deleteNotMatchingPhoto: `${gzKey}/release/deleteNotMatchingPhoto`, // 删除多余的照片
+  matchingUserPhoto: (userId, fileInfoId) => `${gzKey}/release/matchingUserPhoto?userId=${userId}&fileInfoId=${fileInfoId}`, // 关联人员与相片
+  getNotMatchingPhoto: (pageNum, pageSize) => `${gzKey}/release/getNotMatchingPhoto?num=${pageNum}&size=${pageSize}`, // 查询相片匹配 相片
   findAllUserNoPhotoForCompany: (type, pageNum, pageSize, search) => `${gzKey}/release/findAllUserNoPhotoForCompany?type=${type}&num=${pageNum}&size=${pageSize}&searchKey=${search}`, // 查询相片匹配 人员
-  findDuplicateName: (pageNum, pageSize, externalCode, deparmentId) => `${gzKey}/release/findDuplicateName?num=${pageNum}&size=${pageSize}&externalCode=${externalCode}&deparmentId=${deparmentId}`, // 重名人员
+  findDuplicateName: (pageNum, pageSize, externalCode, deparmentId) => `${gzKey}/release/findDuplicateName?num=${pageNum}&size=${pageSize}&externalCode=${externalCode}&departmentId=${deparmentId}`, // 重名人员
 
   matchingUserPhotoFiles: (type, fileName) => `${gzKey}/release/matchingUserPhotoFiles?type=${type}&fileName=${fileName}`, // 批量上传头像
   /**
@@ -113,14 +116,16 @@ export default {
   getConfereeGroupAll: meetId => `${gzKey}/release/findConfereeGroupAllByMeetingId?meetingId=${meetId}`, // 查询参会人分组 - 树
   updateConfereeGroup: `${gzKey}/release/updateConfereeGroup`, // 修改参会人分组
   addByParentId: `${gzKey}/release/addByParentId`, // 添加参会人分组
-  deleteConfereeGroup: id => `${gzKey}/release/deleteConfereeGroup?id=${id}`, // 删除参会人分组 error
+  deleteConfereeGroup: id => `${gzKey}/release/deleteConfereeGroup?id=${id}`, // 删除参会人分组 
 
-  saveSuperiorMeetingInvite: groupId => `${gzKey}/release/saveSuperiorMeetingInvite?confereeGroupId=${groupId}`, // 多级会议 添加参会人
+  // saveSuperiorMeetingInvite: groupId => `${gzKey}/release/saveSuperiorMeetingInvite?confereeGroupId=${groupId}`, // 多级会议 添加参会人
 
+  findMeetingEnableInviteUser: (meetId, pageNum, pageSize, searchKey) => `${gzKey}/release/findMeetingEnableInviteUser?pageNum=${pageNum}&pageSize=${pageSize}&externalCode=all&photoFlag=2&searchKey=${searchKey}&meetingId=${meetId}`, // 全体参会人 - 查询未添加人员
   findByMeetingIdAndPage: (groupId, pageNum, pageSize) => `${gzKey}/release/findByMeetingIdAndPage?confereeGroupId=${groupId}&pageNum=${pageNum}&pageSize=${pageSize}`, // 参会分组查询人员  
   addWholeatten: groupId => `${gzKey}/release/addByConfereeGroupIdAndUserIds?confereeGroupId=${groupId}`, // 添加人员至全体参会人分组中
+  meetingInviteDeleteByIds: `${gzKey}/release/meetingInviteDeleteByIds`, // 删除参会人
 
-  selectConditionGroup: type => `${gzKey}/release/selectConditionGroup?type=${type}`, // 查询条件组 adduser：参会人  persons: 人员  error
+  selectConditionGroup: type => `${gzKey}/release/selectConditionGroup?type=${type}`, // 查询条件组 adduser：参会人  persons: 人员  
   updateConditionGroup: `${gzKey}/release/updateConditionGroup`, // 修改条件组 
   saveConditionGroup: `${gzKey}/release/saveConditionGroup`, // 添加条件组  
   delectConditionGroup: `${gzKey}/release/delectConditionGroup`, // 删除条件组
@@ -140,12 +145,12 @@ export default {
 
   selectCateringByMeetingId: meetId => `${gzKey}/release/selectCateringByMeetingId?meetingId=${meetId}`, // 查询餐饮信息
   saveCatering: `${gzKey}/release/saveCatering`, // 第一次添加餐饮数据 
-  updateCatering: `${gzKey}/release/updateCatering`, // 更新餐饮数据 error
+  updateCatering: `${gzKey}/release/updateCatering`, // 更新餐饮数据
 
   findSelectSmsAndAll: meetId => `${gzKey}/release/findSelectSmsAndAll?meetingId=${meetId}`, // 根据会议id查询 短信
   saveSmsByMeetingId: meetId => `${gzKey}/release/saveSmsByMeetingId?meetingId=${meetId}`, // 添加短信
 
-  accordMeetRoom: (meetId, floorId, pageNum, pageSize) => `${gzKey}/release/findMeetingNotAddHotelRoomsByMeetingId?meetingId=${meetId}&floorId=${floorId}&pageNum=${pageNum}&pageSize=${pageSize}`, // 根据会议id查询房间  error
+  accordMeetRoom: (meetId, floorId, pageNum, pageSize) => `${gzKey}/release/findMeetingNotAddHotelRoomsByMeetingId?meetingId=${meetId}&floorId=${floorId}&pageNum=${pageNum}&pageSize=${pageSize}`, // 根据会议id查询房间  
   findfloorAndRoomByMeetingId: meetId => `${gzKey}/release/findfloorAndRoomByMeetingId?meetingId=${meetId}`, // 查询已添加的酒店
   addListByMeetingId: meetId => `${gzKey}/release/addListByMeetingId?meetingId=${meetId}`, // 添加客房
   selectMeetingRoomByFloorId: (floorId, pageNum, pageSize) => `${gzKey}/release/selectMeetingRoomByFloorId?floorId=${floorId}&pageNum=${pageNum}&pageSize=${pageSize}`, // 查询客房
@@ -161,7 +166,7 @@ export default {
    * 预约审批
    */
   selectByStateCodeAlready: (code, pageNum, pageSize) => `${gzKey}/release/selectByStateCodeAlready?stateCode=${code}&page=${pageNum}&size=${pageSize}`, // 查询全部审批数据
-  selectByStateCode: (pageNum, pageSize) => `${gzKey}/release/selectByStateCode?page=${pageNum}&size=${pageSize}`, 
+  selectByStateCode: (pageNum, pageSize) => `${gzKey}/release/selectByStateCode?page=${pageNum}&size=${pageSize}`, // 查询预约审批数据
   approvalBinDing: `${gzKey}/release/conferenceRoomApproval`, // 审批
 
   /**
@@ -171,7 +176,7 @@ export default {
   findCompanySmsType: (typeCode, pageNum, pageSize) => `${gzKey}/release/findCompanySmsType?typeCode=${typeCode}&pageNum=${pageNum}&pageSize=${pageSize}`, // 根据分组id查询短信 
   findAllSms: (pageNum, pageSize) => `${gzKey}/release/findAllSmsTemplateByCompanyIdAndPage?pageNum=${pageNum}&pageSize=${pageSize}`, // 查询所有短信
   updateSmsIsUse: (smsId, isUse) => `${gzKey}/release/updateSmsIsUse?id=${smsId}&isUse=${isUse}`, // 短信开关
-  findSmsTemplateById: smsId => `${gzKey}/release/findSmsTemplateById?id=${smsId}`, // 根据短信id 查询详情 error
+  findSmsTemplateById: smsId => `${gzKey}/release/findSmsTemplateById?id=${smsId}`, // 根据短信id 查询详情 
   saveCompanySmsTemplateConfig: `${gzKey}/release/saveCompanySmsTemplateConfig`, // 保存详情
 
 } 

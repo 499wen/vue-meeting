@@ -10,11 +10,21 @@
     <div class="sms-body">
       <!-- table -->
       <div class="table">
-        <el-table ref="singleTable" @cell-mouse-enter='mouseTable'
+        <el-table ref="singleTable"
           :data="tableData" border :height="height">
-          <el-table-column :show-overflow-tooltip="true" :prop="item.props" :label="item.label" :width="item.width"
-            v-for="(item, idx) in tableCate" :key="idx"
+          <el-table-column :show-overflow-tooltip="true" prop="groupName" label="短信类型" :width="200"
             align="center" :resizable="false">
+          </el-table-column>
+          <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' label="短信">
+            <template slot-scope="scope">
+              <div v-if="scope.row.allData" class="check-person check-sms">
+                <div v-for="(item, idx) in scope.row.meetingSMSCenters" :key="idx">
+                  <el-checkbox v-model="item.select" class="sm-ck singRow" :title='item.title' >
+                    {{ item.title }}
+                  </el-checkbox>
+                </div>
+              </div>
+            </template>
           </el-table-column>
           <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' label="参会人分组" width='500'>
             <template slot-scope="scope">
@@ -38,11 +48,6 @@
         <el-button size="small" round type="primary" @click="determine">保存</el-button>
       </div>
 
-    </div>
-
-    <!-- 短信表格 -->
-    <div class="sms-table" :style="style" v-show="hoverBool">
-      <hoverTable ref="hoverTable" v-if="hoverBool" :smsRow='smsRow' @update='updateData'></hoverTable>
     </div>
 
     <!-- 短信配置 -->
@@ -91,5 +96,9 @@ export default smscenter
   overflow: hidden;
   white-space: nowrap;
   text-align: left;
+}
+
+.check-sms .el-checkbox__label{
+  width: 140px;
 }
 </style>

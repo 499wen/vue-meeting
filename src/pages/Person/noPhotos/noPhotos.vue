@@ -11,7 +11,11 @@
       <div class="table">
         <el-table ref="singleTable"
           :data="tableData" border :height="height">
-          <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' type="selection" width="50"></el-table-column>
+          <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' label="选择" width='60'>
+            <template slot-scope="scope">
+              <el-checkbox v-model="scope.row.select" @change="chioce(scope.row.id)"></el-checkbox>
+            </template>
+          </el-table-column>
           <el-table-column :show-overflow-tooltip="true" :prop="item.props" :label="item.label" :width="item.width"
             v-for="(item, idx) in tableCate" :key="idx"
             align="center" :resizable="false">
@@ -25,17 +29,17 @@
     <div class="no-image">
       <div class="no-title">
         <span>未匹配照片</span>
-        <el-button size="mini">清空全部照片</el-button>
+        <el-button size="mini" @click="delAll">删除全部照片</el-button>
       </div>
 
       <!-- 存放照片 -->
       <div class="deposit-photo">
         <div class="phtot-box" v-for="(item, idx) in imgList" :key="idx">
           <!-- 照片 -->
-          <img src="" alt="" class="photo">
+          <img :src="API.echoImage(item.saveFileName, 'HeadFile')" alt="" class="photo">
 
           <!-- 名字 -->
-          <span class="photo-name">崖域</span>
+          <span class="photo-name">{{ item.photoName }}</span>
 
           <!-- 选择按钮 -->
           <el-checkbox v-model="item.checked" class="chioce" @change="imgCheck($event, idx, item.checked)"></el-checkbox>
@@ -44,7 +48,7 @@
       </div>
 
       <!-- 照片总和 -->
-      <div class="img-total">{{ total }}张</div>
+      <div class="img-total">{{ itotal }}张</div>
     </div>
   </div>
 </template>
@@ -56,11 +60,11 @@ export default {
   data() {
     return {
 			internal: true, // 内部人员
-      external: false, // 外部人员
+      external: true, // 外部人员
       
       // 分页
       pageNum: 1,
-      pageSize: 50,
+      pageSize: 99999,
       total: 0,
 
       // table
@@ -70,47 +74,101 @@ export default {
         {props: 'userName', label: '姓名', width: '80'},
         {props: 'departmentName', label: '部门', width: ''},
       ],
+      userId: '',
 
       // 图片数据
+      ipageNum: 1,
+      ipageSize: 99999,
+      itotal: 0,
       imgList: [
-        {checked: false}, {checked: false}, {checked: false}
-      ]
+        // {checked: false}, {checked: false}, {checked: false}
+      ],
+      fileInfoId: ''
     }
   },
   methods: {
+    // 删除全部照片
+    delAll(){
+      this.$confirm('是否删除全部照片?', '提示', {  
+        closeOnPressEscape: false,
+        closeOnClickModal: false,
+        cancelButtonClass: 'btn_custom_cancel',
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$http.post(this.API.deleteNotMatchingPhoto)
+          .then(res => {
+            if(res.code == '000') {
+              this.$message.success('删除成功!')
+              this.getNoPhoto()
+            } else {
+              this.$message.error(res.msg)
+            }
+          })
+      }).catch(() => {})
+    },
+    // 选择相片
+    imgCheck(val, rowIndex, row){
+      // console.log(val, rowIndex, row)
+      const data = this.imgList;
+      for (let index in data) {
+        if (index == rowIndex) {
+          data[index].checked = val;
+          this.fileInfoId = data[index].id
+        } else {
+          data[index].checked = false;
+        }
+      }
+      this.imgList = data;
+    },
+    // 选择人员
+    chioce(id){
+      this.userId = id
+      this.tableData.filter(item => id == item.id ? item.select = true : item.select = false)
+    },
+
     // 获取人员数据
     getNoPerosn(){
+      if(this.pageNum == 1) this.tableData = []
       let type = this.internal ?
-        this.external ?
-        "all" :
-        "internal" : 
+        this.external ? "all" : "internal" : 
         "external";
-      this.$http.get(this.API.findAllUserNoPhotoForCompany(type, this.pageNum, this.pageSize, ''))
+      this.$http.get(this.API.findAllUserNoPhotoForCompany(type, this.pageNum, 99, ''))
         .then(res => {
           console.log(res)
           if(res.code == '000' && res.data){
-            res.data.filter(item => !item.departmentName ? item.departmentName = this.loginInfo.companyName : '')
-            this.total = res.total
-            let table_scroll = document.querySelector('.el-table__body-wrapper')
-            dataScrollLoad(table_scroll, res.data, this.pageNum, this.pageSize, (result) => {
-              this.tableData = result
+            res.data.filter(item => {
+              item.select = false
+              !item.departmentName ? item.departmentName = this.loginInfo.companyName : ''
             })
+            this.total = res.total
+            this.tableData.push(...res.data)
+          } else {
+            this.tableData = []
+            this.total = 0
           }
         })
     },
 
-    // 
-    imgCheck(val, rowIndex, row){
-      console.log(val, rowIndex, row)
-      const data = this.imgList;
-			for (let index in data) {
-				if (index == rowIndex) {
-					data[index].checked = val;
-				} else {
-					data[index].checked = false;
-				}
-			}
-			this.imgList = data;
+
+    // 获取相片数据
+    getNoPhoto(){
+      this.$http.get(this.API.getNotMatchingPhoto(this.ipageNum, this.ipageSize))
+        .then(res => {
+          if(res.code == '000') {
+            res.data.filter(item => {
+              item.checked = false
+              item.photoName = item.originalName.substr(0, item.originalName.lastIndexOf('.'))
+            })
+            // 二次分页处理
+            this.itotal = res.count
+            let table_scroll = document.querySelector('.deposit-photo')
+            dataScrollLoad(table_scroll, res.data, 1, 30, (data) => {
+                this.imgList = data
+            })
+          }
+        })
     }
   },
 	watch: {
@@ -120,7 +178,7 @@ export default {
 				this.external = true;
 			}
 
-			// this.getNameData();
+			this.getNoPerosn();
 		}, //internal
 		external: function(val) {
 			this.pageNum = 1
@@ -128,13 +186,44 @@ export default {
 				this.internal = true;
 			}
 
-			// this.getNameData();
-		}, //external
+			this.getNoPerosn();
+    }, //external
+
+    // dom scroll 监听
+    domScroll() {
+      let _dom = document.querySelector('.noPhotos .el-table__body-wrapper')
+      _dom.onscroll = function(){
+        let total = that.total, totalData = that.tableData
+        // 数据不够 不执行逻辑
+        if(total > totalData.length){
+            let scrollHeight = _dom.clientHeight,
+                scrollTop = _dom.scrollTop,
+                totalHeight = _dom.scrollHeight
+
+            // 滚动条距底20长度 触发
+            if((totalHeight - scrollHeight - scrollTop) <= 20){
+                that.pageNum ++
+                // 分割数据
+                // callBack(totalData.slice(0, num * size))
+                that.getNoPerosn()
+            }
+
+        }    
+      }
+    }
   },
   mounted() {
+    let that = this
     this.loginInfo = JSON.parse(localStorage.getItem('loginInfo'))
 
+    // 获取人员
     this.getNoPerosn()
+
+    // 获取图片
+    this.getNoPhoto()
+
+    // 人员表格 dom监听
+    this.domScroll()
   }
 }
 </script>
@@ -207,6 +296,7 @@ export default {
       justify-content: flex-start;
       align-content: flex-start;
       flex-wrap: wrap;
+      overflow-y: auto;
 
       .phtot-box {
         width: 100px;

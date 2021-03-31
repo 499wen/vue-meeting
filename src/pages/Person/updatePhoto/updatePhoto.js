@@ -1,6 +1,7 @@
 import { Load } from '@/plugins/plugins.js'
 import $ from 'jquery'
 let reload = null, token = localStorage.getItem('token')
+
 class FileImg {
   self = null
   n = 1

@@ -72,7 +72,7 @@
           <div class="intro-duce">餐厅平面图</div>
           <div class="img-pmt">
             <img v-if="ruleForm.planeFigure" :src="API.echoImage(ruleForm.planeFigure, 'RestaurantPlane')" class="avatar-duce" @error="errImg(ruleForm.planeFigure, 'RestaurantPlane', $event)"/>
-            <img v-else src="@/assets/images/defaultPmt.png" class="avatar-duce" alt="">
+            <img v-else src="@/assets/images/meetplan.png" class="avatar-duce" alt="">
             <input type="file" name="" id="" class="hide" @change="updateLoad_pml" ref="file_pmt">
           </div>
         </div>

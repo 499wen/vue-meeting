@@ -176,5 +176,8 @@ export default {
 
     // 获取短信
     this.getSms()
+
+    // 默认高亮
+    this.$refs['sms-tree'].setCurrentKey('1')
   }
 }

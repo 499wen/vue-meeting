@@ -20,7 +20,7 @@
       <div class="data-oper">
         <div class="data-add" v-show='!curAttenGroup.parentId'>
           <el-button round size='small' type="primary" @click="addAtteBtn">添加参会人</el-button>
-          <el-button round size='small' type="danger">移除参会人</el-button>
+          <el-button round size='small' type="danger" @click="removeAtte">移除参会人</el-button>
           <el-button round size='small' type="primary" v-show="false">手动录入</el-button>
         </div>
         <div class="data-query" v-show="false">
@@ -43,7 +43,7 @@
       <!-- 表格 -->
       <div class="show-data">
         <div class="table-child">
-          <el-table ref="singleTable"
+          <el-table ref="singleTable" @selection-change="batchDel"
             :data="tableData" border :height="height">
             <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' type="selection" width="50"></el-table-column>
             <el-table-column :show-overflow-tooltip="true" type="index" width="50" label="序号" align="center" :resizable="false"></el-table-column>
