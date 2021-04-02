@@ -51,7 +51,7 @@
 
 <script>
 export default {
-  props: {},
+  props: ['row'],
   data() {
     return {
       checkTrue: false,
@@ -69,10 +69,10 @@ export default {
         type: '', // 类型
         outputWay: '', // 分组
         particulars: '', // 是否打印明细
-        beLate: false, // 是否打印迟到人员名单
-        missing: false, // 是否打印缺席人员名单
-        leave: false, // 是否打印请假人员名单
-        phoneNumber: false, // 是否打印手机号
+        beLate: true, // 是否打印迟到人员名单
+        missing: true, // 是否打印缺席人员名单
+        leave: true, // 是否打印请假人员名单
+        phoneNumber: true, // 是否打印手机号
       },
       rules: {
         outputWay: [
@@ -95,13 +95,16 @@ export default {
 
   },
   mounted() {
-    console.log(this.handmeetingId)
-  },
+    this.handmeetingId = this.row.id
+    // 获取参会人分组
+    this.getGroup()
+  }, 
   methods: {
+    // 获取参会人分组
     getGroup(){
-      this.$http.get(this.API.url + this.API.router.findByMeeting(this.handmeetingId))
+      this.$http.get(this.API.getConfereeGroupAll(this.handmeetingId))
         .then(res =>{
-          if(res.statusCode == '000'){
+          if(res.code == '000'){
             this.group = res.data
           } else {
             this.group = []
@@ -137,11 +140,11 @@ export default {
           // 02 分组, 01 部门
           if(this.form.type == '02'){
             var group = form.group
-            url = this.API.url + this.API.router.downWord(
+            url = this.API.downloadBbByMeetingId(
               this.handmeetingId, outputWay, particulars, beLate, missing, leave, phoneNumber, group
             )
           } else {
-            url = this.API.url + this.API.router.downloadBbByDeparmentId(
+            url = this.API.downloadBbByDeparmentId(
               this.handmeetingId, particulars, beLate, missing, leave, phoneNumber
             )
           }
@@ -159,7 +162,7 @@ export default {
         }
       })
     },
-  },
+  }
 }
 </script>
 

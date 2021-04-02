@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="member-table">
-      <el-table :data="tableData" :height='height' border>
+      <el-table :data="tableData" :height='height' border @selection-change="batchDel">
         <el-table-column :show-overflow-tooltip="true" type="selection" width="50" align='center'></el-table-column>
         <el-table-column :show-overflow-tooltip="true" :resizable="false" align='center' type="index" label="序号" width="50"></el-table-column>
         <el-table-column :show-overflow-tooltip="true" :resizable="false"  align='center'
@@ -11,55 +11,13 @@
         ></el-table-column>
       </el-table>
     </div>
-
-    <div class="pagin">
-      <el-pagination
-        background
-        class="pagination"
-        @size-change="sizeChange"
-        @current-change="curChange"
-        :current-page="pageNum"
-        :page-sizes="[20, 50, 100, 300]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total">
-      </el-pagination>
-    </div>
   </div>
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      tableCate: [
-        {value: 'userName', label: '姓名'},
-        {value: 'sex', label: '性别'},
-        {value: 'phone', label: '电话'},
-      ],
-      tableData: [],
-      height: null,
-      total: 0,
-      pageNum: 1,
-      pageSize: 100
-    }
-  },
-  methods: {
-    // 分页
-    sizeChange(val){
-      this.pageNum = 1
-      this.pageSize = val
-    },
-    curChange(val){
-      this.pageNum = val
-    }
-  },
-  mounted() {
-    var dom = document.querySelector('.member-table')
-    this.height = dom.offsetHeight
-  }
+import delMember from './delMember.js'
 
-};
+export default delMember
 </script>
 
 <style scoped lang='less'>

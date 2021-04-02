@@ -479,13 +479,13 @@
 					</el-collapse-item>
 				</el-collapse>
 			</div>
-
+			
 			<!-- 表单 -->
-			<div id="templateStyle" v-if="tNode && defaultStyle.type == 'form' ">
+			<div id="templateStyle" v-if="defaultStyle.type == 'form'">
 				<el-collapse v-model="activeName">
 					<el-collapse-item title="基本样式" name="1" style="padding-right: 0px;">
 						<div class="layui-colla-content layui-show">
-							<div style="display: flex; justify-content: space-between; align-items: center">
+							<div style="display: flex; justify-content: space-between; align-items: center" v-if="false">
 								<div class="flex invite-progress" style="margin-left: 10px;justify-content: center;">
 									<el-button size='mini' @click="dengWidth">等宽</el-button>
 								</div>
@@ -505,6 +505,33 @@
 									</li>
 								</div>
 							</div>
+
+							<div class="sort">
+								<div>
+									<span>标题颜色：</span>
+									<el-color-picker v-model="defaultStyle.tipsColor" size="small" @change="tipsColor"></el-color-picker>
+								</div>
+								<div>
+									<span>内容颜色：</span>
+									<el-color-picker v-model="defaultStyle.cteColor" size="small" @change="cteColor"></el-color-picker>
+								</div>
+								<div>
+									<span>边框颜色：</span>
+									<el-color-picker v-model="defaultStyle.borderColor" size="small" @change="borderColor"></el-color-picker>
+								</div>
+							</div>
+
+							<div class="desc">
+								<div>
+									<span>边框背景颜色：</span>
+									<el-color-picker v-model="defaultStyle.borderBgcolor" size="small" @change="borderBgcolor"></el-color-picker>
+								</div>
+								<div>
+									<span>按钮背景颜色：</span>
+									<el-color-picker v-model="defaultStyle.btnBgcolor" size="small" @change="btnBgcolor"></el-color-picker>
+								</div>
+							</div>
+							
 						</div>
 					</el-collapse-item>
 				</el-collapse>
@@ -764,14 +791,14 @@
 						<input type="text" />
 					</div>
 					<div class="checkNum form-single">
-						<span>验证码:</span>
+						<span class="white">验证码：</span>
 						<div class="yzm">
 							<input type="text" name="checkedCode">
-							<div class="yzm-btn">获取验证码</div>
+							<div class="yzm-btn btn">获取验证码</div>
 						</div>
 					</div>
 					<div class="submitForm form-single">
-						<div class="submit">提 交</div>
+						<div class="submit btn">提 交</div>
 					</div>
 				</div>
 

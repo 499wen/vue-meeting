@@ -32,6 +32,9 @@ export function selfTime(date, complete = false, chinese = false, minusOne = fal
       h = '23'
       m1 = '59'
     }
+    if(minusOne) {
+      return h + ":" + m1
+    }
 
     if(chinese){
         return complete 

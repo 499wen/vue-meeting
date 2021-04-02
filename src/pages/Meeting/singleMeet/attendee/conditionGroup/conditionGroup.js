@@ -19,7 +19,7 @@ let properties = [
   },
 
   {
-    value: 'oldDepartmentName',
+    value: 'departmentName',
     lable: '部门',
   },
   {

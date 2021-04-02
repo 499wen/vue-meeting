@@ -154,7 +154,8 @@ export default {
 
     // 获取相片数据
     getNoPhoto(){
-      this.$http.get(this.API.getNotMatchingPhoto(this.ipageNum, this.ipageSize))
+      if(this.ipageNum == 1) this.imgList = []
+      this.$http.get(this.API.getNotMatchingPhoto(this.ipageNum, 20))
         .then(res => {
           if(res.code == '000') {
             res.data.filter(item => {
@@ -163,12 +164,59 @@ export default {
             })
             // 二次分页处理
             this.itotal = res.count
-            let table_scroll = document.querySelector('.deposit-photo')
-            dataScrollLoad(table_scroll, res.data, 1, 30, (data) => {
-                this.imgList = data
-            })
+            this.imgList.push(...res.data)
           }
         })
+    },
+    // dom scroll 监听
+    imgScroll() {
+      let _dom = document.querySelector('.deposit-photo'),
+      that = this
+      console.log(_dom)
+      _dom.onscroll = function(e){
+        console.log(e)
+        let total = that.itotal, totalData = that.imgList
+        // 数据不够 不执行逻辑
+        if(total > totalData.length){
+            let scrollHeight = _dom.clientHeight,
+                scrollTop = _dom.scrollTop,
+                totalHeight = _dom.scrollHeight
+
+            // 滚动条距底20长度 触发
+            if((totalHeight - scrollHeight - scrollTop) <= 20){
+                that.ipageNum ++
+                // 分割数据
+                // callBack(totalData.slice(0, num * size))
+                that.getNoPhoto()
+            }
+
+        }    
+      }
+    },
+
+    // dom scroll 监听
+    domScroll() {
+      let _dom = document.querySelector('.noPhotos .el-table__body-wrapper'),
+       that = this
+      _dom.onscroll = function(){
+        console.log(12)
+        let total = that.total, totalData = that.tableData
+        // 数据不够 不执行逻辑
+        if(total > totalData.length){
+            let scrollHeight = _dom.clientHeight,
+                scrollTop = _dom.scrollTop,
+                totalHeight = _dom.scrollHeight
+
+            // 滚动条距底20长度 触发
+            if((totalHeight - scrollHeight - scrollTop) <= 20){
+                that.pageNum ++
+                // 分割数据
+                // callBack(totalData.slice(0, num * size))
+                that.getNoPerosn()
+            }
+
+        }    
+      }
     }
   },
 	watch: {
@@ -189,31 +237,10 @@ export default {
 			this.getNoPerosn();
     }, //external
 
-    // dom scroll 监听
-    domScroll() {
-      let _dom = document.querySelector('.noPhotos .el-table__body-wrapper')
-      _dom.onscroll = function(){
-        let total = that.total, totalData = that.tableData
-        // 数据不够 不执行逻辑
-        if(total > totalData.length){
-            let scrollHeight = _dom.clientHeight,
-                scrollTop = _dom.scrollTop,
-                totalHeight = _dom.scrollHeight
 
-            // 滚动条距底20长度 触发
-            if((totalHeight - scrollHeight - scrollTop) <= 20){
-                that.pageNum ++
-                // 分割数据
-                // callBack(totalData.slice(0, num * size))
-                that.getNoPerosn()
-            }
-
-        }    
-      }
-    }
   },
   mounted() {
-    let that = this
+    
     this.loginInfo = JSON.parse(localStorage.getItem('loginInfo'))
 
     // 获取人员
@@ -222,8 +249,11 @@ export default {
     // 获取图片
     this.getNoPhoto()
 
-    // 人员表格 dom监听
-    this.domScroll()
+    setTimeout(() => {
+      // 人员表格 dom监听
+      this.domScroll()
+      this.imgScroll()
+    }, 1000);
   }
 }
 </script>

@@ -22,9 +22,18 @@ export default {
 
     // 获取请假数据
     getLeave() {
+      var arr = ['待审批', '通过', '不通过']
       this.$http.get(this.API.findleaveInfo(2, 1, 10))
         .then(res => {
           if(res.code == '000' && res.data){
+            res.data.filter(obj => {
+              obj.userName = obj.user.userName
+              obj.meetingName = obj.meeting.meetingName
+              if (!obj.leaveReason) {
+                obj.leaveReason = "(无)"
+              } 
+              obj.stateCode = obj.approvalState == 0 ? arr[obj.approvalState] : arr[obj.approvalResultCode]
+            })
             this.tableData = res.data
           } else {
             this.tableData = []

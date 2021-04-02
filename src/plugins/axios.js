@@ -17,7 +17,7 @@ let needLoadingRequestCount = 0;
 let dsQi = null, s = 0,
     dsQi2 = null, s2 = 0
 //显示loading
-axios.defaults.timeout=5000
+axios.defaults.timeout=10000
 function showLoading(target) {
   // 后面这个判断很重要，因为关闭时加了抖动，此时loading对象可能还存在，
   // 但needLoadingRequestCount已经变成0.避免这种情况下会重新创建个loading

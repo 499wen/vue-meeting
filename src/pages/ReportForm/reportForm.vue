@@ -39,8 +39,8 @@
         </el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' label="操作" width='180'>
           <template slot-scope="scope">
-            <el-button round size='small' type="primary" @click="clumnLook(scope.row)">查看</el-button>
-            <el-button round size='small' type="primary" @click="detailed(scope.row)">明细</el-button>
+            <el-button round size='small' type="primary" @click="detailed(scope.row)">查看</el-button>
+            <el-button round size='small' type="primary" @click="clumnLook(scope.row)">导出报表</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -60,88 +60,33 @@
       </el-pagination>
     </div>
 
-    <!-- 查看 -->
-    <el-dialog title="下载选择项" :visible.sync="clumnLook_child" width="10%" center
+    <!-- 导出报表 -->
+    <el-dialog title="导出报表" :visible.sync="clumnLook_child" width="25%" center
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
-      <clumnLook ref="clumnLook" v-if="clumnLook_child"></clumnLook>
+      <clumnLook ref="clumnLook" v-if="clumnLook_child" :row='row'></clumnLook>
       <div class="dialog-btn">
-        <el-button size="small" type="danger" round>取 消</el-button>
-        <el-button type="primary" size="small" round>添 加</el-button>
+        <el-button type="primary" size="small" round @click="exportBb">导出报表</el-button>
+        <el-button size="small" type="danger" round @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
 
     <!-- 明细 -->
-    <el-dialog title="查明细" :visible.sync="detailed_child" width="80%" center
+    <el-dialog title="查看明细" :visible.sync="detailed_child" width="80%" center
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
-      <detailed ref="detailed" v-if="detailed_child"></detailed>
+      <detailed ref="detailed" v-if="detailed_child" :row='row'></detailed>
       <div class="dialog-btn">
-        <el-button size="small" type="danger" round>取 消</el-button>
-        <el-button type="primary" size="small" round>添 加</el-button>
+        <el-button size="small" type="danger" round @click="close">关 闭</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import clumnLook from './clumnLook/clumnLook.vue'
-import detailed from './detailed/detailed.vue'
+import reportForm from './reportForm.js'
 
-export default {
-  components: {
-    clumnLook,
-    detailed
-  },
-  data() {
-    return {
-      // table
-      tableData: [],
-      height: null,
-
-      // 分页
-      total: 0,
-      pageNum: 1,
-      pageSize: 100,
-
-      // 子集组件 开关
-      clumnLook_child: false,
-      detailed_child: false
-    }
-  },
-  methods: {
-    // 查看
-    clumnLook(data){
-      this.clumnLook_child = true
-    },
-    // 明细
-    detailed(data){
-      this.detailed_child = true
-    },
-    // 分页方法
-    sizeChange(val){
-      this.pageNum = 1
-      this.pageSize = val
-    },
-    curChange(val){
-      this.pageNum = val
-    }
-  },
-  mounted() {
-    // table
-    var dom = document.querySelector('.table')
-    this.height = dom.offsetHeight
-
-  }
-}
+export default reportForm
 </script>
 
 <style scoped lang='less'>
-.reportForm {
-  width: 100%;
-  height: 100%;
-
-  .table {
-    width: 100%;
-    height: calc(100% - 42px);
-  }
-}
+@import url('./reportForm.less');
 </style>

@@ -77,6 +77,8 @@ export default {
           data.sponsorArrJsonStr = data.sponsorArrJsonStr ? JSON.parse(data.sponsorArrJsonStr) : handle('sponsorArrJsonStr')
           data.contactJson = data.contactJson ? JSON.parse(data.contactJson) : handle('contactJson')
           data.meetingProduce = data.meetingProduce ? JSON.parse(data.meetingProduce) : handle('meetingProduce')
+          if (data.layTime == 0) data.layTime = '';
+          if (data.leaveTime == 0) data.leaveTime = ''
 
           // 保存当前会议数据
           this.setMeetingData(data)

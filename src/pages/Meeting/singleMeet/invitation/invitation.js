@@ -413,14 +413,62 @@ export default {
 
       console.log(screenWidth, eleWidth)
     },
+    // 标题颜色
+    tipsColor(color) {
+      // 新属性
+      this.defaultStyle['tipsColor'] = color
+      $(this.tNode).find('.white').css({
+        color
+      })
+
+      console.log($(this.tNode).find('.white'))
+      console.log(this.dataCollection[0].dataPre, color)
+    },
+    // 内容颜色
+    cteColor(color) {
+      this.defaultStyle['cteColor'] = color
+      $(this.tNode).find('input').css({
+        color
+      })
+    },
+    // 边框颜色
+    borderColor(color) {
+      this.defaultStyle['borderColor'] = color
+      $(this.tNode).find('input').css({
+        borderColor: color
+      })
+    },
+    // 边框背景颜色
+    borderBgcolor(color) {
+      this.defaultStyle['borderBgcolor'] = color
+      $(this.tNode).find('input').css({
+        backgroundColor: color
+      })
+    },
+    // 按钮背景颜色
+    btnBgcolor(color) {
+      this.defaultStyle['btnBgcolor'] = color
+      $(this.tNode).find('.btn').css({
+        backgroundColor: color
+      })
+    },
     // 等宽
     dengWidth(){
+      // 新属性
+      this.defaultStyle['tipsColor'] = 'skyblue'
+      $(this.tNode).find('.white').css({
+        color: 'skyblue'
+      })
+
+
       this.defaultStyle['el-x'] = 0
       this.defaultStyle['width'] = '100%'
       $(this.tNode).css({
         width: this.defaultStyle['width'],
         transform: `translate(${this.defaultStyle['el-x']}px, ${this.defaultStyle['el-y']}px)`
       })
+
+      
       console.log(this.dataCollection[0].dataPre, this.defaultStyle)
     },
     createDom(msg){
@@ -566,7 +614,7 @@ export default {
 
       // 保存邀请函
       var id = this.save(false)
-      qrcodeUrl = ' https://my-website-starter-1305256445.cos-website.ap-guangzhou.myqcloud.com?data=' + this.meetingId + '&cId=' + this.loginInfo.companyId
+      qrcodeUrl = 'https://my-vue-starter-1305256445.cos-website.ap-guangzhou.myqcloud.com/qrcode?data=' + this.meetingId + '&cId=' + this.loginInfo.companyId
       console.log(qrcodeUrl)
 
       // 生成二维码
@@ -1143,7 +1191,7 @@ export default {
       // this.$confirm("是否启用表单?", "提示", {
       // cancelButtonClass: 'btn_custom_cancel',
       // 	type: "warning"
-      // }).then(() => {
+      // }).then(() => { 
       // 	this.needForm = true;
       // 	addSubmitForm(this);
       // });

@@ -46,21 +46,21 @@ const routes = [
        * 会议管理
        */
       {
-        path: '/meeting',
+        path: '/meet',
         name: '会议管理',
-        meta: '/meeting',
+        meta: '/meet',
         component: () => import(/* webpackChunkName: "home" */ '../pages/Meeting/meetList.vue'),
       },
       {
         path: '/singleMeet',
         name: '会议管理-单级会议',
-        meta: '/meeting',
+        meta: '/meet',
         component: () => import(/* webpackChunkName: "home" */ '../pages/Meeting/singleMeet/singleMeet.vue'),
       },
       {
         path: '/multiMeet',
         name: '会议管理-多级会议',
-        meta: '/meeting',
+        meta: '/meet',
         component: () => import(/* webpackChunkName: "home" */ '../pages/Meeting/multiMeet/multiMeet.vue'),
       },
       /**
@@ -69,7 +69,7 @@ const routes = [
       {
         path: '/role',
         name: '权限',
-        meta: '/meeting',
+        meta: '/role',
         component: () => import(/* webpackChunkName: "role" */ '../pages/Role/role.vue'),
       },
 
@@ -120,25 +120,25 @@ const routes = [
       },
 
       /**
-       * 基础设置 - 酒店管理 
+       * 基础设置 - 会议室管理 
        */
       {
-        path: '/onferRoom',
+        path: '/meetingRoomManager',
         name: '会议室',
-        meta: '/onferRoom',
+        meta: '/meetingRoomManager',
         component: () => import(/* webpackChunkName: "onferRoom" */ '../pages/OnferRoom/onferRoom.vue'),
         children: []
       },
       {
         path: '/addOnferRoom',
         name: '添加会议室',
-        meta: '/onferRoom',
+        meta: '/meetingRoomManager',
         component: () => import(/* webpackChunkName: "addOnferRoom" */ '../pages/OnferRoom/addOnferRoom/addOnferRoom.vue'),
       },
       {
         path: '/editOnferRoom',
         name: '修改会议室',
-        meta: '/onferRoom',
+        meta: '/meetingRoomManager',
         component: () => import(/* webpackChunkName: "editOnferRoom" */ '../pages/OnferRoom/editOnferRoom/editOnferRoom.vue'),
       },
 
@@ -146,9 +146,9 @@ const routes = [
        * 基础设置 - 短信中心
        */
       {
-        path: '/short_message',
+        path: '/vueSmsCenter',
         name: '短信中心',
-        meta: '/short_message',
+        meta: '/vueSmsCenter',
         component: () => import(/* webpackChunkName: "short_message" */ '../pages/Short_message/short_message.vue'),
       },
 
@@ -167,9 +167,9 @@ const routes = [
        * 会务管理 - 参会审批 Approval_atten
        */
       {
-        path: '/approval_atten',
+        path: '/approve',
         name: '参会审批',
-        meta: '/approval_atten',
+        meta: '/approve',
         component: () => import(/* webpackChunkName: "approval_atten" */ '../pages/Approval_atten/approval_atten.vue'),
         children: []
       },
@@ -178,9 +178,9 @@ const routes = [
        * 会议室预约 - 预约审批 approval_subscribe
        */
       {
-        path: '/approval_subscribe',
+        path: 'reviewApprove',
         name: '预约审批',
-        meta: '/approval_subscribe',
+        meta: 'reviewApprove',
         component: () => import(/* webpackChunkName: "approval_subscribe" */ '../pages/Approval_subscribe/approval_subscribe.vue'),
         children: [] 
       },
@@ -189,9 +189,9 @@ const routes = [
        * 数据统计 - 统计报表 
        */
       {
-        path: '/reportForm',
+        path: '/statistical',
         name: '统计报表',
-        meta: '/reportForm',
+        meta: '/statistical',
         component: () => import(/* webpackChunkName: "reportForm" */ '../pages/ReportForm/reportForm.vue'),
         children: []
       },

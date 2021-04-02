@@ -24,7 +24,10 @@ export default {
     window.onresize = function() {
       setRem()
     }
-  }
+  },
+  mounted() {
+    
+  },
 }
 </script>
 

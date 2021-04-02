@@ -5,84 +5,42 @@
       <div class="logo">
         <img src="@/assets/images/hzLogo.png" alt="">
       </div>
-      <div>
+      <div class="nav-menu">
         <el-col :span="24">
           <el-menu
           :default-active="defaultActive"
           class="el-menu-vertical-demo"
-          router
-          @open="handleOpen" 
-          @close="handleClose"
+          :router='true'
+          @select="handleOpen" 
           background-color="#234060"
           text-color="#fff"
+          :unique-opened='true'
           active-text-color="#ffd04b">
-          <!-- <el-submenu index="1">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>导航一</span>
-            </template>
-            <el-submenu index="1-4">
-              <template slot="title">选项4</template>
-              <el-menu-item index="1-4-1">选项1</el-menu-item>
-            </el-submenu>
-          </el-submenu> -->
-          <el-menu-item index="/home">
-            <i class="el-icon-menu"></i>
-            <span slot="title">首页</span>
-          </el-menu-item>
-          <el-menu-item index="/meeting">
-            <i class="el-icon-menu"></i>
-            <span slot="title">会议管理</span>
-          </el-menu-item>
-          <el-menu-item index="/short_message">
-            <i class="el-icon-menu"></i>
-            <span slot="title">短信中心</span>
-          </el-menu-item>
-          <el-menu-item index="/approval_subscribe">
-            <i class="el-icon-menu"></i>
-            <span slot="title">预约审批</span>
-          </el-menu-item>
-          <el-menu-item index="/approval_atten">
-            <i class="el-icon-menu"></i>
-            <span slot="title">参会审批</span>
-          </el-menu-item>
-          <el-menu-item index="/reportForm">
-            <i class="el-icon-menu"></i>
-            <span slot="title">统计报表</span>
-          </el-menu-item>
-          <el-menu-item index="/hotel">
-            <i class="el-icon-menu"></i>
-            <span slot="title">酒店管理</span>
-          </el-menu-item>
-          <el-menu-item index="/onferRoom">
-            <i class="el-icon-menu"></i>
-            <span slot="title">会议室管理</span>
-          </el-menu-item>
-          <el-menu-item index="/restaurant" >
-            <i class="el-icon-document"></i>
-            <span slot="title">餐厅管理</span>
-          </el-menu-item>
-          <el-menu-item index="/person" >
-            <i class="el-icon-document"></i>
-            <span slot="title">人员管理</span>
-          </el-menu-item>
-          <el-menu-item index="/role">
-            <i class="el-icon-setting"></i>
-            <span slot="title">权限管理</span>
-          </el-menu-item>
 
-
-
-          <!-- <el-submenu :index="item.path" v-for="(item, idx) in router" :key="idx">
-              <el-submenu index="1-4" v-if="item.children && item.children.length">
-                  <template slot="title">{{ item.name }}</template>
-                  <el-menu-item :index="child.path" v-for="(child, index) in item.children" :key='index'>{{ child.name }}</el-menu-item>
-              </el-submenu>
-              <template slot="title" v-else>
-                  <i class="el-icon-location"></i>
-                  <span>{{ item.name }}</span>
+          <el-menu-item index="/home" v-show="false">
+              <i class="el-icon-setting"></i>
+              <span slot="title">首页</span>
+            </el-menu-item>
+          
+          <div v-for="(item, idx) in router" :key="idx">
+            <!-- 一级 -->
+            <el-submenu :index="item.menuUrl + ''" v-if="item.children">
+              <template slot="title">
+                <i class="el-icon-location"></i>
+                <span>{{ item.menuName }}</span>
               </template>
-          </el-submenu> -->
+                <!-- 二级 -->
+                <el-menu-item-group v-for="(child, index) in item.children" :key="index">
+                  <el-menu-item :index="'/'+child.menuUrl">{{ child.menuName }}</el-menu-item>
+                </el-menu-item-group>
+            </el-submenu>
+            <!-- 一级 -->
+            <el-menu-item :index="'/'+item.menuUrl" v-else>
+              <i class="el-icon-setting"></i>
+              <span slot="title">{{ item.menuName }}</span>
+            </el-menu-item>
+          </div>
+          
           </el-menu>
 
         </el-col>
@@ -182,7 +140,15 @@ export default index
 </style>
 
 <style lang="less">
-.left-nav .el-menu-item {
-  font-size: 16px;
-}
+.left-nav{
+  .el-menu-item {
+    font-size: 16px;
+  }
+
+  .el-submenu__title {
+    font-size: 16px;
+  }
+} 
+
+
 </style>

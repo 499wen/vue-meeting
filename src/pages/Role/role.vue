@@ -23,7 +23,7 @@
             <el-button size="small" type="primary" @click="addUsers(scope.row)" round>添加成员</el-button>
             <el-button size="small" type="danger" @click="deleteUsers(scope.row)" round>删除成员</el-button>
             <el-button size="small" type="danger" @click="handleDelete(scope.row)" round>删除</el-button>
-          </template> 
+          </template>
         </el-table-column> 
       </el-table>
     </div>
@@ -58,7 +58,7 @@
     <el-dialog
     title="编辑角色" :visible.sync="editRoleOpen" :close-on-click-modal='false' 
     :close-on-press-escape='false' width="30%" custom-class='dialog' center>
-      <EditRole ref="EditRole" v-if="editRoleOpen" @close='close'></EditRole>
+      <EditRole ref="EditRole" v-if="editRoleOpen" @close='close' :row='row'></EditRole>
       <div class="dialog-btn">
         <el-button type="primary" size='small' round @click="preser">保 存</el-button>
         <el-button size='small' round @click="close">取 消</el-button>
@@ -68,7 +68,7 @@
     <!-- 添加成员 --> 
     <el-dialog
     title="添加成员" :visible.sync="addMember" :close-on-click-modal='false' 
-    :close-on-press-escape='false' width="30%" custom-class='dialog' center>
+    :close-on-press-escape='false' width="50%" custom-class='dialog' center>
       <AddMember ref="AddMember" v-if="addMember" @close='close'></AddMember>
       <div class="dialog-btn">
         <el-button type="primary" @click="submitForm()" size="small" round>添加选中人员</el-button>
@@ -80,9 +80,9 @@
     <el-dialog
     title="删除成员" :visible.sync="delMember" :close-on-click-modal='false' 
     :close-on-press-escape='false' width="30%" custom-class='dialog' center>
-      <DelMember ref="DelMember" v-if="delMember" @close='close'></DelMember>
+      <DelMember ref="DelMember" v-if="delMember" @close='close' :row='row'></DelMember>
       <div class="dialog-btn">
-        <el-button type="primary" size='small' round @click="preseMember">保 存</el-button>
+        <el-button type="primary" size='small' round @click="preseMember">移除选中人员</el-button>
         <el-button size='small' round @click="close">取 消</el-button>
       </div>
     </el-dialog>

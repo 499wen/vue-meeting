@@ -446,6 +446,11 @@ let formData = {
 	'el-y': 50,
 	'width': '80%',
 	'height': '360',
+	'tipsColor': '#333', // 标题颜色
+	'cteColor': '#333', // 内容颜色
+	'borderColor': '#dedede', // 边框颜色
+	'borderBgcolor': '#fff', // 边框背景颜色
+	'btnBgcolor': '#ffa500', // 按钮背景颜色
 
 	formAttr: {
 		'enable': true, // 使用表单标记
@@ -467,12 +472,6 @@ export function addSubmitForm(_this) {
 	console.log(is_form)
 	if (is_form) {
 		console.log('已存在表单')
-		// //不需要表单
-		// let forms = $('#mc').find('.formTemplate');	
-		// for (let i = 0; i < forms.length; i++) {
-		// 	$(forms[i]).remove()
-		// }
-
 		return
 	}
 	
@@ -491,6 +490,7 @@ export function addSubmitForm(_this) {
 	}
 	// 没有存在表单，就要先添加一个
 	let node = document.getElementById('formTemplate').cloneNode(true)
+	_this.tNode = node
 
 	// 给元素添加  右键事件
 	let elem = $(node).find('.invite-text-box')[0]
@@ -815,8 +815,19 @@ export function reduction(_this){
 				'transform': `translate(${defaultStyle['el-x']}px,${defaultStyle['el-y']}px)`,
 				'width': `${defaultStyle.width}`,
 				'height': `${defaultStyle.height}px`,
-				'display': 'block'
+				'display': 'block',
 			})
+			$(node).find('.white').css({
+        color: defaultStyle.tipsColor
+			})
+			$(node).find('input').css({
+				borderColor: defaultStyle.borderColor,
+				backgroundColor: defaultStyle.borderBgcolor,
+				color: defaultStyle.cteColor
+			})
+			$(node).find('.btn').css({
+        backgroundColor: defaultStyle.btnBgcolor
+      })
 			console.log(defaultStyle.formAttr)
 			for(let i in defaultStyle.formAttr){
 				if(i != 'enable')

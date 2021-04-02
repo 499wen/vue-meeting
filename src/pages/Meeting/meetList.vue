@@ -22,7 +22,7 @@
       </div>
 
       <!-- 会议列表 -->
-      <div class="meet-list">
+      <div class="meet-list" v-if="tableData.length != 0">
         <div class="meet-single" v-for="(item, idx) in tableData" :key="idx">
 
           <!-- 盒子拆分 - 左右结构 -->
@@ -72,6 +72,7 @@
           </div>
         </div>
       </div>
+      <div class="meet-list no-meet" v-else> 此项无会议。。。 </div>
 
       <!-- 分页 -->
       <div class="pagin">

@@ -1,6 +1,6 @@
 import companyInfo from './companyInfo/companyInfo.vue'
 import init from './init/init.vue'
-import { selfTime } from '@/plugins/plugins'
+import { selfTime, toTree } from '@/plugins/plugins'
 import { delCookie } from '@/plugins/cookie.js'
 
 export default {
@@ -60,8 +60,8 @@ export default {
       this.companyInfo_child = true
     },
     // 展开导航
-    handleOpen(data){
-      console.log('handleOpen', data)
+    handleOpen(data, ma){
+      console.log('handleOpen', data, ma)
     },
     // 关闭导航
     handleClose(data){
@@ -94,7 +94,7 @@ export default {
 
     // 退出登录
     logout(){
-      this.$confirm('是否推出该账号?', '提示', {  
+      this.$confirm('是否退出该账号?', '提示', {  
         closeOnPressEscape: false,
         closeOnClickModal: false,
         cancelButtonClass: 'btn_custom_cancel',
@@ -103,9 +103,74 @@ export default {
         type: 'warning'
       }).then(() => {
         delCookie('autoLogin')
+        localStorage.removeItem('token')
         this.$router.push('/login')
       }).catch(() => {})
       
+    },
+
+    // 获取权限列表
+    getMeum(){
+      // 排除
+      let arr = ['0ba5b5d9de6e42c589c1dd5c233960c5'
+          , '24dfe17b51cf4058b6f221ce6b3d5dd9'
+          , 'f7019026a79742979f9e60f07da8af15'
+          , 'a8d85ed898874fffb611877b071d05d5'
+          , '45e79259621c40bdba10e9965228fe90'
+          , '133c0146f6db482b967a9db950099055']
+      this.$http.get(this.API.getCustomerMenus)
+        .then(res => {
+          if(res.code == '000'){
+            let data = res.menuArr.filter((item, idx) => {
+              item.menuUrl == '#' ? item.menuUrl += idx : ''
+              return !arr.includes(item.id) && item
+            })
+            this.router = this.toTree(data)
+
+            this.defaultActive = this.$route.meta
+            // this.defaultActive = '/home'
+            console.log(this.defaultActive, this.router)
+          }
+        })
+    },
+    toTree(data) {
+      let result = []
+      if(!Array.isArray(data)) {
+          return result
+      }
+      data.forEach(item => {
+          delete item.children;
+      });
+      let map = {};
+      data.forEach(item => {
+          map[item.id] = item;
+      });
+      data.forEach(item => {
+          let parent = map[item.parent];
+          if(parent) {
+              (parent.children || (parent.children = [])).push(item);
+          } else {
+              result.push(item);
+          }
+      });
+      return result;
+    },
+    // 获取公司信息
+    getCustomer() {
+      // 获取权限列表
+      this.getMeum()
+
+      // 获取公司信息
+      this.$http.get(this.API.getCustomer)
+        .then(res => {
+          if(res.code == '000'){
+            this.loginInfo = res.data
+            if(!res.data.loginName) {
+              this.init_child = true
+            }
+            localStorage.setItem('loginInfo', JSON.stringify(res.data))
+          }
+        })
     }
   },
   created() {
@@ -128,25 +193,22 @@ export default {
           this.days = '星期日'; break
     }
 
-
     let routes = this.$router.options.routes
     routes.filter(item => item.name == '框架' && this.router.push(...item.children))
 
     // 获取公司信息
-    this.$http.get(this.API.getCustomer)
-      .then(res => {
-        if(res.code == '000'){
-          this.loginInfo = res.data
-          if(!res.data.loginName) {
-            this.init_child = true
-          }
-          localStorage.setItem('loginInfo', JSON.stringify(res.data))
-        }
-      })
+    this.getCustomer()
   },
   mounted() {
-    // this.listenPage()
-    console.log(this.$route)
-    this.defaultActive = this.$route.meta
+    // 监听用户进入页面
+    document.addEventListener('visibilitychange', (e) => {
+      let token = localStorage.getItem('token')
+      console.log(document.hidden)
+      if(!token) this.$router.push('/login')
+      else if(!document.hidden) {
+          // 获取公司信息
+          this.getCustomer()
+      }
+    })
   }
 }

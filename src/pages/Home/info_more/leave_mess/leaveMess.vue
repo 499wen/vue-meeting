@@ -14,12 +14,9 @@
         <el-table-column :show-overflow-tooltip="true"
         :prop="item.description" :label="item.name" :resizable='false' align='center'
           v-for="(item, idx) in tableCate" :key="idx"> </el-table-column> 
-        <el-table-column :show-overflow-tooltip="true"  label="操作" width="200" :resizable='false' align='center'>
-          <template slot-scope="scope">
-            <div class="time">
-              <span>{{ scope.row.time }}</span>
-              <span>{{ scope.row.beginAndEndDate }}</span>    
-            </div>
+        <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' label="操作" width='150'>
+          <template slot-scope="scope" v-if="scope.row.approvalState == '0'">
+            <el-button type="primary" size='small' @click="approval(scope.row)"> 审批 </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -38,11 +35,27 @@
       :total="total">
       </el-pagination>
     </div>
+
+    <!-- 请假审批 -->
+    <el-dialog title="请假审批" :visible.sync="approval_child" width="10%" center
+      :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
+      <approval ref="approval" v-if="approval_child" :form="selectRow"></approval>
+      <div class="dialog-btn">
+        <el-button @click="applyAgree(1)" size="small" type="primary" round>同 意</el-button>
+        <el-button @click="applyAgree(2)" size="small" type="success" round>不同意</el-button>
+        <el-button @click="cancel" size="small" type="danger" round>关 闭</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import approval from '../approval/approval.vue'
+
 export default {
+  components: {
+    approval
+  },
   data() {
     return {
       // 分类
@@ -59,6 +72,9 @@ export default {
       ],
       tips: '2',
 
+      // 选中row
+      selectRow: {},
+
       // table
       tableData: [],
       height: null,
@@ -66,10 +82,19 @@ export default {
       // 分页
       total: 0,
       pageNum: 1,
-      pageSize: 100
+      pageSize: 100,
+
+      // 子组件 开关
+      approval_child: false
     }
   },
   methods: {
+    // 审批
+    approval(appr){
+      console.log(appr)
+      this.selectRow = appr
+      this.approval_child = true
+    },
     // 切换list
     tabList(index){
       this.list.filter((item, idx) => idx == index ? item.select = true : item.select = false)
@@ -91,22 +116,43 @@ export default {
       this.getLeave()
     },
 
+    // 子组件方法
+    // 审批
+    applyAgree(code) {
+      let child = this.$refs.approval
+      let formObject = {
+          approvalReplyMessage: child.form.approvalOpinions
+      };
+      this.$http.post(this.API.examinationAndApprovalLeave(child.form.id, code), formObject)
+        .then(res => {
+          if (res.code == "000") {
+            this.$message.success('审批成功!')
+            this.approval_child = false
+            this.getLeave()
+          } else {
+            this.$message.error(res.msg)
+          }
+        });
+    },
+    cancel() {
+      this.approval_child = false
+    },
+
     // 获取请假数据
     getLeave() {
+      var arr = ['待审批', '通过', '不通过']
       this.$http.get(this.API.findleaveInfo(this.tips, this.pageNum, this.pageSize))
         .then(res => {
           if(res.code == '000' && res.data){
-            let content = res.data;
-            for (let i = 0; i < content.length; i++) {
-              let obj = content[i];
+            res.data.filter(obj => {
               obj.userName = obj.user.userName
               obj.meetingName = obj.meeting.meetingName
               if (!obj.leaveReason) {
                 obj.leaveReason = "(无)"
-              }
+              } 
               obj.stateCode = obj.approvalState == 0 ? arr[obj.approvalState] : arr[obj.approvalResultCode]
-            }
-            this.tableData = content
+            })
+            this.tableData = res.data
             this.total = res.total
           } else {
             this.tableData = []

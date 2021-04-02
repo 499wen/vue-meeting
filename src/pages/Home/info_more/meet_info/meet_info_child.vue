@@ -95,7 +95,7 @@ export default {
           if(res.code == '000' && res.data){
             res.data.filter((item, idx) => {
               var time = selfTime(new Date(item.beginDate).getTime())
-              var st = selfTime(new Date(item.beginDate).getTime(), true, true)
+              var st = selfTime(new Date(item.beginDate).getTime(), true, true, true)
               var et = selfTime(new Date(item.endDate).getTime(), true, true, true)
               item.number = idx + 1
               item.time = time
@@ -128,6 +128,17 @@ export default {
   .table {
     width: 100%;
     height: calc(100% - 42px);
+  }
+
+  .time {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+
+    span {
+      width: 100%;
+    }
   }
 }
 </style>

@@ -9,18 +9,29 @@
 
     <!-- 表格 -->
     <div class="table">
-      <el-table ref="multipleTable" :data="tableData" border :height='height'
-        @selection-change="handleSelectionChange">
-        <el-table-column :show-overflow-tooltip="true" type="selection" width="55" align="center"></el-table-column>
+      <el-table ref="multipleTable" :data="tableData" border :height='height'>
         <el-table-column :show-overflow-tooltip="true" 
           v-for="(item, idx) in tableCate" :key="idx"
           :prop="item.prop" :label="item.label" :width="item.width" align="center"></el-table-column>
-        <el-table-column :show-overflow-tooltip="true" label="状态" width="200" align="center">
-          <template slot-scope="scope">{{ scope.row.date ? '已通过' : '未通过' }}</template>
-        </el-table-column>
-        <el-table-column :show-overflow-tooltip="true" label="操作" width="200" align="center">
-          <template slot-scope="scope">{{ scope.row.date ? '通过' : '不通过' }}</template>
-        </el-table-column>
+        <el-table-column align="center" label="状态" width="120">
+            <template slot-scope="scope">
+              <div v-if="scope.row.ifExamineAndApprove == 0">未审批</div>
+              <div v-else>
+                <span v-if="scope.row.examineAndApproveResult == 0">未通过</span>
+                <span v-if="scope.row.examineAndApproveResult == 1">已通过</span>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" label="操作" class="edit">
+            <template slot-scope="scope" v-if="scope.row.ifExamineAndApprove == 0">
+              <el-button size="mini" @click="handlePass(1, scope.row)">通过</el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                @click="handlePass(0, scope.row)"
+              >不通过</el-button>
+            </template>
+          </el-table-column>
       </el-table>
     </div>
      
@@ -41,6 +52,8 @@
 </template>
 
 <script>
+import { selfTime } from '@/plugins/plugins.js'
+
 export default {
   data() {
     return {
@@ -63,24 +76,54 @@ export default {
     }
   },
   methods: {
-    // 表格多选框
-    handleSelectionChange(val){
-
+    // 审批
+    handlePass(code, data){
+      this.$http.post(this.API.examinationApprovalById(data.id, code))
+        .then(res => {
+          console.log(res)
+          if(res.code == '000') {
+            this.$message.success('审批成功！')
+            this.getAppr()
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
     },
     // 分页方法
     sizeChange(val){
       this.pageNum = 1
       this.pageSize = val
+
+      this.getAppr()
     },
     curChange(val){
       this.pageNum = val
+
+      this.getAppr()
     },
     
+    // 获取审批数据
+    getAppr(){
+      this.$http.get(this.API.findAllByCompanyIdApprove(this.pageNum, this.pageSize, 2))
+        .then(res => {
+          if(res.code == '000'){
+            res.data.filter(item => item.time = selfTime(item.createDate, true))
+            this.tableData = res.data
+            this.total = res.total
+          } else {
+            this.tableData = res.data
+            this.total = res.total
+          }
+        })
+    }
   },
   mounted() {
+    // 获取表格高度
     var dom = document.querySelector('.table')
     this.height = dom.offsetHeight
 
+    // 获取审批数据
+    this.getAppr()
   }
 };
 </script>

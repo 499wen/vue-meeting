@@ -5,8 +5,9 @@ export default {
   /**
    * 模块之外
    */
+  getCustomerMenus: `${gzKey}/release/getCustomerMenus`, // 获取权限列表
   getCustomer: `${gzKey}/release/getCustomer`, // 获取公司信息
-  uploadFile: `${gzKey}/release/uploadFile?`, // 上传图片 问号不能去掉
+  uploadFile: `${gzKey}/release/uploadFile?`, // 上传图片 (问号不能去掉)
   fileExcel: (name, type) => `https://service-ij14wquc-1305256445.gz.apigw.tencentcs.com/release/excel?actionCode=0&fileName=${name}&type=${type}`, // 上传excel人员
   echoImage: (id, type) => {
     let loginInfo = JSON.parse(localStorage.getItem('loginInfo')),
@@ -16,7 +17,7 @@ export default {
   }, // 回显图片
 
   /**
-   * 注册
+   * 注册 
    */
   smsCheckedCode: phone => `${gzKey}/release/smsCheckedCodeForRegister?phone=${phone}`, // 获取验证码
   register: `${gzKey}/release/apply`, // 注册
@@ -34,8 +35,8 @@ export default {
    * 首页
    */
   findleaveInfo: (state, pageNum, pageSize) => `${gzKey}/release/findByAuthorityOfCompanyAdministratorAndPage?approvalState=${state}&pageNum=${pageNum}&pageSize=${pageSize}`, // 请假消息 state: 0-待审批, 1-已审批, 2-查所有  
-  findMeetingStatistical: (pageNum, pageSize, searchKey) => `${gzKey}/release/findMeetingStatisticalData2s?searchKey=${searchKey}&pageNum=${pageNum}pageSize=${pageSize}`, // 会议信息 - 参会人报到数据  code
-
+  findMeetingStatistical: (pageNum, pageSize, searchKey) => `${gzKey}/release/findMeetingStatisticalData2s?searchKey=${searchKey}&pageNum=${pageNum}pageSize=${pageSize}`, // 会议信息 - 参会人报到数据 
+  examinationAndApprovalLeave: (id, code) => `${gzKey}/release/examinationAndApprovalLeave?id=${id}&approvalResultCode=${code}`, // 请假审批
   /**
    * 基础设置 - 酒店管理
    */
@@ -179,5 +180,34 @@ export default {
   findSmsTemplateById: smsId => `${gzKey}/release/findSmsTemplateById?id=${smsId}`, // 根据短信id 查询详情 
   saveCompanySmsTemplateConfig: `${gzKey}/release/saveCompanySmsTemplateConfig`, // 保存详情
 
-} 
 
+  /**
+   * 权限管理
+   */
+  addRole: `${gzKey}/release/addRole`, // 添加角色
+  selectRole: `${gzKey}/release/selectRole`, // 查询权限列表
+  delRole: id => `${gzKey}/release/delectRole?id=${id}`, // 删除角色
+  roleByAuth: id => `${gzKey}/release/roleByAuth?id=${id}`, // 修改 - 查询单个权限数据
+  updateRole: `${gzKey}/release/updateRole`, // 修改 - 按钮
+
+  roleBindCustomer: id => `${gzKey}/release/roleBindCustomer?id=${id}`, // 添加人员
+  roleDelectCostomer: id => `${gzKey}/release/roleDelectCostomer?id='${id}`, // 移除人员
+
+  /**
+   * 参会审批
+   */
+  findAllByCompanyIdApprove: (pageNum, pageSize, code) => `${gzKey}/release/findAllByCompanyIdApprove?pageNum=${pageNum}&pageSize=${pageSize}&approve=${code}`, // 查询参会审批 列表
+  examinationApprovalById: (id, code) => `${gzKey}/release/examinationApprovalById?id=${id}&examineAndApproveResult=${code}`, // 审批 数据
+
+
+  /**
+   * 统计报表
+   */
+  meetSign: (meetId, code) => `${gzKey}/release/meetingSign?meetingId=${meetId}&code=${code}`, // 会议签到
+
+  downloadBbByMeetingId: (meetId, outputWay, particulars, beLate, missing, leave, phoneNumber, groupId) => `${gzKey}/release/downloadBbByMeetingId?meetingId=${meetId}&outputWay=${outputWay}&groupId=${groupId}&particulars=${particulars}&phoneNumber=${phoneNumber}&beLate=${beLate}&missing=${missing}&leave=${leave}`, // 分组 下载报表
+  downloadBbByDeparmentId: (meetId, particulars, beLate, missing, leave, phoneNumber) => `${gzKey}/release/downloadBbByDeparmentId?meetingId=${meetId}&particulars=${particulars}&beLate=${beLate}&missing=${missing}&leave=${leave}&phoneNumber=${phoneNumber}`, // 部门 - 导出报表
+
+  singleStatistical: meetId => `${gzKey}/release/findMeetingStatisticalByMeeting?meetingId=${meetId}`, // 单个查询报表数据
+  findMeetingStatisticalDataByMeeting: (meetId, pageNum, pageSize) => `${gzKey}/release/findMeetingStatisticalDataByMeetingId?meetingId=${meetId}&page=${pageNum}&size=${pageSize}`, // 查询全部签到人员数据
+} 

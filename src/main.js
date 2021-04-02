@@ -14,6 +14,10 @@ Vue.prototype.$message = ResetMessage
 import $http from './plugins/axios.js'
 Vue.prototype.$http = $http
 
+// 挂载echarts
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts
+
 // 挂载接口对象
 import Api from './API/api.js'
 Vue.prototype.API = Api
