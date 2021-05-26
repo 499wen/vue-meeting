@@ -12,7 +12,7 @@
           </label>
           <div class="sm-text">
             <p class="help-block">
-              (建议图片格式为：JPEG/PNG/GIF，每张大小不超过200kb)
+              (建议图片格式为：JPEG/PNG，每张大小不超过200kb)
             </p>
 
             <!-- <el-button size='small' v-if="this.gl.length && this.showNum == 0" @click="exportToExcel">导出excel</el-button> -->
@@ -149,7 +149,7 @@ export default updatePhoto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    // margin-bottom: 10px;
   }
 
 }

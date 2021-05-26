@@ -55,6 +55,7 @@
 
 <script>
 import { dataScrollLoad } from '@/plugins/plugins.js'
+let bool = true
 
 export default {
   data() {
@@ -68,7 +69,7 @@ export default {
       total: 0,
 
       // table
-      height: 430,
+      height: null,
       tableData: [],
       tableCate: [
         {props: 'userName', label: '姓名', width: '80'},
@@ -101,7 +102,8 @@ export default {
           .then(res => {
             if(res.code == '000') {
               this.$message.success('删除成功!')
-              this.getNoPhoto()
+              this.ipageNum == 1
+              this.imgList = []
             } else {
               this.$message.error(res.msg)
             }
@@ -148,6 +150,7 @@ export default {
             this.tableData = []
             this.total = 0
           }
+          bool = true
         })
     },
 
@@ -165,30 +168,36 @@ export default {
             // 二次分页处理
             this.itotal = res.count
             this.imgList.push(...res.data)
+
+          } else {
+            this.itotal = 0
+            this.imgList = []
           }
+
+          bool = true
         })
     },
     // dom scroll 监听
     imgScroll() {
       let _dom = document.querySelector('.deposit-photo'),
       that = this
-      console.log(_dom)
       _dom.onscroll = function(e){
-        console.log(e)
         let total = that.itotal, totalData = that.imgList
         // 数据不够 不执行逻辑
-        if(total > totalData.length){
-            let scrollHeight = _dom.clientHeight,
-                scrollTop = _dom.scrollTop,
-                totalHeight = _dom.scrollHeight
+        if(total > totalData.length && bool){
+          
+          let scrollHeight = _dom.clientHeight,
+              scrollTop = _dom.scrollTop,
+              totalHeight = _dom.scrollHeight
 
-            // 滚动条距底20长度 触发
-            if((totalHeight - scrollHeight - scrollTop) <= 20){
-                that.ipageNum ++
-                // 分割数据
-                // callBack(totalData.slice(0, num * size))
-                that.getNoPhoto()
-            }
+          // 滚动条距底20长度 触发
+          if((totalHeight - scrollHeight - scrollTop) <= 20){
+            bool = false
+            that.ipageNum ++
+            // 分割数据
+            // callBack(totalData.slice(0, num * size))
+            that.getNoPhoto()
+          }
 
         }    
       }
@@ -199,21 +208,22 @@ export default {
       let _dom = document.querySelector('.noPhotos .el-table__body-wrapper'),
        that = this
       _dom.onscroll = function(){
-        console.log(12)
+        
         let total = that.total, totalData = that.tableData
         // 数据不够 不执行逻辑
-        if(total > totalData.length){
-            let scrollHeight = _dom.clientHeight,
-                scrollTop = _dom.scrollTop,
-                totalHeight = _dom.scrollHeight
+        if(total > totalData.length && bool){
+          let scrollHeight = _dom.clientHeight,
+              scrollTop = _dom.scrollTop,
+              totalHeight = _dom.scrollHeight
 
-            // 滚动条距底20长度 触发
-            if((totalHeight - scrollHeight - scrollTop) <= 20){
-                that.pageNum ++
-                // 分割数据
-                // callBack(totalData.slice(0, num * size))
-                that.getNoPerosn()
-            }
+          // 滚动条距底20长度 触发
+          if((totalHeight - scrollHeight - scrollTop) <= 20){
+            bool = false
+            that.pageNum ++
+            // 分割数据
+            // callBack(totalData.slice(0, num * size))
+            that.getNoPerosn()
+          }
 
         }    
       }
@@ -240,7 +250,9 @@ export default {
 
   },
   mounted() {
-    
+    let dom = document.querySelector('.deposit-photo')
+    this.height = dom.offsetHeight
+
     this.loginInfo = JSON.parse(localStorage.getItem('loginInfo'))
 
     // 获取人员

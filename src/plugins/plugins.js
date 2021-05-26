@@ -146,9 +146,9 @@ export function toTree(data) {
     if(!Array.isArray(data)) {
         return result
     }
-    data.forEach(item => {
-        delete item.children;
-    });
+    // data.forEach(item => {
+    //     delete item.children;
+    // });
     let map = {};
     data.forEach(item => {
         map[item.id] = item;
@@ -204,11 +204,30 @@ export class Load {
       text: text || '正在加载中。。。',
       spinner: 'el-icon-loading',
       background: 'rgba(0, 0, 0, 0.5)',
-      target: document.querySelector('html')
+      target: document.querySelector('body')
     })
   }
 
   close() {
     this.load.close()
   }
+}
+
+/**
+ * 获取地址栏参数
+ * @returns 
+ */
+export function getSearch() {
+  var sea = location.search.substr(1) // 取出所有参数
+  var para = sea.split('&')
+  var paraObj = {}
+
+  for (let i of para) {
+    var key = i.split('=')[0]
+    var value = i.split('=')[1]
+
+    paraObj[key] = value
+  }
+
+  return paraObj
 }

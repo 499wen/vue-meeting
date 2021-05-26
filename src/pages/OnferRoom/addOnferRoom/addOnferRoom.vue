@@ -34,6 +34,13 @@
                   <el-option label="3000" value="3000"></el-option>
                 </el-select>
               </el-form-item> 
+              <el-form-item label="审批模式" size="mini" prop='appointmentApplyApprovalMode'>
+
+                <el-radio-group v-model="ruleForm.appointmentApplyApprovalMode">
+                  <el-radio label="1" >自动通过</el-radio>
+                  <el-radio label="0" >人工审批</el-radio>
+                </el-radio-group>
+              </el-form-item>
               <el-form-item label="会议室图片">
                 <div class="avatar-uploader">
                   <div class="avatar">

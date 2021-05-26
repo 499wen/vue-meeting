@@ -88,14 +88,14 @@
 						<div></div>
 					</div>
 					<div class="longpage_pixel" draggable="false" v-if="true">
-						375 x <el-input-number size='small' v-model="dataCollection[curPage - 1].model.height" controls-position="right"></el-input-number> px
+						375 x <el-input-number size='small' v-model="dataCollection[curPage - 1].model.height" controls-position="right" class="longpage_pixel-height"></el-input-number> px
 					</div>
 					<!-- 鼠标悬停后展示二维码 -->
 					<div class="show_qrcode" @click="openQrcode">
 						<span v-if="codeVisible">收起</span>
 						<span v-else>预览</span>
 						<div class="qrcode_box" v-show="codeVisible">
-							<p class="scan" style="margin:0 0 5px 0;">扫码预览</p>
+							<p class="scan" style="margin:0 0 5px 0; width: 130px">扫码预览</p>
 							<div class="align-center">
 								<div id="qrcode" ref="qrcode" title=""></div>
 							</div>
@@ -483,7 +483,7 @@
 			<!-- 表单 -->
 			<div id="templateStyle" v-if="defaultStyle.type == 'form'">
 				<el-collapse v-model="activeName">
-					<el-collapse-item title="基本样式" name="1" style="padding-right: 0px;">
+					<el-collapse-item title="表单样式" name="1" style="padding-right: 0px;">
 						<div class="layui-colla-content layui-show">
 							<div style="display: flex; justify-content: space-between; align-items: center" v-if="false">
 								<div class="flex invite-progress" style="margin-left: 10px;justify-content: center;">
@@ -507,28 +507,43 @@
 							</div>
 
 							<div class="sort">
-								<div>
-									<span>标题颜色：</span>
+								<span class="label">标题：</span>
+
+								<div class="color">
+									<span>文字颜色 </span>
 									<el-color-picker v-model="defaultStyle.tipsColor" size="small" @change="tipsColor"></el-color-picker>
-								</div>
-								<div>
-									<span>内容颜色：</span>
-									<el-color-picker v-model="defaultStyle.cteColor" size="small" @change="cteColor"></el-color-picker>
-								</div>
-								<div>
-									<span>边框颜色：</span>
-									<el-color-picker v-model="defaultStyle.borderColor" size="small" @change="borderColor"></el-color-picker>
 								</div>
 							</div>
 
-							<div class="desc">
-								<div>
-									<span>边框背景颜色：</span>
-									<el-color-picker v-model="defaultStyle.borderBgcolor" size="small" @change="borderBgcolor"></el-color-picker>
-								</div>
-								<div>
-									<span>按钮背景颜色：</span>
+							<div class="sort">
+								<span class="label">按钮：</span>
+
+								<div class="color">
+									<span>背景颜色 </span>
 									<el-color-picker v-model="defaultStyle.btnBgcolor" size="small" @change="btnBgcolor"></el-color-picker>
+								</div>
+								<div class="color">
+									<span>文本颜色 </span>
+									<el-color-picker v-model="defaultStyle.textbtnBgcolor" size="small" @change="textbtnBgcolor"></el-color-picker>
+								</div>
+							</div>
+							<div class="sort">
+								<span class="label">文本框：</span>
+
+
+								<div class="value">
+									<div class="color">
+										<span>内容颜色 </span>
+										<el-color-picker v-model="defaultStyle.cteColor" size="small" @change="cteColor"></el-color-picker>
+									</div>
+									<div class="color">
+										<span>背景颜色 </span>
+										<el-color-picker v-model="defaultStyle.borderBgcolor" size="small" @change="borderBgcolor"></el-color-picker>
+									</div>
+									<div class="color">
+										<span>边框颜色 </span>
+										<el-color-picker v-model="defaultStyle.borderColor" size="small" @change="borderColor"></el-color-picker>
+									</div>
 								</div>
 							</div>
 							
@@ -850,10 +865,11 @@
 				</div>
 				<div class="popup_cente"> 
 					<div class="popup_item" v-for="(item, idx) in bgImage" :key="idx">
-						<img :src="API.echoImage(item.imgId, 'Invitation')" alt="" @error="errImg(item.imgId, 'Invitation', $event)">
-						<div>
+						<img alt="" @click="changeBgImg(idx)" :class="[ (selectImg && selectImg.imgId == item.imgId) && 'select']"
+						 :src="API.echoImage(item.imgId, 'Invitation')" @error="errImg(item.imgId, 'Invitation', $event)" >
+						<!-- <div>
 							<input type="radio" name="bgImgRadio" class="bgimage" id="bgimage" @click="changeBgImg(idx)">
-						</div>
+						</div> -->
 					</div>
 				</div>
 

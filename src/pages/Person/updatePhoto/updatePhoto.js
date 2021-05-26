@@ -141,14 +141,14 @@ export default {
       console.log(files, Object.values(files).length)
       
       if(!this.load.execution){
-        this.load.show()
+        // this.load.show()
         this.load.execution = true
         reload = null
       } else {
         setTimeout(() => {
           if(!reload){
             this.load.execution = false
-            this.load.hide()
+            // this.load.hide()
             file.blur()
           }
         }, 1000)
@@ -175,21 +175,20 @@ export default {
       if (Object.keys(inputDOM).length) {
         
         for (let i in inputDOM) {
-          // console.log(typeof inputDOM[i])
           // 图片类型 => Object
           if (typeof inputDOM[i] == 'object') {
-            let size = Math.floor(inputDOM[i].size / 1024);
-            if (size <= 200) {
+            let size = Math.floor(inputDOM[i].size / 1024),
+            name = inputDOM[i].name
+
+            // 过滤gif文件
+            if(name.substr(name.length - 4) == '.gif'){
+              
+              console.log('gif文件')
+            } else if (size <= 200) {
               // alert('请选择200KB以内的图片！');
               // this.$message.warning('请选择200KB以内的图片！')
               // return false
               fil[i] = inputDOM[i]
-            } else {
-              this.gl.push({
-                sizeToBig: true,
-                reason: '大小超过200kb',
-                files: inputDOM[i]
-              })
             }
           } else {
             this.gl.push({
@@ -206,7 +205,8 @@ export default {
         }
         
         // 通过DOM取文件数据
-        this.fil = this.fil.concat(Object.values(fil));
+        // this.fil = this.fil.concat(Object.values(fil)); // 累加
+        this.fil = Object.values(fil) // 累加
         this.showNum = this.fil.length
         // 设置showNum
         this.$emit('setShowNum', this.showNum)

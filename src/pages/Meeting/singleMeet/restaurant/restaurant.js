@@ -1,5 +1,6 @@
 import { selfTime } from '@/plugins/plugins.js'
 import { mapState } from 'vuex'
+let rightArr = [], leftArr = [], allData = []
 
 // 获取餐厅配置
 function Ct(type, date){
@@ -57,9 +58,11 @@ export default {
       radio: '1',
       group: [],
       groupVal: '',
-      input3: '',
+      searchKey: '',
       tableData: [],
       tableData1: [],
+      queryConditionArr: [],
+      condiData: [],
       tableCate: [
         {name: '姓名', description: 'userName'},
         {name: '电话', description: 'phone'},
@@ -67,6 +70,11 @@ export default {
       ],
       chrId: '', // 参会人树状id,
       pageNum: 1,
+      pageSize: 500,
+      total: 0,
+      num: 1,
+      size: 500,
+      leng: 0,
       ctList: [],
       curPerson: [],
       curPerson1: [],
@@ -151,89 +159,199 @@ export default {
         return 
       }
 
+      // 数据初始化
+      this.pageNum = 1
+      // rightArr = []
+      leftArr = []
+
       this.pidx = pidx
       this.cidx = cidx
       this.can = can
-      this.tableData = JSON.parse(JSON.stringify(item.person))
+      leftArr = JSON.parse(JSON.stringify(item.person))
  
       console.log('diani', this.chrId)
       this.addPersonBox = true
       this.getChrPerson(this.chrId)
     },
 
-    // 获取参会人 - 人员
-    getChrPerson(id){ 
-      this.$http.get(this.API.findByMeetingIdAndPage(id, this.pageNum, 999))
-          .then(res => {
-            if(res.code == '000'){
-              var obj = new Map()
-              this.tableData1 = []
-              this.tableData.filter(item => obj.set(item.userId, item))
+    // 选中条件组
+    clickCondi(idx){
+      let item = this.condiData[idx]
+      // 判断是否全体参会人  添加人员
+      // if(this.meetingData.id == this.chrId) {
+      //   item.condition.filter(item => item.value == '部门' ? item.fieldName = 'oldDepartmentName' : '')
+      // } else {
+        item.condition.filter(item => item.value == '部门' ? item.fieldName = 'departmentName' : '')
+      // }
+      this.queryConditionArr = item.condition
+      this.getChrPerson()
+    },
+    // 获取条件组 数据
+    getCondi() {
+      this.$http.get(this.API.selectConditionGroup('adduser'))
+        .then(res => {
+          if(res.code == '000' && res.data){
+            res.data.filter(item => item.condition = JSON.parse(item.condition))
+            this.condiData = res.data
+          }
+        })
+    },
 
-              res.data.filter(item => {
-                var o = {
-                  userId: item.userId,
-                  meetingInviteId: item.id,
-                  phone: item.phone,
-                  departmentName: item.departmentName,
-                  userName: item.userName
-                }
-                if(!obj.get(item.userId)){
-                  this.tableData1.push(o)
-                } else {
-                  if(!obj.get(item.userId).userName){
-                    obj.set(item.userId, o)
-                    this.tableData = []
-                    obj.forEach((value, key) => {
-                      this.tableData.push(value)
-                    })
-                  }
-                }
-              })
-            }
-          })
+    // 获取参会人 - 人员
+    getChrPerson(){ 
+      if(!this.chrId) this.chrId = this.meetingData.id
+      let obj = {
+        contanUserIdArr: [],
+        ifContanUserIdArr: false,
+        queryConditionArr: this.queryConditionArr
+      }
+      this.$http.post(this.API.findByMeetingIdAndPage(this.meetingData.id, this.chrId, 1, 99999, this.searchKey, ), obj)
+        .then(res => {
+          if(res.code == '000'){
+            allData = res.data
+            // 筛选数据
+            this.screenData(leftArr)
+
+            // 数据分页
+            this.rightPagin()
+            this.leftPagin()
+          }
+        })
+    },
+    // 筛选数据
+    screenData(person) {
+      person = JSON.parse(JSON.stringify(person))
+      rightArr = []
+      // leftArr = []
+      var obj = new Map()
+      this.tableData1 = []
+      person.filter(item => obj.set(item.userId, item))
+      allData.filter(item => {
+        var o = {
+          userId: item.userId,
+          meetingInviteId: item.id,
+          phone: item.phone,
+          departmentName: item.departmentName,
+          userName: item.userName
+        }
+        if(!obj.get(item.userId)){
+          // this.tableData1.push(o)
+          rightArr.push(o)
+        } else {
+          if(!obj.get(item.userId).userName){
+            obj.set(item.userId, o)
+            leftArr = []
+            obj.forEach((value, key) => {
+              leftArr.push(value)
+            })
+          }
+        }
+      })
+    },
+    // 分页
+    rightPagin() {
+      let num = this.pageNum, size = this.pageSize
+      this.total = rightArr.length
+      this.tableData1 = rightArr.slice((num - 1) * size, num * size)
+    },
+    leftPagin() {
+      let num = this.num, size = this.size
+      this.leng = leftArr.length
+      this.tableData = leftArr.slice((num - 1) * size, num * size)
+    },
+    // 分页方法
+    leftcurChange(val){
+      this.num = val
+      // 筛选数据
+      this.screenData(leftArr)
+
+      // 数据分页
+      this.leftPagin()
+    },
+    curChange(val){
+      this.pageNum = val
+      // 筛选数据
+      this.screenData(leftArr)
+
+      // 数据分页
+      this.rightPagin()
     },
     // 移除人员
     removePerson(){
-      var obj = new Map(), arr = []
+      var obj = new Map(), big = new Map(), bigarr = [], arr = [], num = 0
+      leftArr.filter((item, idx) => {
+        big.set(item.userId, item)
+      })
       this.tableData.filter((item, idx) => {
         obj.set(item.userId, item)
       })
-      this.curPerson.filter(item => obj.delete(item.userId))
+      this.curPerson.filter(item => {
+        num ++
+        obj.delete(item.userId)
+        big.delete(item.userId)
+      })
+
+      big.forEach(function(value,key){
+        bigarr.push(value)
+      });
 
       obj.forEach(function(value,key){
         arr.push(value)
       });
+
       // 给左边更新数据
       this.tableData = arr
+      leftArr = bigarr
       // 给右边添加数据
       this.tableData1.push(...this.curPerson)
+      this.total += num
+      this.leng -= num
+      // 筛选数据
+      this.screenData(leftArr)
+      this.num = 1
+      this.pageNum = 1
+      this.leftPagin()
+      this.rightPagin()
+
+      this.savePerson()
     },
     // 添加人员
     addPerson(){
-      var obj = new Map(), arr = []
+      var obj = new Map(), arr = [], num = 0
       this.tableData1.filter((item, idx) => {
         obj.set(item.userId, item)
       })
       this.curPerson1.filter(item => {
+        num ++
         obj.delete(item.userId)
       })
       obj.forEach(function(value,key){
         arr.push(value)
       });
-      console.log(arr)
+      
       // 给左边更新数据
       this.tableData1 = arr
       // 给右边添加数据
       this.tableData.push(...this.curPerson1)
+      leftArr.push(...this.curPerson1)
+      this.total -= num
+      this.leng += num
+      // 筛选数据
+      this.screenData(leftArr)
+      this.num = 1
+      this.pageNum = 1
+      this.leftPagin()
+      this.rightPagin()
+
+      this.savePerson()
     },
     // 保存人员
     savePerson(){
-      this.card[this.pidx][this.can].ct[this.cidx].person = this.tableData
-      this.card[this.pidx][this.can].ct[this.cidx].info = `已选择${this.tableData.length}人`
+      this.card[this.pidx][this.can].ct[this.cidx].person = leftArr
+      this.card[this.pidx][this.can].ct[this.cidx].info = `已选择${leftArr.length}人`
 
-      console.log(this.tableData)
-      this.addPersonBox = false
+      // console.log(this.tableData)
+      // this.addPersonBox = false
     },
     handleSelectionChange(val){
       this.curPerson = val
@@ -313,6 +431,13 @@ export default {
         } else {
           // 复制
           var obj = JSON.parse(JSON.stringify(this.card[this.card.length - 1]))
+          // 删除 原有id
+          let breakfast = obj.breakfast.ct, dinner = obj.dinner.ct, lunch = obj.lunch.ct
+          breakfast.filter(item => delete item.id)
+          dinner.filter(item => delete item.id)
+          lunch.filter(item => delete item.id)
+          console.log(obj)
+          
           obj.date += 3600 * 24 * 1000
           this.card.push(obj)
         }
@@ -400,7 +525,7 @@ export default {
     },
     // 保存
     prese(){
-      var card = this.card, arr = []
+      var card = this.card, arr = [], result = []
       console.log(this.card)
       card.filter(item => {
         // 处理时间戳
@@ -421,11 +546,18 @@ export default {
         })
       })
 
-      arr = arr.filter(item => item)
-      console.log(arr)
-      // return 
+      if(!arr.length) {
+        this.$message.error('餐饮信息不能为空')
+        return
+      }
+      result = arr.filter(item => (item && item.diningInformationUserList.length > 0) && item)
+      if(!result.length){
+        this.$message.error('请选择就餐人员')
+        return
+      }
+      
       if(this.requestApi){
-        this.$http.post(this.API.updateCatering, arr)
+        this.$http.post(this.API.updateCatering, result)
         .then(res => {
           if(res.code == '000'){
             console.log(res)
@@ -553,7 +685,9 @@ export default {
     }
   },
   created() {
+
     this.initPage()
+    this.getCondi()
   },
   mounted() {
     this.getChrData()

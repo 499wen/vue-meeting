@@ -17,7 +17,7 @@ let needLoadingRequestCount = 0;
 let dsQi = null, s = 0,
     dsQi2 = null, s2 = 0
 //显示loading
-axios.defaults.timeout=10000
+axios.defaults.timeout= 600000
 function showLoading(target) {
   // 后面这个判断很重要，因为关闭时加了抖动，此时loading对象可能还存在，
   // 但needLoadingRequestCount已经变成0.避免这种情况下会重新创建个loading
@@ -56,9 +56,10 @@ var toHideLoading = _.debounce(()=>{
 
 //配置axios拦截器
 let instance = axios.create({
-  headers: {
-    'content-type': 'application/json;charset=UTF-8',
-    // 'token': "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0MDI4ODBhYzcyMzRjY2NkMDE3MjM0ZGYzMTcwMDAyYSJ9.ha_86lMqcLBv3HciEwV_XJMiwOghKKvcrWZ2kwJl2vk"
+  headers: { 
+    'content-type': 'application/json; charset=utf-8;',
+    // 'Access-Control-Allow-Origin': '*',
+    // Authorization: '12'
   }
 })
 //请求拦截器
@@ -67,10 +68,12 @@ instance.interceptors.request.use(
   config=>{
     config = config || {}
     let token=localStorage.getItem('token')
+    // config.headers['content-type'] = 'application/json; charset=utf-8'
+
     if(token){
       //每次请求前，如果token存在则在请求头上添加token
       config.headers.token = token
-      config.headers.Authorization = token
+      // config.headers.Authorization = token
     }
 
     // console.log(config)
@@ -98,6 +101,7 @@ instance.interceptors.response.use(
     // console.log(response)
     // 判断是否过期
     if(response.data.code == -1){
+      localStorage.removeItem('token')
       delCookie('autoLogin')
       router.push('/login')
     }
@@ -108,6 +112,7 @@ instance.interceptors.response.use(
     return response.data
   },
   err=>{
+    // console.log(err)
     if(err == 'Error: timeout of 5000ms exceeded at createError'){
       hideLoading()
       Message.error('已超时，请检查网络是否流畅！')
@@ -130,6 +135,9 @@ instance.interceptors.response.use(
           break
           case 408:
             Message.error('请求超时。请重新刷新页面！')
+          break
+          case 500:
+            Message.error('请检查网络是否流畅。重新刷新页面！')
           break
           case 501:
             Message.error('服务未实现')

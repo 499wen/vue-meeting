@@ -26,8 +26,8 @@ export default {
       tabList: [
         {name: '基本信息', eng: 'basicInfo', select: true},
 				{name: '参会人管理', eng: 'attendee', select: false},
-				{name: '会议室预约', eng: 'meetRoom', select: false},
 				{name: '通知消息管理', eng: 'smscenter', select: false},
+				{name: '会议室预约', eng: 'meetRoom', select: false},
 				{name: '邀请函', eng: 'invitation', select: false},
 				{name: '住宿管理', eng: 'guestroom', select: false},
 				{name: '餐饮管理', eng: 'restaurant', select: false},
@@ -36,7 +36,10 @@ export default {
 				// {name: '会务组报到', eng: 'report', select: false},
       ],
       // 显示模块
-      block: false
+      block: false,
+
+      // 当前时间戳
+      curDate: new Date().getTime()
     }
 
   },
@@ -65,6 +68,7 @@ export default {
           item.select = false
         }
       })
+
     },
 
     // 获取会议信息

@@ -1,4 +1,5 @@
-var noVueAll = null, noVueSingle = null, t = null
+var noVueAll = null, noVueSingle = [], t = null, loading
+import axios from 'axios'
 
 export default {
   props: ['row'],
@@ -9,7 +10,7 @@ export default {
         personData: [],
         filterTable: {
             pageNum: 1,
-            pageSize: 10,
+            pageSize: 100,
             total: 0
         },
         personCate: [
@@ -216,11 +217,7 @@ export default {
       this.columnData = val
     }
   },
-  mounted() {
-    console.log(this)
-    
-    this.initData(this.row.id)
-  },
+  
   methods: {
       // 
       initData(meetId){
@@ -243,22 +240,7 @@ export default {
               }
           })
       },
-      // 请求全部得数据
-      requestAllData(){
-          var meetId = this.columnData.id
-          this.$http.get(this.API.findMeetingStatisticalDataByMeeting(meetId, this.allTable.pageNum, 9999))
-          .then(res => {
-              console.log(res)
-              if(res.code == '000' && res.data){
-                  res.data.filter(item => {
-                      item.state = this.statusTab(item.statusCode, item.leaveState)
-                  })
-                  noVueSingle = res.data
-              } else {
-                  noVueSingle = []
-              }
-          })
-      },
+      
       // 分页 - 过滤数据
       filterSize(val){
           this.filterTable.pageNum = 1
@@ -342,8 +324,11 @@ export default {
           // return 
           var data = [
               { name: '实到', fild: '已签到'},
-              { name: '未到', fild: '未到'}
-          ], { fild } = data.filter(item => item.name == param.name ? this.tip = item.fild : '')
+          ]
+          if(this.columnData.IsAttendanceNumber == 0) data.push({ name: '未到', fild: '未签到'})
+          else if(this.columnData.IsAttendanceNumber == 1) data.push({ name: '未到', fild: '未到'})
+          
+          let { fild } = data.filter(item => item.name == param.name ? this.tip = item.fild : '')
           console.log(this.tip)
           if(this.qhTab == 12){
               this.selfPaginationFilter()
@@ -435,6 +420,13 @@ export default {
           // 柱状图
           this.drawLine()
 
+          noVueSingle = []
+          loading = this.$loading({
+            lock: true,
+            text: 'Loading',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          });
           this.requestAllData()
 
 
@@ -531,26 +523,48 @@ export default {
               return '请假'
           }
       },
-      statusTab2(statusCode, leaveState){
-          const Is = this.Is, Does = this.Does
-
-          if(leaveState == 0){
-              if(statusCode == 0){
-                  return '未确认'
-              } else if(statusCode == 3){
-                  return '已签到'
-              } else if(statusCode != 3){
-                  return '未签到'
-              } else {
-                  return '已确认'
+      // 请求全部得数据
+      requestAllData(){
+          var meetId = this.columnData.id
+          axios({
+            method: 'get',
+            url: this.API.findMeetingStatisticalDataByMeeting(meetId, this.allTable.pageNum, 2000),
+            headers: {
+              token: localStorage.getItem('token')
+            }
+          }).then(({ data }) => {
+              if(data.code == '000' && data.data){
+                data.data.filter(item => {
+                      item.state = this.statusTab(item.statusCode, item.leaveState)
+                  })
+                  noVueSingle.push(...data.data)
+                  console.log(noVueSingle.length)
+                  if (data.total > noVueSingle.length){
+                    this.allTable.pageNum ++
+                    this.requestAllData()
+                  } else {
+                    loading.close()
+                  }
               }
-          } else {
-              return '请假'
-          }
+          }).catch(err => {})
       },
-
   },
-  destroyed() {
+  mounted() {
+    console.log(this)
+    
+    this.initData(this.row.id)
 
-  }
+    // 分10个进程
+    // this.worker = this.$worker.create([
+    //   { message: 'img01', func: data => data},
+    //   { message: 'img02', func: data => data},
+    // ])
+
+    // this.worker.postMessage('img01', ['第一个work']).then(res => {
+    //   console.log(res)
+    // })
+    // this.worker.postMessage('img02', ['第二个work']).then(res => {
+    //   console.log(res)
+    // })
+  },
 }

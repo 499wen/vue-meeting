@@ -1,22 +1,6 @@
 <template>
   <div class="qrcode">
-    <full-page :="options">
-        <div class="section">
-            <div class="box1">
-                section1
-            </div>
-        </div>
-        <div class="section">
-            <div class="box2">
-            section2
-            </div>
-        </div>
-        <div class="section">
-            <div class="box3">
-            section3
-            </div>
-        </div>
-    </full-page>
+    qrcode
   </div>
 </template>
 

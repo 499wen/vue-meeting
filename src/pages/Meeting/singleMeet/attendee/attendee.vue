@@ -18,15 +18,16 @@
     <div class="atte-data">
       <!-- 数据操作 -->
       <div class="data-oper">
-        <div class="data-add" v-show='!curAttenGroup.parentId'>
-          <el-button round size='small' type="primary" @click="addAtteBtn">添加参会人</el-button>
-          <el-button round size='small' type="danger" @click="removeAtte">移除参会人</el-button>
-          <el-button round size='small' type="primary" v-show="false">手动录入</el-button>
+        <div class="data-add">
+          <el-button round size='small' type="primary" @click="addAtteBtn" :disabled='meetingData.timeNow > meetingData.endDate'>添加参会人</el-button>
+          <el-button round size='small' type="danger" @click="removeAtte" :disabled='meetingData.timeNow > meetingData.endDate'>移除参会人</el-button>
+          <el-button round size='small' type="danger" @click="removeAll" :disabled='meetingData.timeNow > meetingData.endDate'>移除全部</el-button>
+          <el-button round size='small' v-show='!curAttenGroup.parentId' type="primary" @click="manualImport" :disabled='meetingData.timeNow > meetingData.endDate'>手动录入</el-button>
         </div>
-        <div class="data-query" v-show="false">
-          <el-button class="spacing" size='small' @click="exportAtten">导出参会人</el-button>
+        <div class="data-query">
+          <el-button class="spacing" size='small' @click="exportAtten" v-show="false">导出参会人</el-button>
           <!-- 条件组查询 -->
-          <el-dropdown trigger="click" class="spacing" @command='clickCondi' placement='bottom'>
+          <el-dropdown trigger="click" class="spacing" @command='clickCondi' placement='bottom' v-show="false">
             <el-button size="small">
               条件组查询<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
@@ -34,7 +35,7 @@
               <el-dropdown-item v-for="(item, idx) in condiData" :key="idx" :command='idx'>{{ item.groupName }}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <el-input size="small" placeholder="请输入会议名称" v-model="searchKey" @keyup.native.enter="searchBtn" v-show='!curAttenGroup.parentId'>
+          <el-input size="small" placeholder="请输入名称，手机号" v-model="searchKey" @keyup.native.enter="searchBtn">
             <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
           </el-input>
         </div>
@@ -69,6 +70,16 @@
         </div>
       </div>
     </div>
+
+    <!-- 手动录入 -->
+    <el-dialog title="手动录入" :visible.sync="manualImport_child" width="20%" center height='100%'
+      :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
+      <manualImport ref="manualImport" v-if="manualImport_child" :groupId='this.curAttenGroup.id'></manualImport>
+      <div class="dialog-btn">
+        <el-button type="primary" @click="newAddPerson" size="small" round>添 加</el-button>
+        <el-button @click="cancel" size="small" type="danger" round>取 消</el-button>
+      </div>
+    </el-dialog>
 
     <!-- 添加参会人 - dialog-->
     <el-dialog title="添加参会人" :visible.sync="addAtte_child" width="50%" center height='100%'

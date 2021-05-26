@@ -65,16 +65,16 @@
               <!-- scope.row.stateCode == 0 -->
               <div v-if="scope.row.stateCode != null">
                 <el-button
-                  size="mini"
+                  size="mini" round
                   class="operation_btn"
                   style="background-color:#53c6ac;color:#fff;"
-                  @click="agree(scope.row.id)"
+                  @click="agree(scope.row)"
                 >同意</el-button>
                 <el-button
-                  size="mini"
+                  size="mini" round
                   class="operation_btn"
                   type="danger"
-                  @click="disagree(scope.row.id)"
+                  @click="disagree(scope.row)"
                 >不同意</el-button>
               </div>
             </template>
@@ -134,12 +134,12 @@ export default {
 
     },
 		// 同意审批申请
-		agree:function(id){
+		agree:function(row){
 			this.$confirm('确认同意申请吗？', '确认', {
 				cancelButtonClass: 'btn_custom_cancel',
 				type: 'success'
 			}).then(() => {
-				var obj = { id: id,  remarks: '', stateCode: 1}
+				var obj = { id: row.id,  remarks: '', stateCode: 1, roomName: row.name, beeginDate: row.beginDate, creatorId: row.creatorId}
 				this.$http.post(this.API.approvalBinDing, obj)
 				.then(res => {
 					if("000" == res.code){
@@ -156,12 +156,12 @@ export default {
 			}).catch(() => {});
 		},
 		// 不同意审批申请
-		disagree:function(id){
+		disagree:function(row){
 			this.$confirm('确认拒绝申请吗？', '确认', {
 				cancelButtonClass: 'btn_custom_cancel',
 				type: 'warning'
 			}).then(() => {
-				var obj = { id: id, remarks: '', stateCode: 2}
+				var obj = { id: row.id,  remarks: '', stateCode: 2, roomName: row.name, beeginDate: row.beginDate, creatorId: row.creatorId}
 				this.$http.post(this.API.approvalBinDing, obj)
 				.then(res => {
 					if("000" == res.code){

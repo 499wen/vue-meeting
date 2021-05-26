@@ -306,7 +306,7 @@ export default {
       console.log(this.curTree)
       
       var roomGrade = ['普通套房', '豪华套房', '总统套房']
-      this.$http.get(this.API.selectMeetingRoomByFloorId(this.curTree.id, this.pageNum, this.pageSize))
+      this.$http.get(this.API.selectMeetingRoomByFloorId(this.meetingData.id, this.curTree.id, this.pageNum, this.pageSize))
         .then(res => {
           if(res.code == '000' && res.data){
             res.data.filter(item => {

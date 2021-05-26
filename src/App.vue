@@ -12,11 +12,13 @@ export default {
     // 设置 rem 函数
     function setRem() {
       // 当前页面宽度相对于 750 宽的缩放比例，可根据自己需要修改。
-      const width = document.documentElement.clientWidth
+      const width = document.documentElement.clientWidth <= 1440 ? 1400 : document.documentElement.clientWidth
       const height = window.screen.height 
       const scale = height == 1080 ? 1 : width / 1920
+
+      console.log('scale', scale)
       // 设置页面根节点字体大小 Math.min(scale, 2)
-      document.documentElement.style.fontSize = baseSize * scale.toFixed(2) + 'px'
+      document.documentElement.style.fontSize = (baseSize * scale.toFixed(2)) < 14 ? '14px' : baseSize * scale.toFixed(2) + 'px'
     }
     // 初始化
     setRem()
@@ -88,7 +90,7 @@ body {
 .dialog {
   max-height: calc(100vh - 160px);
   box-sizing: border-box;
-  min-width: 500px;
+  min-width: 550px;
 }
 
 .el-dialog__body {
@@ -108,7 +110,7 @@ body {
 
 .dialog-btn {
   width: 100%;
-  background-color: #fff;
+  background-color: #eee;
   text-align: center;
   padding: 20px 0;
   box-sizing: border-box;
@@ -191,8 +193,8 @@ body {
 
 ::-webkit-scrollbar-thumb {
 	/*滚动条里面小方块*/
-	border-radius: 0.625rem;
-	box-shadow: inset 0 0 0.3125rem #e3e3e3;
+	border-radius: 0;
+	box-shadow: inset 0 0 0.3125rem #9c9a9a;
 	background: #cecece;
 }
 
@@ -215,11 +217,12 @@ body {
 // 设置选中时 背景颜色
 .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
   background-color: #d0e7ff;
+  height: 30px;
 }
 
 .btn_custom_cancel{
-    float: right;
-    margin-left: 10px !important;
+  float: right;
+  margin-left: 10px !important;
 }
 
 .tangram-suggestion-main {
@@ -288,5 +291,22 @@ body {
   left: 0;
   opacity: 0;
   cursor: pointer;
+}
+
+// 按钮颜色
+.el-button--warning {
+  background-color: #ed7d31 !important;
+  border-color: #ed7d31 !important;
+}
+
+// 搜索框 按钮
+.el-input .el-input-group__append:hover {
+  color: #0982fb;
+  background-color: #c6e1ff;
+  border-color: #badbff;
+}
+
+.el-menu-item-group__title {
+  padding: 0 !important;
 }
 </style>

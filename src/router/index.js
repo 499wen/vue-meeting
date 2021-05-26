@@ -1,5 +1,10 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
+import axios from '../plugins/axios.js'
+import API from '../API/api.js'
+import { setCookie, delCookie, getCookie } from '@/plugins/cookie'
+
+import { getSearch } from '@/plugins/plugins.js'
 
 Vue.use(VueRouter);
 
@@ -19,6 +24,12 @@ const routes = [
     path: '/login',
     name: '登录',
     component: () => import(/* webpackChunkName: "login" */ '../pages/Login/login.vue'),
+  },
+  {
+    path: '/demo',
+    name: 'demo',
+    meta: '/demo',
+    component: () => import(/* webpackChunkName: "home" */ '../demo/demo.vue'),
   },
 
   {
@@ -97,7 +108,7 @@ const routes = [
       },
       
       /**
-       * 基础设置 - 酒店管理
+       * 基础设置 - 餐厅管理
        */
       {
         path: '/restaurant',
@@ -175,10 +186,21 @@ const routes = [
       },
 
       /**
+       * 会务管理 - 请假审批 LeaveApprove
+       */
+      {
+        path: '/leaveApprove',
+        name: '请假审批',
+        meta: '/approve',
+        component: () => import(/* webpackChunkName: "leaveApprove" */ '../pages/LeaveApprove/leaveApprove.vue'),
+        children: []
+      },
+
+      /**
        * 会议室预约 - 预约审批 approval_subscribe
        */
       {
-        path: 'reviewApprove',
+        path: '/reviewApprove',
         name: '预约审批',
         meta: 'reviewApprove',
         component: () => import(/* webpackChunkName: "approval_subscribe" */ '../pages/Approval_subscribe/approval_subscribe.vue'),
@@ -207,8 +229,41 @@ const router = new VueRouter({
 });
 
 // 监听路由
-// router.beforeEach((to, from, next) => {
-  
-// })
+router.beforeEach((to, from, next) => {
+  let param = getSearch(),
+  bind = localStorage.getItem('bind') || null
+
+  if(to.path != '/login') next()
+  else if(param.code && !bind ) {
+    localStorage.setItem('bind', 1)
+    console.log(param.code)
+
+    // code 换取 openid
+    axios.post(API.loginBywx(param.code))
+      .then(res => {
+        console.log(res)
+        if(res.code == '000') {
+          /**
+           * data == null  未绑定
+           */
+          if(!res.data) {
+            localStorage.setItem('openId', res.openId)
+            next({ name: '登录'})
+          } else {
+            // 保存token本地
+            localStorage.setItem('token', res.data.token)
+            localStorage.removeItem('bind')
+
+            next({name: '首页'})
+          }
+        } else {
+          next({ name: '登录'})
+        }
+      })
+  } else {
+    next()
+  }
+
+})
 
 export default router;

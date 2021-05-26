@@ -6,7 +6,7 @@
         :data="tableData" border :height="height">
         <el-table-column :show-overflow-tooltip="true" type="index" width="50" label="序号" align="center" :resizable="false"></el-table-column>
         <el-table-column :show-overflow-tooltip="true" width="300" prop="name" label="会议室名称" align="center" :resizable="false"></el-table-column>
-        <el-table-column :show-overflow-tooltip="true" width="180px" align="center" :resizable='false'>
+        <el-table-column :show-overflow-tooltip="true" width="180px" align="center" label="会议室图片" :resizable='false'>
           <template slot-scope="scope">
             <img v-if="!scope.row.photoFileId" src="@/assets/images/defaultImg.png" class="hotel-img" />
             <img v-else id="updateUserImg" class="hotel-img" :src="API.echoImage(scope.row.photoFileId, 'MeetingRoomImage')" alt="">
@@ -17,29 +17,28 @@
           align="center" :resizable="false">
         </el-table-column>
         <el-table-column :show-overflow-tooltip="true"
-          v-if="tableData.length && tableData[0].Is === 3" label="预约"
+          label="状态" width="150px" align="center" prop="stateCode">
+          <template slot-scope="scope" v-if="scope.row.Is !== 3">
+            <div v-if="scope.row.Is == '0'" class="ball-fa">
+              <div class="ball" style="color: #ed7d31 !important;">待审批</div>
+            </div>
+            <div v-if="scope.row.Is == '1'" class="ball-fa">
+              <div class="ball" style="color: #409EFF #16a085">已通过</div>
+            </div>
+            <div v-if="scope.row.Is == '2'" class="ball-fa">
+              <div class="ball" style="color: #f60a0a">未通过</div>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column :show-overflow-tooltip="true" label="预约"
           width="100px" align="center" prop="stateCode" :resizable='false'>
-          <template slot-scope="scope">
+          <template slot-scope="scope" v-if="scope.row.Is === 3">
             <el-button type="primary" @click="subscribe(scope.row.id)" 
             round :disabled='meetIsEnd' size="small">选择</el-button>
           </template>
         </el-table-column>
-        <el-table-column :show-overflow-tooltip="true" v-if="tableData.length && tableData[0].Is !== 3"
-          label="状态" width="150px" align="center" prop="stateCode">
-          <template slot-scope="scope">
-            <div v-if="scope.row.Is == '0'" class="ball-fa">
-              <div class="ball" style="color: #409EFF !important;"></div>待审批
-            </div>
-            <div v-if="scope.row.Is == '1'" class="ball-fa">
-              <div class="ball" style="color: #409EFF !important;"></div>已通过
-            </div>
-            <div v-if="scope.row.Is == '2'" class="ball-fa">
-              <div class="ball"></div>未通过
-            </div>
-          </template>
-        </el-table-column>
       </el-table>
-    </div> 
+    </div>
 
     <!-- 分页 -->
     <div class="pagin">
@@ -152,6 +151,7 @@ export default {
           if(res.code == '000') {
             let List = res.data;
             if(List && List.length){
+              // List.filter(item => item.Is = 0)
               this.tableData = List
               this.total = res.total
     

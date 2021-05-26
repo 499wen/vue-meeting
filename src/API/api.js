@@ -1,10 +1,20 @@
-const gzKey = '/gzapi' // 广州
-// const gzKey = `https://service-ij14wquc-1305256445.gz.apigw.tencentcs.com`
+// const gzKey = '/gzapi' // 广州
+const gzKey = `https://service-ij14wquc-1305256445.gz.apigw.tencentcs.com`
 
 export default {
   /**
+   * 微信登录
+   */
+  loginBywx: openId => `${gzKey}/release/loginBywx?code=${openId}`, // 获取code
+  loginByWxBind: `${gzKey}/release/loginByWxBind`, // 绑定手机号
+  bindingPhon: phone => `${gzKey}/release/bindingPhon?phone=${phone}`, // 获取验证码
+
+  /**
    * 模块之外
    */
+  updatePassword: `${gzKey}/release/updatePassword`, // 修改密码
+  updateInfo: `${gzKey}/release/updateCustomerInformation`, // 修改公司信息
+  getCustomType: `${gzKey}/release/NoTokenCustomType?customType=all&pageNum=1&pageSize=10&addButtonList=1&searchKey=`, // 获取注册版本号
   getCustomerMenus: `${gzKey}/release/getCustomerMenus`, // 获取权限列表
   getCustomer: `${gzKey}/release/getCustomer`, // 获取公司信息
   uploadFile: `${gzKey}/release/uploadFile?`, // 上传图片 (问号不能去掉)
@@ -28,21 +38,20 @@ export default {
   loginByPhone: `${gzKey}/release/loginByPhone`, // 验证码 - 登录
   verificationCode: phone => `${gzKey}/release/verificationCode?phone=${phone}`, // 获取登录验证码
   loginByLoginNameAndPassword: `${gzKey}/release/loginByLoginNameAndPassword`, // 账号密码登录
-
-  initLoginNameAndPassword: `/hzbase/customer/initLoginNameAndPassword`, // 提交修改后用户信息
+  initLoginNameAndPassword: `${gzKey}/release/initLoginNameAndPassword`, // 提交修改后用户信息
 
   /**
    * 首页
    */
   findleaveInfo: (state, pageNum, pageSize) => `${gzKey}/release/findByAuthorityOfCompanyAdministratorAndPage?approvalState=${state}&pageNum=${pageNum}&pageSize=${pageSize}`, // 请假消息 state: 0-待审批, 1-已审批, 2-查所有  
-  findMeetingStatistical: (pageNum, pageSize, searchKey) => `${gzKey}/release/findMeetingStatisticalData2s?searchKey=${searchKey}&pageNum=${pageNum}pageSize=${pageSize}`, // 会议信息 - 参会人报到数据 
+  findMeetingStatistical: (pageNum, pageSize, searchKey) => `${gzKey}/release/findMeetingStatisticalData2s?searchKey=${searchKey}&pageNum=${pageNum}&pageSize=${pageSize}`, // 会议信息 - 参会人报到数据 
   examinationAndApprovalLeave: (id, code) => `${gzKey}/release/examinationAndApprovalLeave?id=${id}&approvalResultCode=${code}`, // 请假审批
   /**
    * 基础设置 - 酒店管理
    */
   addHotelByCustomer: `${gzKey}/release/addHotelByCustomer`,  // 添加酒店
   updateHotelByCustomer: `${gzKey}/release/updateHotelByCustomer`, // 修改酒店
-  findHotelByCompanyId: (pageNum, pageSize) => `${gzKey}/release/findHotelByCompanyId?pageNum=${pageNum}&pageSize=${pageSize}`, // 查询酒店
+  findHotelByCompanyId: (pageNum, pageSize, searchKey = '') => `${gzKey}/release/findHotelByCompanyId?searchKey=${searchKey}&pageNum=${pageNum}&pageSize=${pageSize}`, // 查询酒店
   findHotelById: id => `${gzKey}/release/findHotelById?id=${id}`, // 查询酒店 - 查询单个
   deleteHotelById: id => `${gzKey}/release/deleteHotelById?id=${id}`, // 删除酒店
 
@@ -94,6 +103,7 @@ export default {
   delectAllUser: `${gzKey}/release/delectAllUser`, // 删除全部人员
   singleClomnData: id => `${gzKey}/release/findPersonById?id=${id}`, // 查询人员 - 单条数据 
 
+  photoMatching: `${gzKey}/release/photoMatching`, // 匹配相片
   deleteNotMatchingPhoto: `${gzKey}/release/deleteNotMatchingPhoto`, // 删除多余的照片
   matchingUserPhoto: (userId, fileInfoId) => `${gzKey}/release/matchingUserPhoto?userId=${userId}&fileInfoId=${fileInfoId}`, // 关联人员与相片
   getNotMatchingPhoto: (pageNum, pageSize) => `${gzKey}/release/getNotMatchingPhoto?num=${pageNum}&size=${pageSize}`, // 查询相片匹配 相片
@@ -101,15 +111,20 @@ export default {
   findDuplicateName: (pageNum, pageSize, externalCode, deparmentId) => `${gzKey}/release/findDuplicateName?num=${pageNum}&size=${pageSize}&externalCode=${externalCode}&departmentId=${deparmentId}`, // 重名人员
 
   matchingUserPhotoFiles: (type, fileName) => `${gzKey}/release/matchingUserPhotoFiles?type=${type}&fileName=${fileName}`, // 批量上传头像
+  uploadZip: fileName => `${gzKey}/release/uploadZip?fileName=${fileName}`, // 压缩包上传文件
   /**
    * 会议管理
    */
   findMeetingAddByMeetingId: meetId => `${gzKey}/release/findMeetingAddByMeetingId?meetingId=${meetId}&searchKey=&examineAndApprove=2&typeCode=0&triggerType=1&pageNum=1&pageSize=1000&count=`, // 会议发布 - 是否添加短信
-  meetingReleaseById: meetId => `${gzKey}/release/meetingReleaseById?id=${meetId}`, // 发布会议
+  meetingReleaseById: meetId => `https://www.hzics.com/meetingapi/hzkj/releaseById/${meetId}`, // 发布会议
+  // meetingReleaseById: meetId => `http://192.168.0.224:19520/hzkj/releaseById/${meetId}`, // 发布会议
+  // meetingReleaseById: meetId => `${gzKey}/release/meetingReleaseById/{meetId}`, // 发布会议
+  
 
   findMeetingById: (pageNum, pageSize, searchKey) => `${gzKey}/release/meetings?pageNum=${pageNum}&pageSize=${pageSize}&searchKey=${searchKey}`, // 查询全部会议
   meetingsPageAndStateCode: (code, pageNum, pageSize, searchKey) => `${gzKey}/release/meetingsPageAndStateCode?stateCode=${code}&pageSize=${pageSize}&pageNum=${pageNum}&searchKey=${searchKey}`, // 根据分页查询会议 进行中 - 0  未发布 - 3  已发布 - 4 已结束 2 code
-  saveMeeting: `${gzKey}/release/saveMeeting`, // 保存会议 - 修改 - 共用
+  saveMeeting: `https://www.hzics.com/meetingapi/hzkj/updateMeeting`, // 保存会议 - 修改 - 共用
+  // saveMeeting: `${gzKey}/release/saveMeeting`, // 保存会议 - 修改 - 共用
   singleMeeting: meetId => `${gzKey}/release/findMeetingById?id=${meetId}`, // 根据会议id查询 单级会议
   multiMeeting: meetId => `${gzKey}/release/multistageMeetingId?meetingId=${meetId}`, // 根据会议id查询 单级会议
   
@@ -120,11 +135,13 @@ export default {
   deleteConfereeGroup: id => `${gzKey}/release/deleteConfereeGroup?id=${id}`, // 删除参会人分组 
 
   // saveSuperiorMeetingInvite: groupId => `${gzKey}/release/saveSuperiorMeetingInvite?confereeGroupId=${groupId}`, // 多级会议 添加参会人
-
-  findMeetingEnableInviteUser: (meetId, pageNum, pageSize, searchKey) => `${gzKey}/release/findMeetingEnableInviteUser?pageNum=${pageNum}&pageSize=${pageSize}&externalCode=all&photoFlag=2&searchKey=${searchKey}&meetingId=${meetId}`, // 全体参会人 - 查询未添加人员
-  findByMeetingIdAndPage: (groupId, pageNum, pageSize) => `${gzKey}/release/findByMeetingIdAndPage?confereeGroupId=${groupId}&pageNum=${pageNum}&pageSize=${pageSize}`, // 参会分组查询人员  
+  addUserToMeetingInvite: meetId => `${gzKey}/release/addUserToMeetingInvite?meetingId=${meetId}`, // 手动录入
+  findMeetingEnableInviteUser: (meetId, pageNum, pageSize, searchKey, externalCode = 'all') => `${gzKey}/release/findMeetingEnableInviteUser?pageNum=${pageNum}&pageSize=${pageSize}&externalCode=${externalCode}&photoFlag=2&searchKey=${searchKey}&meetingId=${meetId}`, // 全体参会人 - 查询未添加人员
+  findByMeetingIdAndPage: (meetId, groupId, pageNum, pageSize, searchKey, add = '', externalCode = 2) => `${gzKey}/release/findByMeetingIdAndPage?meetingId=${meetId}&confereeGroupId=${groupId}&pageNum=${pageNum}&searchKey=${searchKey}&pageSize=${pageSize}&statuslCode=&report=2&externalCode=${externalCode}&add=${add}`, // 参会分组查询人员  
+  updateConfereeGroupId: groupId => `${gzKey}/release/updateConfereeGroupId?confereeGroupId=${groupId}`, // 子级分组添加参会人
   addWholeatten: groupId => `${gzKey}/release/addByConfereeGroupIdAndUserIds?confereeGroupId=${groupId}`, // 添加人员至全体参会人分组中
-  meetingInviteDeleteByIds: `${gzKey}/release/meetingInviteDeleteByIds`, // 删除参会人
+  // meetingInviteDeleteByIds: `${gzKey}/release/meetingInviteDeleteByIds`, // 删除参会人
+  deleteByIds: `${gzKey}/release/deleteByIds`, // 移除参会人
 
   selectConditionGroup: type => `${gzKey}/release/selectConditionGroup?type=${type}`, // 查询条件组 adduser：参会人  persons: 人员  
   updateConditionGroup: `${gzKey}/release/updateConditionGroup`, // 修改条件组 
@@ -148,13 +165,16 @@ export default {
   saveCatering: `${gzKey}/release/saveCatering`, // 第一次添加餐饮数据 
   updateCatering: `${gzKey}/release/updateCatering`, // 更新餐饮数据
 
-  findSelectSmsAndAll: meetId => `${gzKey}/release/findSelectSmsAndAll?meetingId=${meetId}`, // 根据会议id查询 短信
-  saveSmsByMeetingId: meetId => `${gzKey}/release/saveSmsByMeetingId?meetingId=${meetId}`, // 添加短信
+  findSelectSmsAndAll: (meetId, groupId) => `${gzKey}/release/findSelectSmsAndAll?meetingId=${meetId}&confereeGroupId=${groupId}`, // 根据会议id查询 短信 - 添加短信
+  findAddSmsByGroupId: groupId => `${gzKey}/release/findAddSmsByGroupId?confereeGroupId=${groupId}`, // 根据参会分组id 查询已添加短信
+  delectSmsByGroupId: `${gzKey}/release/delectSmsByGroupId`, // 移除短信
+  saveSmsByMeetingId: (meetId, groupId) => `${gzKey}/release/saveSmsByMeetingId?meetingId=${meetId}&confereeGroupId=${groupId}`, // 添加短信
+  sendMeetingSmsById: smsId => `${gzKey}/release/sendMeetingSmsById?smsId=${smsId}`, // 个性化发送短信
 
   accordMeetRoom: (meetId, floorId, pageNum, pageSize) => `${gzKey}/release/findMeetingNotAddHotelRoomsByMeetingId?meetingId=${meetId}&floorId=${floorId}&pageNum=${pageNum}&pageSize=${pageSize}`, // 根据会议id查询房间  
   findfloorAndRoomByMeetingId: meetId => `${gzKey}/release/findfloorAndRoomByMeetingId?meetingId=${meetId}`, // 查询已添加的酒店
   addListByMeetingId: meetId => `${gzKey}/release/addListByMeetingId?meetingId=${meetId}`, // 添加客房
-  selectMeetingRoomByFloorId: (floorId, pageNum, pageSize) => `${gzKey}/release/selectMeetingRoomByFloorId?floorId=${floorId}&pageNum=${pageNum}&pageSize=${pageSize}`, // 查询客房
+  selectMeetingRoomByFloorId: (meetId, floorId, pageNum, pageSize) => `${gzKey}/release/selectMeetingRoomByFloorId?meetingId=${meetId}&floorId=${floorId}&pageNum=${pageNum}&pageSize=${pageSize}`, // 查询客房
   onekeyCheckin: meetId => `${gzKey}/release/automaticCheckInByMeetingId?meetingId=${meetId}`, // 一键安排入住
   onekeyRemove: meetId => `${gzKey}/release/deleteByMeetingId?meetingId=${meetId}`, // 一键清空人员
   removeRoom: `${gzKey}/release/deleteHotelRoomByIds`, // 移除客房
@@ -206,7 +226,7 @@ export default {
   meetSign: (meetId, code) => `${gzKey}/release/meetingSign?meetingId=${meetId}&code=${code}`, // 会议签到
 
   downloadBbByMeetingId: (meetId, outputWay, particulars, beLate, missing, leave, phoneNumber, groupId) => `${gzKey}/release/downloadBbByMeetingId?meetingId=${meetId}&outputWay=${outputWay}&groupId=${groupId}&particulars=${particulars}&phoneNumber=${phoneNumber}&beLate=${beLate}&missing=${missing}&leave=${leave}`, // 分组 下载报表
-  downloadBbByDeparmentId: (meetId, particulars, beLate, missing, leave, phoneNumber) => `${gzKey}/release/downloadBbByDeparmentId?meetingId=${meetId}&particulars=${particulars}&beLate=${beLate}&missing=${missing}&leave=${leave}&phoneNumber=${phoneNumber}`, // 部门 - 导出报表
+  downloadBbByDeparmentId: (meetId, particulars, beLate, missing, leave, phoneNumber) => `${gzKey}/release/downloadBbByDeparmentId?meetingId=${meetId}&particulars=${particulars}&beLate=${beLate}&missing=${missing}&leave=${leave}&phoneNumber=${phoneNumber}`, // 部门 - 下载报表
 
   singleStatistical: meetId => `${gzKey}/release/findMeetingStatisticalByMeeting?meetingId=${meetId}`, // 单个查询报表数据
   findMeetingStatisticalDataByMeeting: (meetId, pageNum, pageSize) => `${gzKey}/release/findMeetingStatisticalDataByMeetingId?meetingId=${meetId}&page=${pageNum}&size=${pageSize}`, // 查询全部签到人员数据

@@ -283,7 +283,7 @@ export default {
         invitationWay: '0',
         leaveApprovalMethod: 1, // 请假审批方式
         strangersJoinIn: 0, 
-        IsAttendanceNumber: 1,
+        IsAttendanceNumber: 1, 
         doesTheNumberLeave: '',
         sponsorArrJsonStr: [
           { type: "organizer", value: ""}
@@ -339,20 +339,25 @@ export default {
       headers: {},
 
       // 折叠板
-      collapse: '',
+      collapse: '会议配置',
 
       // 过期开关
       meetIsEnd: false,
       // 登录信息
       loginInfo: {},
       // del
-      select: ''
+      select: '',
     }
   },
   computed: {
     ...mapState([
       'meetingData'
     ])
+  },
+  watch: {
+    'addForm.id': function(val) {
+      if(val) this.meetIsEnd = true
+    }
   },
   methods: {
     // vuex --- 
@@ -442,12 +447,19 @@ export default {
     },
     // 添加会议
     save(){
+      
       this.$refs['addForm'].validate((valid) => {
         if(valid){
+          // 没有timeNow 手动加上
+          if(!this.addForm.timeNow) this.addForm.timeNow = new Date().getTime()
           let form = JSON.parse(JSON.stringify(this.addForm))
           this.handle(form)
         }
       })
+    },
+    // 修改会议
+    edit() {
+      this.meetIsEnd = false
     },
     handle(param){
       param.leaveApprovalMethod = Number(param.leaveApprovalMethod)
@@ -484,9 +496,10 @@ export default {
       this.$http.post(this.API.saveMeeting, param)
         .then((res) => {
           if(res.code == '000') {
-            this.$message.success('添加成功!')
+            this.$message.success('成功!')
 
             this.addForm.id = res.data
+            this.meetIsEnd = true
             this.setMeetingData(this.addForm)
             // 初始化参会人分组
             this.initGroup(res.data)

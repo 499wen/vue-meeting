@@ -60,7 +60,7 @@ export default {
           dataPre: [],
           eleList: [],
           model: {
-            height: 720,
+            height: 666,
             width: 375,
             img: '',
             pattern: 'multiPage'
@@ -86,7 +86,7 @@ export default {
       popupVisible: false, //控制选择背景图弹出层的隐藏与显示
       popupModel: false, // 控制模板弹出层的隐藏与显示
       isLongPage: true, //是否为长页模式
-      longPageHeight: 720, //长页的长度，单位px
+      longPageHeight: 666, //长页的长度，单位px
       longPageHeightArray: [],
       tempScreenY: 0, //鼠标的Y轴坐标
       isElongate: false, //是否处于拉伸长页状态
@@ -452,6 +452,13 @@ export default {
         backgroundColor: color
       })
     },
+    // 按钮背景颜色
+    textbtnBgcolor(color) {
+      this.defaultStyle['textbtnBgcolor'] = color
+      $(this.tNode).find('.btn').css({
+        color: color
+      })
+    },
     // 等宽
     dengWidth(){
       // 新属性
@@ -597,7 +604,7 @@ export default {
       var that = this
       this.$http.get(this.API.selectCompanyByBackGroup).then(res => {
         console.log(res)
-        if(res.code == '000' && res.data.length){
+        if(res.code == '000' && res.data){
           that.bgImage = res.data
           console.log( that.bgImage)
           // that.dataCollection[that.curPage - 1].model.img = res.data[0].imgId
@@ -617,18 +624,22 @@ export default {
       qrcodeUrl = 'https://my-vue-starter-1305256445.cos-website.ap-guangzhou.myqcloud.com/qrcode?data=' + this.meetingId + '&cId=' + this.loginInfo.companyId
       console.log(qrcodeUrl)
 
+      // 获取 body font-size
+      let fontSize = +document.documentElement.style.fontSize.replace('px', ''),
+          width = 130 / 16 * fontSize, height = 130 / 16 * fontSize
+      console.log(fontSize)
       // 生成二维码
       new QRCode(qrcode, {
         text: qrcodeUrl,
-        width: 130,
-        height: 130,
+        width,
+        height,
         colorDark: '#000000',
         colorLight: '#ffffff'
       })
 
       var ficDom = document.createElement('img')
       ficDom.src = require('@/assets/images/logo.png')
-      ficDom.style = `width: 30px; height: 30px; position: absolute; top: 50px; left: 50px; `
+      ficDom.style = `width: 30px; height: 30px; position: absolute; top: ${(width - 30) / 2}px; left: ${(width - 30) / 2}px; `
       qrcode.appendChild(ficDom)
       this.codeVisible = !this.codeVisible
 
@@ -938,7 +949,7 @@ export default {
           // 记录上一次的值 
           this_.dataCollection[this_.curPage - 1].model.height += 2
         } else if(e.screenY < defaultY){
-          if(this_.dataCollection[this_.curPage - 1].model.height > 720){
+          if(this_.dataCollection[this_.curPage - 1].model.height > 666){
             this_.dataCollection[this_.curPage - 1].model.height -= 2
           }
         }
@@ -1276,12 +1287,21 @@ export default {
 
       this.fileUpload(files, 'Invitation', res => {
         if(res.code == '000') {
-          this.defaultStyle.url = this.API.echoImage(res.data.saveFileName, 'Invitation')
-          // $(this.tNode).find('.invite-text-box-text').css('background-image','url("'+res.src+'")')
-          $(this.tNode).css("background-image", 'url("' + this.defaultStyle.url + '")');
-          $(this.tNode)
-            .find(".tip")
-            .css("display", "none");
+          let url = this.API.echoImage(res.data.saveFileName, 'Invitation')
+          let s = setInterval(() => {
+            if(this.CheckImgExists(url)){
+              clearInterval(s)
+              this.defaultStyle.url = this.API.echoImage(res.data.saveFileName, 'Invitation')
+              // $(this.tNode).find('.invite-text-box-text').css('background-image','url("'+res.src+'")')
+              $(this.tNode).css("background-image", 'url("' + this.defaultStyle.url + '")');
+              $(this.tNode)
+                .find(".tip")
+                .css("display", "none");
+            }
+          }, 1000)
+
+          return 
+          
         } else {
           this.$message.error(res.msg)
         }
@@ -1290,6 +1310,20 @@ export default {
       })
       
     }, //uploadImage
+
+    // 图片是否有效
+    CheckImgExists(imgurl) {
+      var ImgObj = new Image(); //判断图片是否存在  
+      ImgObj.src = imgurl;  
+      //存在图片
+      if (ImgObj.fileSize > 0 || (ImgObj.width > 0 && ImgObj.height > 0)) {  
+          console.log('图片地址有效')
+          return true;
+      } else {
+          console.log('图片地址无效')  
+          return false;
+      }   
+    },
     uploadVedio: function(res) {
       console.log(res);
       if (res.statusCode == "000") {

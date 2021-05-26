@@ -1,11 +1,13 @@
 import addAtte from './addAtte/addAtte.vue' // 添加参会人
 import operconditionGroup from './operconditionGroup/operconditionGroup.vue' // 条件组
+import manualImport from './manualImport/manualImport.vue' // 手动录入
 import { mapState } from 'vuex'
 import { toTree, exportToExcel, Load } from '@/plugins/plugins.js'
 
 export default {
   components: {
     addAtte,
+    manualImport,
     operconditionGroup
   },
   data() {
@@ -31,7 +33,8 @@ export default {
         {props: 'phone', label: '手机号', width: ''},
         {props: 'departmentName', label: '部门', width: ''},
         {props: 'characterId', label: '角色', width: ''},
-        {props: 'confereeGroupName', label: '所在分组', width: ''},
+        {props: 'type', label: '人员类型', width: ''},
+        // {props: 'confereeGroupName', label: '所在分组', width: ''},
         {props: 'status', label: '状态', width: '100'},
       ],
 
@@ -53,6 +56,7 @@ export default {
       addAtte_child: false,
       condition_child: false,
       editGroup_child: false,
+      manualImport_child: false,
 
       // 操作条件组 new: 添加， update: 修改
       type: 'new'
@@ -66,15 +70,21 @@ export default {
   methods: {
     // 导出参会人
     exportAtten(){
-      let loading = new Load()
+      let loading = new Load(),
+      obj = {
+        contanUserIdArr: [],
+        ifContanUserIdArr: false,
+        queryConditionArr: this.queryConditionArr
+      }
       let arr = ['未确认', '已确认', '已报到', '已签到', '不参加'], 
         arr2 = ['', '请假', '请假', '请假'],
         tHeader = ["序号", "姓名", "手机号", "部门", "角色", "所在分组", "状态"],
         filterVal = ["id", "userName", "phone", "departmentName", "characterId", "confereeGroupName", "status"]
-      this.$http.get(this.API.findByMeetingIdAndPage(this.curAttenGroup.id, 1, 9999999))
+      this.$http.post(this.API.findByMeetingIdAndPage(this.meetingData.id, this.curAttenGroup.id, 1, 9999999, this.searchKey), obj)
         .then(res => {
           if(res.code == '000' && res.data){
             res.data.filter((item, idx) => {
+              item.type = item.externalCode == '0' ? '内部人员' : '外部人员'
               item.confereeGroupName = this.curAttenGroup.confereeGroupName
               item.statusCode = item.statusCode == '' ? 0 : item.statusCode
               item.status = !item.leaveState ? arr[item.statusCode] : arr2[item.leaveState]
@@ -82,11 +92,53 @@ export default {
             })
             
             exportToExcel(res.data, this.curAttenGroup.confereeGroupName, tHeader, filterVal, () => {
-              console.log('回调')
               loading.close()
             })
           } else {
 
+          }
+        })
+    },
+
+    // 移除全部参会人
+    removeAll() {
+      this.$confirm('是否移除全部人员?', '提示', {  
+        closeOnPressEscape: false,
+        closeOnClickModal: false,
+        cancelButtonClass: 'btn_custom_cancel',
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.doRemoveAll()
+      }).catch(() => {})
+    },
+    doRemoveAll() {
+      let obj = {
+        contanUserIdArr: [],
+        ifContanUserIdArr: false,
+        queryConditionArr: this.queryConditionArr
+      }
+      this.$http.post(this.API.findByMeetingIdAndPage(this.meetingData.id, this.curAttenGroup.id, this.pageNum, 999999, this.searchKey), obj)
+        .then(res => {
+          if(res.code == '000' && res.data){
+            let data = [], api
+            res.data.filter(item => data.push(item.id))
+            if(this.meetingData.id == this.curAttenGroup.id) {
+              api = this.API.deleteByIds
+            } else {
+              api = this.API.updateConfereeGroupId(this.meetingData.id)
+            }
+            this.$http.post(api, data)
+              .then(res => {
+                console.log(res)
+                if(res.code == '000') {
+                  this.$message.success('移除成功!')
+                  this.getAttenPerson()
+                } else {
+                  this.$message.error(res.msg)
+                }
+              })
           }
         })
     },
@@ -105,13 +157,13 @@ export default {
     },
     // tree - 树结构
     renderContent(h, { node, data, store }) {
-      let html;
+      let html, meetingData = this.meetingData;
       if(node.level == 1){
         html = (
           <span class="custom-tree-node">
             <span>{node.label}</span>
             <span>
-              <el-button size="mini" type="text" on-click={ (e) => this.append(data, e) } icon="el-icon-circle-plus-outline"></el-button>
+              <el-button size="mini" type="text" on-click={ (e) => this.append(data, e) } disabled={meetingData.timeNow > meetingData.endDate} icon="el-icon-circle-plus-outline"></el-button>
             </span>
           </span>)
       } else {
@@ -119,8 +171,8 @@ export default {
           <span class="custom-tree-node">
             <span>{node.label}</span>
             <span>
-              <el-button size="mini" type="text" on-click={ (e) => this.remove(data, e) } icon="el-icon-delete"></el-button>
-              <el-button size="mini" type="text" on-click={ (e) => this.edit(node, data, e) } icon="el-icon-edit"></el-button>
+              <el-button size="mini" type="text" on-click={ (e) => this.remove(data, e) } disabled={meetingData.timeNow > meetingData.endDate} icon="el-icon-delete"></el-button>
+              <el-button size="mini" type="text" on-click={ (e) => this.edit(node, data, e) } disabled={meetingData.timeNow > meetingData.endDate} icon="el-icon-edit"></el-button>
             </span>
           </span>)
       }
@@ -131,8 +183,43 @@ export default {
       e.preventDefault();
       e.stopPropagation();
 
-      this.type = 'new'
-      this.condition_child = true
+      console.log(this.data[0])
+      let arr = []
+      this.data[0].children.filter(item => arr.push(item.confereeGroupName))
+
+      this.$prompt('请输入分组名称', '提示', {
+        closeOnPressEscape: false,
+        closeOnClickModal: false,
+        cancelButtonClass: 'btn_custom_cancel',
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputValidator: function(val) {
+          let cte = val ? val.trim() : ''
+          if(!cte) {
+            return '分组名称不能为空'
+          } else if(arr.includes(cte)) {
+            return '名称已存在'
+          }
+        }
+      }).then(({ value }) => {
+        let obj = {
+          meetingId: this.meetingData.id,
+          parentId: this.meetingData.id,
+          confereeGroupName: value
+        }
+        this.$http.post(this.API.addByParentId, obj)
+          .then(res => {
+            if(res.code == '000'){
+              this.$message.success('添加成功！')
+              this.getAttenGroup()
+            } else {
+              this.$message.error(res.msg)
+            }
+          })
+      }).catch(err => {})
+
+      // this.type = 'new'
+      // this.condition_child = true
     },
     // tree - 删除
     remove(data, e){
@@ -165,15 +252,43 @@ export default {
     edit(node, data, e){
       e.preventDefault();
       e.stopPropagation();
-      this.type = 'update'
-      this.editGroup_child = true
-      let obj = {...data}
-      this.curEditGroup = obj
-      
-      this.$nextTick(() => {
-        this.$refs.conditionGroup.handleSelectionChange(obj)
-        this.$refs.conditionGroup.depart = obj
-      })
+
+      let arr = []
+      this.data[0].children.filter(item => arr.push(item.confereeGroupName))
+
+      this.$prompt('请输入分组名称', '提示', {
+        closeOnPressEscape: false,
+        closeOnClickModal: false,
+        cancelButtonClass: 'btn_custom_cancel',
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputValidator: function(val) {
+          let cte = val ? val.trim() : ''
+          if(!cte) {
+            return '分组名称不能为空'
+          } else if(arr.includes(cte)) {
+            return '名称已存在'
+          }
+        }
+      }).then(({ value }) => {
+        // let obj = {
+        //   meetingId: this.meetingData.id,
+        //   id: data.id,
+        //   confereeGroupName: value
+        // }
+
+        data.confereeGroupName = value
+        
+        this.$http.post(this.API.updateConfereeGroup, data)
+          .then(res => {
+            if(res.code == '000'){
+              this.$message.success('更新成功！')
+              this.getAttenGroup()
+            } else {
+              this.$message.error(res.msg)
+            }
+          })
+      }).catch(err => {})
     },
 
     // 分页方法
@@ -187,6 +302,30 @@ export default {
       this.pageNum = val
 
       this.getAttenPerson()
+    },
+    // 手动录入
+    manualImport() {
+      this.manualImport_child = true
+    },
+    // 新增人员
+    newAddPerson(){
+      let child = this.$refs.manualImport
+      child.form.confereeGroupId = this.meetingData.id
+      child.$refs['form'].validate((valid) => {
+        if (valid) {
+          this.$http.post(this.API.addUserToMeetingInvite(this.meetingData.id), child.form)
+            .then(res => {
+              console.log(res)
+              if(res.code == '000'){
+                this.$message.success('添加成功!')
+                this.manualImport_child = false
+                this.getAttenPerson()
+              } else {
+                this.$message.error(res.msg)
+              }
+            })
+        }
+      })
     },
 
     // 移除参会人
@@ -204,9 +343,15 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        let data = []
+        let data = [], api, tableData = this.tableData
+
         this.delData.filter(item => data.push(item.id))
-        this.$http.post(this.API.meetingInviteDeleteByIds, data)
+        if(this.meetingData.id == this.curAttenGroup.id) {
+          api = this.API.deleteByIds
+        } else {
+          api = this.API.updateConfereeGroupId(this.meetingData.id)
+        }
+        this.$http.post(api, data)
           .then(res => {
             console.log(res)
             if(res.code == '000') {
@@ -216,7 +361,10 @@ export default {
               this.$message.error(res.msg)
             }
           })
-      }).catch(() => {})
+        
+      }).catch((err) => {
+        console.log(err)
+      })
       
     },
     batchDel(val){
@@ -235,7 +383,7 @@ export default {
 
     // 子组件 - 按钮
     addTo(){
-      let selectData = this.$refs.addAtte.selectData, ids = []
+      let selectData = this.$refs.addAtte.selectData, ids = [], api
       if(selectData.length == 0){
         this.$message.error('请勾选人员!')
         return
@@ -243,8 +391,13 @@ export default {
 
       // 处理数据
       selectData.filter(item => ids.push(item.id))
+      if(this.curAttenGroup.id == this.meetingData.id){
+        api = this.API.addWholeatten(this.curAttenGroup.id)
+      } else {
+        api = this.API.updateConfereeGroupId(this.curAttenGroup.id)
+      }
 
-      this.$http.post(this.API.addWholeatten(this.curAttenGroup.id), ids)
+      this.$http.post(api, ids)
         .then(res => {
           console.log(res)
           if(res.code == '000'){
@@ -271,23 +424,6 @@ export default {
         this.$message("请添加查询条件！")
         return
       }
-
-      // if (!conditionGroup.bool && conditionGroup.editBool) {
-      //   var data = {
-      //     id: param.id,
-      //     groupName: param.queryBuilderName,
-      //     condition: JSON.stringify(param.queryConditionList),
-      //     types: 'adduser'
-      //   }
-      // } else {
-      //   // 处理数据 condition
-      //   param.queryConditionList.map((item, idx) => param.queryConditionList[idx].sequenceNumber = '' + idx)
-      //   var data = {
-      //     groupName: param.queryBuilderName,
-      //     condition: JSON.stringify(param.queryConditionList),
-      //     types: 'adduser'
-      //   }
-      // }
 
       if (this.type == 'new') {
         let depart = {
@@ -333,6 +469,7 @@ export default {
       this.addAtte_child = false
       this.condition_child = false
       this.editGroup_child = false
+      this.manualImport_child = false
     },
 
     // 获取参会人分组
@@ -342,6 +479,7 @@ export default {
           if(res.code == '000' && res.data) {
             // 手动补充属性 children
             res.data.filter(item => item.children = [])
+            console.log(res.data)
             this.data = toTree(res.data)
 
             setTimeout(() => {
@@ -354,11 +492,17 @@ export default {
     // 查询参会分组下的参会人员
     getAttenPerson(){
       let arr = ['未确认', '已确认', '已报到', '已签到', '不参加'], 
-        arr2 = ['', '请假', '请假', '请假']
-      this.$http.get(this.API.findByMeetingIdAndPage(this.curAttenGroup.id, this.pageNum, this.pageSize))
+        arr2 = ['', '请假', '请假', '请假'],
+        obj = {
+          contanUserIdArr: [],
+          ifContanUserIdArr: false,
+          queryConditionArr: this.queryConditionArr
+        }
+      this.$http.post(this.API.findByMeetingIdAndPage(this.meetingData.id, this.curAttenGroup.id, this.pageNum, this.pageSize, this.searchKey), obj)
         .then(res => {
           if(res.code == '000' && res.data){
             res.data.filter((item, idx) => {
+              item.type = item.externalCode == '0' ? '内部人员' : '外部人员'
               item.confereeGroupName = this.curAttenGroup.confereeGroupName
               item.statusCode = item.statusCode == '' ? 0 : item.statusCode
               item.status = !item.leaveState ? arr[item.statusCode] : arr2[item.leaveState]

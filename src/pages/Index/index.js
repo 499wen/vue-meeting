@@ -56,7 +56,7 @@ export default {
     },
     // 公司信息
     company_info() {
-      return 
+      // return 
       this.companyInfo_child = true
     },
     // 展开导航
@@ -125,12 +125,14 @@ export default {
               item.menuUrl == '#' ? item.menuUrl += idx : ''
               return !arr.includes(item.id) && item
             })
-            this.router = this.toTree(data)
+            this.router = this.toTree(data).sort((cur, next) => cur.menuOrder - next.menuOrder)
 
             this.defaultActive = this.$route.meta
             // this.defaultActive = '/home'
-            console.log(this.defaultActive, this.router)
+            // console.log(this.defaultActive, this.router)
           }
+        }).catch(err=> {
+          console.log(err)
         })
     },
     toTree(data) {
@@ -157,20 +159,24 @@ export default {
     },
     // 获取公司信息
     getCustomer() {
+      this.$http.get(this.API.getCustomer)
+      .then(res => {
+        if(res.code == '000'){
+          this.loginInfo = res.data
+          if(!res.data.loginName) {
+            this.init_child = true
+          }
+          localStorage.setItem('loginInfo', JSON.stringify(res.data))
+        }
+      })
+    },
+    // 获取公司信息
+    init() {
       // 获取权限列表
       this.getMeum()
 
       // 获取公司信息
-      this.$http.get(this.API.getCustomer)
-        .then(res => {
-          if(res.code == '000'){
-            this.loginInfo = res.data
-            if(!res.data.loginName) {
-              this.init_child = true
-            }
-            localStorage.setItem('loginInfo', JSON.stringify(res.data))
-          }
-        })
+      this.getCustomer()
     }
   },
   created() {
@@ -197,17 +203,20 @@ export default {
     routes.filter(item => item.name == '框架' && this.router.push(...item.children))
 
     // 获取公司信息
-    this.getCustomer()
+    this.init()
   },
   mounted() {
     // 监听用户进入页面
     document.addEventListener('visibilitychange', (e) => {
-      let token = localStorage.getItem('token')
-      console.log(document.hidden)
+      // 登录，注册页面不执行
+      let token = localStorage.getItem('token'),
+      path = this.$route.path
+      if(path == '/login' || path == '/regist') return 
+
       if(!token) this.$router.push('/login')
       else if(!document.hidden) {
-          // 获取公司信息
-          this.getCustomer()
+        // 获取公司信息
+        this.init()
       }
     })
   }

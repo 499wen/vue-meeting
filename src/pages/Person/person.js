@@ -6,6 +6,10 @@ import NoPhotos from './noPhotos/noPhotos.vue' // 人员无照片匹配
 import conditionGroup from './conditionGroup/conditionGroup.vue' // 条件组
 import { dataScrollLoad, exportToExcel } from '@/plugins/plugins.js'
 
+import COS from 'cos-js-sdk-v5'
+import $ from 'jquery'
+// var COS = require('cos-js-sdk-v5');
+
 export default {
   components: {
     AddPerson,
@@ -27,8 +31,8 @@ export default {
       height: null, 
       tableData: [],
       tableCate: [
-        { prop: 'attribute2', label: '编号', width: '110' },
-        { prop: 'userName', label: '姓名', width: '110' },
+        // { prop: 'attribute2', label: '编号', width: '110' },
+        // { prop: 'userName', label: '姓名', width: '110' },
         { prop: 'sex', label: '性别', width: '70' },
         { prop: 'phone', label: '手机号码', width: '120' },
         { prop: 'email', label: '电子邮箱', width: '180' },
@@ -56,6 +60,10 @@ export default {
       // 条件组数据
       condiData: [],
       queryConditionArr: [],
+      tjgroup: '条件组查询', 
+
+      // 标记 -- 重名数据
+      isdouble: false,
 
       // 各子组件开关
       addPeroson_child: false,
@@ -67,7 +75,11 @@ export default {
 
       // 子组件参数
       editPersonId: '',
-      showNum: 0
+      showNum: 0,
+
+      // 进度值
+      percentage: 0,
+      mask: false
     }
   },
   methods: {
@@ -79,14 +91,18 @@ export default {
     clickCondi(idx){
       let item = this.condiData[idx]
       this.queryConditionArr = item.condition
+      this.tjgroup = item.groupName
       this.getProsonData()
     },
     // tree - 点击触发
     treeClick(data, node){
       // console.log(node, data)
+      this.tjgroup = '条件组查询'
+
       this.pageNum = 1
       this.photoFlag = 2
       this.searchKey = ''
+      this.queryConditionArr = []
       if(node.level == 1){
         this.deparmentId = this.loginInfo.companyId
         this.externalCode = ''
@@ -276,8 +292,16 @@ export default {
       this.getProsonData()
     },
     // 自定匹配
-    auto() {
-
+    autoPhoto() {
+      this.$http.post(this.API.photoMatching)
+        .then(res => {
+          if(res.code == '000'){
+            this.$message.success('匹配完成！')
+            this.getProsonData()
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
     },
     // 添加人员 - 下拉
     addPersonL(command){
@@ -285,11 +309,7 @@ export default {
         this.addPeroson_child = true
       } else if(command == 'b') {
         this.importPeroson_child = true
-      }
-    },
-    // 删除人员 - 下拉
-    handlePhoto(command){
-      if(command == 'a'){
+      } else if(command == 'c'){
         // 处理数据 取出id
         let id = []
         this.batchdata.filter(item => id.push(item.id))
@@ -317,7 +337,7 @@ export default {
               }
             })
         }).catch(() => {})
-      } else if(command == 'b') {
+      } else if(command == 'd') {
         this.$confirm('是否删除所有人员数据?', '提示', {  
           closeOnPressEscape: false,
           closeOnClickModal: false,
@@ -337,70 +357,154 @@ export default {
               }
             })
         })
+      } else if(command == 'e'){
+        this.photoFlag = 2
+        this.queryDuplicate()
+      } else if(command == 'f') {
+        this.exportPerson()
       }
     },
+
     // 相片管理 - 下拉
     handleCommand(command){
       if(command == 'a'){
         this.updatePhoto_child = true
+      } else if(command == 'b'){
+        this.autoPhoto()
       } else if(command == 'c'){
         this.noPhotos_child = true
-      } else if(command == 'f') {
-        this.exportPerson()
-      } else if(command == 'b') {
+      } else if(command == 'e') {
         this.iptCpdPackage()
       }
     },
     // 导出人员
     exportPerson(){
-      let tHeader = [], filterVal = []
+      let tHeader = [], filterVal = [], tableData,
+      obj = {
+        contanUserIdArr: [],
+        ifContanUserIdArr: false,
+        queryConditionArr: this.queryConditionArr
+      }
       this.tableCate.filter(item => {
         tHeader.push(item.label)
         filterVal.push(item.prop)
       })
-      exportToExcel(this.tableData, '人员数据', tHeader, filterVal, res => {
-
-      })
+      
+      // 重名数据
+      if(this.isdouble) {
+        this.$http.get(this.API.findDuplicateName(1, 99999, this.externalCode, this.deparmentId))
+        .then(res => {
+          // console.log(res)
+          if (res.code == "000") {
+            tableData = res.data
+          } else {
+            tableData = [];
+          }
+          exportToExcel(tableData, '导出人员', tHeader, filterVal, res => { })
+        })
+      } else {
+        // 其它数据
+        this.$http.post(this.API.conditionQuerys(this.deparmentId, 1, 99999, this.externalCode, this.searchKey, this.photoFlag), obj)
+        .then(res => {
+          if (res.code == "000") {
+            tableData = res.data
+          } else {
+            tableData = [];
+          }
+          exportToExcel(tableData, '导出人员', tHeader, filterVal, res => { })
+        })
+      }
+      
     },
     // 导入相片压缩包
     iptCpdPackage(){
+      // // 解压给出缓冲时间
+      // let load = this.$loading({
+      //   lock: true,
+      //   text: '正在解压。。。',
+      //   customClass: 'loading-color',
+      //   spinner: 'el-icon-loading',
+      //   background: 'rgba(0, 0, 0, 0)',
+      //   target: document.querySelector('body')
+      // })
+      // return 
       let fileDom = document.createElement('input')
       fileDom.type = 'file'
       fileDom.onchange = () => {
-        let file = fileDom.files[0]
-        console.log(file)
+        let files = fileDom.files[0]
+        console.log(files)
+        
+        let name = files.name,
+        size = files.size,
+        suffix = name.substr(name.lastIndexOf('.')),
+        suffixArr = ['.zip', '.tar', '.rar']
+
+        if(!suffixArr.includes(suffix)){
+          this.$message.error('只支持 zip, tar, rar 文件类型!')
+          return
+        }
+
+        if(size > 1024 * 1024 * 300) {
+          this.$message.error('文件太大，请上传不超过300M！')
+          return 
+        }
+
+        this.mask = true
+        
+        //实例化COS对象
+        var cos = new COS({
+          SecretId: 'AKIDFqEMDofJBviSxLFObXNUN0aJp4nHivqX ', //密钥id
+          SecretKey: 'tY3KWR6UdgU4Nq4wlOWbS5qNRFnHYcTT'//密钥的key
+        });
+      
+        cos.putObject({
+          Bucket: 'compressed-package-1305256445', /* 存储同名称，必须字段 */
+          Region: 'ap-nanjing',     /* 存储桶所在地域，必须字段 */
+          Key: name,      /* 文件名称，必须字段 */
+          Body: files, // 上传文件对象
+          StorageClass: 'STANDARD',
+          onProgress: (progressData) => {
+            console.log(JSON.stringify(progressData));
+            this.percentage = progressData.percent * 100
+          }
+        }, (err, data) => {
+          let res = err || data
+
+          // if(this.percentage >= 100) this.mask = false
+          if(res.statusCode == 200) {
+            this.$http.post(this.API.uploadZip(name))
+              .then(resu => {
+                console.log(resu)
+                if(resu.code == '000'){
+                  this.mask = false
+                  this.percentage = 0
+                  this.$message.success('上传成功！')
+                }
+
+              }).catch(error => {
+                this.mask = false
+              })
+          }
+          // console.log(err || data);
+        });
       }
 
       fileDom.click()
     },
-    // 筛选 - 下拉
-    screenCommand(command) {
-      this.pageNum = 1
-      if(command == 'a'){
-        this.photoFlag = 2
-        this.queryDuplicate()
-      } else if(command == 'b'){
-        this.photoFlag = 1
-        this.getProsonData()
-      }
-    },
     // 重名
     queryDuplicate(){
+      this.isdouble = true
       this.$http.get(this.API.findDuplicateName(this.pageNum, this.pageSize, this.externalCode, this.deparmentId))
         .then(res => {
           // console.log(res)
           if (res.code == "000") {
-            // 二次分页处理
             this.total = res.count
-            let table_scroll = document.querySelector('.person .el-table__body-wrapper')
-            dataScrollLoad(table_scroll, res.data, 1, 30, (data) => {
-                this.tableData = data
-            })
+            this.tableData = res.data
           } else {
             this.total = 0;
             this.tableData = [];
           }
-        }).catch(res => {
+        }).catch(err => {
           this.total = 0;
           this.tableData = [];
         })
@@ -445,9 +549,14 @@ export default {
           console.log(res)
           if(res.code == '000'){
             this.$message.success('关联成功！')
-            this.noPhotos_child = false
-            this.pageNum = 1
-            this.getProsonData()
+            // this.noPhotos_child = false
+            // 获取人员
+            child.pageNum = 1
+            child.getNoPerosn()
+
+            // 获取图片
+            child.ipageNum = 1
+            child.getNoPhoto()
           } else {
             this.$message.success(res.msg)
           }
@@ -472,6 +581,8 @@ export default {
                 this.$message.success('添加成功！')
                 this.addPeroson_child = false
                 this.getProsonData()
+              } else {
+                this.$message.error(res.msg)
               }
             })
         } else { 
@@ -491,6 +602,8 @@ export default {
                 this.$message.success('修改成功！')
                 this.editPeroson_child = false
                 this.getProsonData()
+              } else {
+                this.$message.error(res.msg)
               }
             })
         } else { 
@@ -505,6 +618,10 @@ export default {
       this.noPhotos_child = false
       this.updatePhoto_child = false
       this.importPeroson_child = false
+
+      this.showNum = 0
+      this.pageNum = 1
+      this.getProsonData()
     },
     close() {
       this.condi_child = false
@@ -542,6 +659,10 @@ export default {
           
           setTimeout(() => {
             this.$refs['person-tree'].setCurrentKey(this.deparmentId)
+            document.querySelector('.el-tree-node__content').style = `
+              background-color: #e67c7c;
+              color: #fff
+            `
           }, 300)
         }
       })
@@ -554,17 +675,14 @@ export default {
         ifContanUserIdArr: false,
         queryConditionArr: this.queryConditionArr
       }
+      // 不是获取重名数据 -- 标记
+      this.isdouble = false
       this.$http.post(this.API.conditionQuerys(this.deparmentId, this.pageNum, this.pageSize, this.externalCode, this.searchKey, this.photoFlag), obj)
         .then(res => {
           console.log(res)
           if (res.code == "000") {
             this.total = res.count
             this.tableData = res.data
-            // 二次分页处理
-            // let table_scroll = document.querySelector('.person .el-table__body-wrapper')
-            // dataScrollLoad(table_scroll, res.data, 1, 30, (data) => {
-            // })
-
           } else {
             this.total = 0;
             this.tableData = [];
@@ -604,5 +722,6 @@ export default {
 
     // 获取条件组
     this.getCondit()
+
   }
 }

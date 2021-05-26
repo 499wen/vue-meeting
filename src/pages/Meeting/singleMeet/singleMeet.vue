@@ -22,10 +22,10 @@
         <basicInfo ref='basicInfo' v-if="tabFunc == '基本信息'"></basicInfo>
         <!-- 参会人管理 -->
         <attendee ref='attendee' v-if="tabFunc == '参会人管理'"></attendee>
-        <!-- 会议室预约 -->
-        <meetRoom ref='meetRoom' v-if="tabFunc == '会议室预约'"></meetRoom>
         <!-- 通知消息管理 -->
         <smscenter ref='smscenter' v-if="tabFunc == '通知消息管理'"></smscenter>
+        <!-- 会议室预约 -->
+        <meetRoom ref='meetRoom' v-if="tabFunc == '会议室预约'"></meetRoom>
         <!-- 餐饮管理 -->
         <restaurant ref='restaurant' v-if="tabFunc == '餐饮管理'"></restaurant>
         <!-- 邀请函 -->

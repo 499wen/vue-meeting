@@ -24,12 +24,8 @@
           </el-table-column>
           <el-table-column align="center" label="操作" class="edit">
             <template slot-scope="scope" v-if="scope.row.ifExamineAndApprove == 0">
-              <el-button size="mini" @click="handlePass(1, scope.row)">通过</el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handlePass(0, scope.row)"
-              >不通过</el-button>
+              <el-button size="mini" @click="handlePass(1, scope.row)" round>通过</el-button>
+              <el-button size="mini" type="danger" @click="handlePass(0, scope.row)" round>不通过</el-button>
             </template>
           </el-table-column>
       </el-table>

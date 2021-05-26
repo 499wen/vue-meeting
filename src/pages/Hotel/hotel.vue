@@ -152,7 +152,7 @@ export default {
 
     // 查询酒店数据
     getHotelData() {
-      this.$http.get(this.API.findHotelByCompanyId(this.pageNum, this.pageSize))
+      this.$http.get(this.API.findHotelByCompanyId(this.pageNum, this.pageSize, this.searchKey))
         .then(res => {
           if(res.code == '000' && res.data){
             this.tableData = res.data

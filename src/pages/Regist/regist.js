@@ -138,6 +138,22 @@ export default {
             })
         }
       })
+    },
+
+    // 获取版本号
+    getCustomType() {
+      this.$http.get(this.API.getCustomType)
+        .then(res => {
+          console.log(res)
+          if(res.code == '000') {
+            this.editList = res.data
+          }
+        })
     }
+  },
+
+  mounted() {
+    // 获取版本号
+    this.getCustomType()
   }
 }

@@ -160,12 +160,10 @@
       </div>
 
       <!-- 添加用餐人员 -->
-      <el-dialog title="添加人员" :visible.sync="addPersonBox" :close-on-click-modal='false' width="80%">
+      <el-dialog title="添加人员" :visible.sync="addPersonBox" :close-on-click-modal='false' width="80%" >
         <div class="top-nav">
-          <!-- <el-radio v-model="radio" label="1">内部人员</el-radio>
-          <el-radio v-model="radio" label="2">外部人员</el-radio> -->
 
-          <el-select @change="personCha" v-model="groupVal" placeholder="所有分组" size="mini" style="margin-right: 20px">
+          <el-select @change="personCha" v-model="groupVal" placeholder="所有分组" size="small" style="margin-right: 10px">
             <el-option
               v-for="item in group"
               :key="item.id"
@@ -173,11 +171,18 @@
               :value="item.id">
             </el-option>
           </el-select>
-          <!-- <div>
-            <el-input placeholder="请输入内容" v-model="input3" class="input-with-select" size="mini">
-              <el-button slot="append" icon="el-icon-search"></el-button>
-            </el-input>
-          </div> -->
+          <!-- 条件组查询 -->
+          <el-dropdown trigger="click" class="spacing" @command='clickCondi' placement='bottom'>
+            <el-button size="small">
+              条件组查询<i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item v-for="(item, idx) in condiData" :key="idx" :command='idx'>{{ item.groupName }}</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <el-input placeholder="请输入手机号，姓名" v-model="searchKey" class="input-with-select" size="small" @keyup.native.enter="getChrPerson">
+            <el-button slot="append" icon="el-icon-search" @click="getChrPerson"></el-button>
+          </el-input>
         </div>
 
         <div class="table-value">
@@ -189,18 +194,29 @@
               @selection-change="handleSelectionChange"
               style="width: 100%">
               <el-table-column :show-overflow-tooltip="true" type="selection" width="55"></el-table-column>
+              <el-table-column :show-overflow-tooltip="true" type="index" width="50" label="序号" align="center" :resizable="false"></el-table-column>
               <el-table-column :show-overflow-tooltip="true" 
                 v-for="(item, idx) in tableCate" :key="idx"
                 :prop="item.description" :label="item.name"
                 width="">
               </el-table-column>
             </el-table>
-            <div class="showPerson">{{ tableData.length }}人</div>
+            <div class="pagin">
+              <el-pagination
+              background
+              @current-change="leftcurChange"
+              :current-page="num"
+              :page-size="size"
+              layout="total, pager"
+              :total="leng">
+              </el-pagination>
+            </div>
+            <!-- <div class="showPerson">{{ tableData.length }}人</div> -->
           </div>
           <div class="table-center">
             <el-button class="c-btn" @click="removePerson()">&gt;</el-button>
             <el-button class="c-btn" @click="addPerson()">&lt;</el-button>
-            <el-button class="c-btn" type="warning" @click="savePerson()" :disabled="meetIsEnd">保存</el-button>
+            <!-- <el-button class="c-btn" type="warning" @click="savePerson()" :disabled="meetIsEnd">保存</el-button> -->
           </div>
           <div class="table-public">
             <el-table
@@ -210,13 +226,24 @@
               border
               style="width: 100%">
               <el-table-column :show-overflow-tooltip="true" type="selection" width="55"></el-table-column>
+              <el-table-column :show-overflow-tooltip="true" type="index" width="50" label="序号" align="center" :resizable="false"></el-table-column>
               <el-table-column :show-overflow-tooltip="true" 
                 v-for="(item, idx) in tableCate" :key="idx"
                 :prop="item.description" :label="item.name"
                 width="">
               </el-table-column>
             </el-table>
-            <div class="showPerson person-right">{{ tableData1.length }}人</div>
+            <div class="pagin">
+              <el-pagination
+              background
+              @current-change="curChange"
+              :current-page="pageNum"
+              :page-size="pageSize"
+              layout="total, pager"
+              :total="total">
+              </el-pagination>
+            </div>
+            <!-- <div class="showPerson person-right">{{ tableData1.length }}人</div> -->
           </div>
         </div>
 

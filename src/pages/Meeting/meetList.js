@@ -31,7 +31,7 @@ export default {
         {name: '会议用餐管理', scription: 'restaurant', icon: '/eatmanage.png', id: '110008', num: 8, isShow: '1', isUse: '1'},
         {name: '会议车辆管理', scription: 'vehicletask', icon: '/carmanagement.png', id: '110009', num: 9, isShow: '1', isUse: '0'},
         {name: '会务组管理', scription: 'meetingaffairs', icon: '/groupManage.png', id: '110010', num: 10, isShow: '1', isUse: '1'},
-        {name: '会议资料管理', scription: ' ', icon: '/ziliaomanagment.png', id: '110006', num: 11, isShow: '1', isUse: '0'},
+        {name: '会议议程管理', scription: ' ', icon: '/ziliaomanagment.png', id: '110006', num: 11, isShow: '1', isUse: '0'},
         {name: '参会统计', scription: 'statistics', icon: '/attendCensus.png', id: '110011', num: 12, isShow: '1', isUse: '1'},
         {name: '会务组报道', scription: 'report', icon: '/attendCensus.png', id: '110013', num: 12, isShow: '1', isUse: '0'},
       ],
@@ -40,7 +40,10 @@ export default {
       tableData: [],
 
       // el-dialog 
-      addMeeting: false
+      addMeeting: false,
+
+      // 当前时间戳
+      curDate: ''
     }
   },
   methods: {
@@ -247,7 +250,7 @@ export default {
 			// 发布会议
 			that.$http.post(that.API.meetingReleaseById(data.id))
 			.then(resu => {
-				if (resu.statusCode == "000") {
+				if (resu.code == "000") {
 					that.$message.success('会议发布成功');
 					that.tab_list(0)
 				} else {
@@ -282,23 +285,21 @@ export default {
           if(res.code == '000' && res.data){
             let curTime = new Date().getTime()
             res.data.filter(item => {
-              // if(item.beginDate < curTime && item.endDate > curTime){
-              //   item.tips = item.releaseCode == 1 ? '进行中' : '未发布'
-              // } else if(item.endDate < curTime){
-              //   item.tips = item.releaseCode == 1 ? '已结束' : '未发布'
-              // } else {
-              //   item.tips = item.releaseCode == 1 ? '已发布' : '未发布'
-              // }
-              switch(code){
-                case '0': item.tips = '进行中'; break;
-                case '2': item.tips = '已结束'; break;
-                case '3': item.tips = '未发布'; break;
-                case '4': item.tips = '已发布'; break;
+              if(item.beginDate < curTime && item.endDate > curTime){
+                item.tips = item.releaseCode == 1 ? '进行中' : '已过期'
+                item.tipsLeft = item.releaseCode == 1 ? '进行中' : '未发布'
+              } else if(item.endDate < curTime){ 
+                item.tips = item.releaseCode == 1 ? '已结束' : '已过期'
+                item.tipsLeft = item.releaseCode == 1 ? '进行中' : '未发布'
+              } else {
+                item.tips = item.releaseCode == 1 ? '已发布' : '未发布'
+                item.tipsLeft = item.releaseCode == 1 ? '已发布' : '未发布'
               }
 
               item.beginTime = selfTime(item.beginDate, true)
               item.endTime = selfTime(item.endDate, true)
             })
+            console.log(res.data)
             this.tableData = res.data
             this.total = res.total
           } else {
@@ -319,11 +320,14 @@ export default {
             let curTime = new Date().getTime()
             res.data.filter(item => {
               if(item.beginDate < curTime && item.endDate > curTime){
-                item.tips = item.releaseCode == 1 ? '进行中' : '未发布'
-              } else if(item.endDate < curTime){
-                item.tips = item.releaseCode == 1 ? '已结束' : '未发布'
+                item.tips = item.releaseCode == 1 ? '进行中' : '已过期'
+                item.tipsLeft = item.releaseCode == 1 ? '进行中' : '未发布'
+              } else if(item.endDate < curTime){ 
+                item.tips = item.releaseCode == 1 ? '已结束' : '已过期'
+                item.tipsLeft = item.releaseCode == 1 ? '进行中' : '未发布'
               } else {
                 item.tips = item.releaseCode == 1 ? '已发布' : '未发布'
+                item.tipsLeft = item.releaseCode == 1 ? '已发布' : '未发布'
               }
 
               item.beginTime = selfTime(item.beginDate, true)
@@ -344,5 +348,8 @@ export default {
   mounted() {
     // 获取全部会议
     this.getAllMeet()
+
+    // 获取当前时间戳
+    this.curDate = new Date().getTime()
   }
 }

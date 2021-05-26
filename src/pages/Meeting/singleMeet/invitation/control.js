@@ -24,7 +24,7 @@ export function eachPageData(_this, page) {
 		eleList: [],
 		model: {
 			width: 375,
-			height: 720,
+			height: 666,
 			img: ''
 		},
 		formAttr: {
@@ -451,6 +451,7 @@ let formData = {
 	'borderColor': '#dedede', // 边框颜色
 	'borderBgcolor': '#fff', // 边框背景颜色
 	'btnBgcolor': '#ffa500', // 按钮背景颜色
+	'textbtnBgcolor': '#fff', // 按钮文字颜色
 
 	formAttr: {
 		'enable': true, // 使用表单标记
@@ -826,7 +827,8 @@ export function reduction(_this){
 				color: defaultStyle.cteColor
 			})
 			$(node).find('.btn').css({
-        backgroundColor: defaultStyle.btnBgcolor
+        backgroundColor: defaultStyle.btnBgcolor,
+				color: defaultStyle.textbtnBgcolor
       })
 			console.log(defaultStyle.formAttr)
 			for(let i in defaultStyle.formAttr){
@@ -1129,11 +1131,26 @@ function leftResize(moveX, moveY) {
 	if (nodeWidth - moveX <= 20) {
 		return
 	}
-	console.log('移动', moveX, moveY)
-	$(currentNode).css('width', (nodeWidth - moveX) / 375 * 101.5 + '%')
-	$(currentNode).css('transform', 'translate(' + (nodeX + moveX) + 'px,' + (nodeY) + 'px)');
 
-	vue.defaultStyle.width = ((nodeWidth - moveX) / 375 * 101.5) / 100 * 375 + 'px'
+	let data = (nodeWidth - moveX) / 375 * 1.015 * 375
+	// 表单处理 宽度不能小于300
+	if(vue.defaultStyle['type'] == "form"){
+		if(data >= 300) {
+			$(currentNode).css('width', (nodeWidth - moveX) / 375 * 101.5 + '%')
+			$(currentNode).css('transform', 'translate(' + (nodeX + moveX) + 'px,' + (nodeY) + 'px)');
+		
+			vue.defaultStyle.width = ((nodeWidth - moveX) / 375 * 101.5) / 100 * 375 + 'px'
+		}
+	} else {
+		$(currentNode).css('width', (nodeWidth - moveX) / 375 * 101.5 + '%')
+		$(currentNode).css('transform', 'translate(' + (nodeX + moveX) + 'px,' + (nodeY) + 'px)');
+	
+		vue.defaultStyle.width = ((nodeWidth - moveX) / 375 * 101.5) / 100 * 375 + 'px'
+	}
+	// $(currentNode).css('width', (nodeWidth - moveX) / 375 * 101.5 + '%')
+	// $(currentNode).css('transform', 'translate(' + (nodeX + moveX) + 'px,' + (nodeY) + 'px)');
+
+	// vue.defaultStyle.width = ((nodeWidth - moveX) / 375 * 101.5) / 100 * 375 + 'px'
 	// console.log((nodeWidth - moveX) / 375 * 101.5)
 }
 
@@ -1141,9 +1158,18 @@ function rightResize(moveX, moveY) {
 	if (nodeWidth + moveX <= 20) {
 		return
 	}
-	$(currentNode).css('width', (nodeWidth + moveX) / 375 * 101.5 + '%')
-	// $(currentNode).css('transform','translate('+(nodeX+moveX)+'px,'+(nodeY)+'px)');
-	vue.defaultStyle.width = ((nodeWidth + moveX) / 375 * 101.5) / 100 * 375 + 'px'
+	let data = (nodeWidth + moveX) / 375 * 1.015 * 375
+	// 表单处理 宽度不能小于300
+	if(vue.defaultStyle['type'] == "form"){
+		if(data >= 300) {
+			$(currentNode).css('width', (nodeWidth + moveX) / 375 * 101.5 + '%')
+			vue.defaultStyle.width = ((nodeWidth + moveX) / 375 * 101.5) / 100 * 375 + 'px'
+		}
+	} else {
+		$(currentNode).css('width', (nodeWidth + moveX) / 375 * 101.5 + '%')
+		vue.defaultStyle.width = ((nodeWidth + moveX) / 375 * 101.5) / 100 * 375 + 'px'
+	}
+
 }
 
 function rightBottomResize(moveX, moveY) {

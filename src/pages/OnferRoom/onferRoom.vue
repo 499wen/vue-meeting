@@ -30,10 +30,10 @@
         :key="index"
         :prop="item.value" :label="item.label" :width="item.width"
         ></el-table-column>
-        <el-table-column :show-overflow-tooltip="true" :resizable="false"  align='center' label="操作" width="350">
+        <el-table-column :show-overflow-tooltip="true" :resizable="false"  align='center' label="操作" width="200">
           <template slot-scope="scope">
-            <el-button size="small" type="warning" @click="handleEdit(scope.row)" round>修改会议室</el-button>
-            <el-button size="small" type="danger" @click="deleteUsers(scope.row)" round>删除会议室</el-button>
+            <el-button size="small" type="warning" @click="handleEdit(scope.row)" round>修 改</el-button>
+            <el-button size="small" type="danger" @click="deleteUsers(scope.row)" round>删 除</el-button>
           </template> 
         </el-table-column> 
       </el-table>

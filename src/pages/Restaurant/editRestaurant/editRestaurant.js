@@ -1,8 +1,4 @@
-  let token = localStorage.getItem('token')
-
-function G(id) {
-  return document.getElementById(id);
-}
+let token = localStorage.getItem('token')
 
 export default {
   data() {
@@ -96,7 +92,8 @@ export default {
     },
     map() {
       var map = new BMap.Map("baidu-map"), that = this
-      map.centerAndZoom("北京",18);                   // 初始化地图,设置城市和地图级别。
+      console.log('地址', that.ruleForm.restauranAddress)
+      map.centerAndZoom(that.ruleForm.restauranAddress,18);                   // 初始化地图,设置城市和地图级别。
     
       var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
         {"input" : "suggestId"
@@ -108,7 +105,7 @@ export default {
       var _value = e.item.value;
         myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
         
-        // 赋值给vue 
+        // 赋值给vue
         that.ruleForm.restauranAddress = myValue
         setPlace();
       });
@@ -133,7 +130,7 @@ export default {
         .then(res => {
           if(res.code == '000'){
             this.ruleForm = res.data
-
+            this.map()
             setTimeout(() => {
               this.tips_blur()
             }, 300)
@@ -152,7 +149,6 @@ export default {
   },
   mounted() {
     this.id = this.$route.query.id
-    this.map()
 
     setTimeout(() => {
       this.getData()

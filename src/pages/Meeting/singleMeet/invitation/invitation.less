@@ -113,9 +113,10 @@ body .parti-content .invite-content .invite-progress {
     border: 2px dashed #0b4488;
     top:0px;
      */
-     .invite-text-box{
+  .invite-text-box{
       position: absolute;
       width: 100%;
+			// min-width: 300px;
       user-select:none;
       height: 100%;
   }
@@ -518,7 +519,7 @@ body .parti-content .invite-content .invite-progress {
       box-sizing: border-box;
       margin-left: 5px;
       border: 1px solid #dedede;
-      flex: 1;
+      width: calc(100% - 80px);
 	}
 
 	.form-single span {
@@ -527,10 +528,10 @@ body .parti-content .invite-content .invite-progress {
 	}
 	
 	.yzm {
-	  width: calc(100% - 68px);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+	  width: calc(100% - 80px);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 	}
 	
 	.yzm input {
@@ -597,7 +598,7 @@ body .parti-content .invite-content .invite-progress {
 	}
 
 	.longpage_pixel .el-input-number--small {
-		width: 80px !important;
+		width: 96px !important;
 	}
 	.longpage_pixel .el-input__inner {
 		padding-left: 0px !important;
@@ -1053,6 +1054,15 @@ body .parti-content .invite-content .invite-progress {
 				img {
 					width: 110px;
 					height: 193px;
+					cursor: pointer;
+				}
+
+				.select {
+					box-shadow: 1px 1px 5px 3px #f56c6c;
+				}
+
+				img:hover {
+					box-shadow: 1px 1px 5px 3px #f56c6c;
 				}
 
 				& > div {
@@ -1195,7 +1205,7 @@ body .parti-content .invite-content .invite-progress {
 
 		.white {
 			// display: inline-block;
-			width: 70px;
+			width: 80px;
 			font-size: 14px;
 			text-align-last: justify;
 			text-align: justify;
@@ -1426,8 +1436,33 @@ body .parti-content .invite-content .invite-progress {
 	.sort {
 		width: 100%;
 		display: flex;
-		justify-content: space-between;
-		align-items: center;
+		justify-content: flex-start;
+		align-items: flex-start;
+
+		.label {
+			width: 60px;
+			margin-right: 10px;
+			text-align: right;
+		}
+
+		.value {
+			flex: 1;
+			display: flex;
+			justify-content: flex-start;
+			align-items: flex-start;
+			flex-wrap: wrap;
+		}
+
+		.color {
+			display: flex;
+			align-items: flex-start;
+			margin-right: 10px;
+			margin-bottom: 10px;
+
+			span {
+				margin-right: 10px;
+			}
+		}
 	}
 
 	.desc {

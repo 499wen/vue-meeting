@@ -99,7 +99,7 @@ this.height = dom.offsetHeight
       :total="total">
       </el-pagination>
     </div>
-
+ 
   js
     total: 0,
     pageNum: 1,
@@ -243,7 +243,7 @@ this.height = dom.offsetHeight
           let file = this.$refs.file, files
           files = file.files[0]
 
-          this.fileUpload(files, res => {
+          this.fileUpload(files, 'HeadFile', res => {
             if(res.code == '000'){
               this.$message.success(res.msg)
               this.addForm.photoFileId = res.data.saveFileName
@@ -275,7 +275,7 @@ this.height = dom.offsetHeight
           let file = this.$refs.file_pmt, files
           files = file.files[0]
 
-          this.fileUpload(files, res => {
+          this.fileUpload(files, 'HeadFile', res => {
             if(res.code == '000') {
               this.$message.success(res.msg)
               this.addForm.meetingRoomId = res.data.saveFileName

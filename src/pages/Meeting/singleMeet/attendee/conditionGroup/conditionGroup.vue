@@ -34,27 +34,27 @@
                   :key="item" :label="item" :value="item"></el-option>
                 </el-select>
               </el-col>
-              <el-col :span="4" class="condis-condies" :offset=" index > 0 ? 0 : 2 ">
+              <el-col :span="5" class="condis-condies" :offset=" index > 0 ? 0 : 2 ">
                 <el-select :disabled="!editBool" v-model="item.fieldName" placeholder="请选择字段">
                   <el-option v-for="item in properties" :key="item.value"
                   :label="item.lable" :value="item.value"></el-option>
                 </el-select>
               </el-col>
-              <el-col :span="4" class="condis-condies">
+              <el-col :span="5" class="condis-condies">
                 <el-select :disabled="!editBool" v-model="item.conditionalSign" placeholder="请选择操作符">
                   <el-option v-for="item in oprates" :key="item.value"
                   :label="item.lable" :value="item.value"></el-option>
                 </el-select>
               </el-col>
-              <el-col :span="8" class="condis-condies">
+              <el-col :span="10" class="condis-condies">
                 <el-input v-model="item.value" placeholder="请输入值" :disabled="!editBool"></el-input>
               </el-col>
             </el-row>
             <el-row class="tc">
               <!-- 默认 -->
               <div v-if="bool">
-                <el-button type="primary" size='small' icon="el-icon-circle-check" title="查询" @click="preservation('new')">保存</el-button>
                 <el-button type="success" size='small' icon="el-icon-plus" title="添加条件" @click="addCondis">添加条件</el-button>
+                <el-button type="primary" size='small' icon="el-icon-circle-check" title="查询" @click="preservation('new')">保存</el-button>
               </div>
               <!-- 点击条件组 -->
               <div v-else>

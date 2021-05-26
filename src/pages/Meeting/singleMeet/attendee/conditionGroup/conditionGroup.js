@@ -1,4 +1,4 @@
-// import { mapState } from 'vuex'
+import { mapState } from 'vuex'
 
 let properties = [
   {
@@ -100,6 +100,7 @@ export default {
   // components: {
   //   SearchUser
   // },
+  props: ['groupId'],
   data() {
     return {
       height: null,
@@ -123,7 +124,7 @@ export default {
       delCon: [],
       centerDialogVisible: false,
 
-      properties: properties,
+      properties,
       condies: condies,
       oprates: oprates,
       param: {
@@ -144,6 +145,11 @@ export default {
       editBool: true,
 
     };
+  },
+  computed: {
+    ...mapState([
+      'meetingData'
+    ])
   },
   methods: {
     setsearchcondition: function (val) {

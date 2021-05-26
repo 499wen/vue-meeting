@@ -1,73 +1,75 @@
 <template>
   <div class="smscenter">
-    <!-- 功能 -->
-    <div class="sms-func">
-      <!-- <el-button round size='small' type="primary" @click="dispose">个性短信配置</el-button> -->
-      <!-- <el-button round size='small' type="success" @click="sendRecord">短信发送记录</el-button> -->
-    </div>
-
     <!-- 主体 -->
     <div class="sms-body">
-      <!-- table -->
-      <div class="table">
-        <el-table ref="singleTable"
-          :data="tableData" border :height="height">
-          <el-table-column :show-overflow-tooltip="true" prop="groupName" label="短信类型" :width="200"
-            align="center" :resizable="false">
-          </el-table-column>
-          <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' label="短信">
-            <template slot-scope="scope">
-              <div v-if="scope.row.allData" class="check-person check-sms">
-                <div v-for="(item, idx) in scope.row.meetingSMSCenters" :key="idx">
-                  <el-checkbox v-model="item.select" class="sm-ck singRow" :title='item.title' >
-                    {{ item.title }}
-                  </el-checkbox>
-                </div>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' label="参会人分组" width='500'>
-            <template slot-scope="scope">
-              <div v-if="scope.row.allData" class="check-person">
-                <div>
-                  <el-checkbox v-model="scope.row.allData.is_select" title='全体参会人' class="sm-ck singRow" @change="all(scope.row)">全体参会人</el-checkbox>
-                </div>
-                <div v-for="(item, idx) in scope.row.data" :key="idx">
-                  <el-checkbox v-model="item.is_select" class="sm-ck singRow" :title='item.confereeGroupName' @change="single(scope.row, idx)">
-                    {{ item.confereeGroupName }}
-                  </el-checkbox>
-                </div>
-              </div>
-            </template>
-          </el-table-column>
-        </el-table>
+      <!-- 参会人 -->
+      <div class="sms-tree">
+        <div class="tree-head">参会人分组管理</div>
+        <el-tree
+          ref='smsTree'
+          :data="data"
+          :props="treeProps" 
+          node-key="id"
+          default-expand-all
+          :highlight-current="true"
+          :expand-on-click-node="false"
+          @node-click='treeClick'
+          :render-content="renderContent">
+        </el-tree> 
       </div>
-
-      <!-- 分页 -->
-      <div class="pagin">
-        <el-button size="small" round type="primary" @click="determine">保存</el-button>
+      <!-- 短信 -->
+      <div class="sms-table">
+        <!-- 功能 -->
+        <div class="func-sms">
+          <el-button round size='small' type="primary" @click="addSms">添加短信</el-button>
+          <el-button round size='small' type="danger" @click="removeSms">移除短信</el-button>
+          <el-button round size='small' type="primary" @click="dispose">人工发送短信</el-button>
+          <!-- <el-button round size='small' type="success" @click="sendRecord">短信发送记录</el-button> -->
+        </div>
+        <!-- table -->
+        <div class="table">
+          <el-table ref="singleTable" @selection-change="batchDel"
+            :data="tableData" border :height="height">
+            <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' type="selection" width="50"></el-table-column>
+            <el-table-column :show-overflow-tooltip="true" prop="groupName" label="短信类型" 
+              align="center" :resizable="false">
+            </el-table-column>
+            <el-table-column :show-overflow-tooltip="true" prop="title" label="短信名称" 
+              align="center" :resizable="false">
+            </el-table-column>
+          </el-table>
+        </div>
       </div>
-
     </div>
 
-    <!-- 短信配置 -->
-    <el-dialog title="短信配置" :visible.sync="dispose_child" width="60%" center
+    <!-- 人工发送短信 -->
+    <el-dialog title="人工发送短信" :visible.sync="dispose_child" width="60%" center
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <dispose ref="dispose" v-if="dispose_child"></dispose>
       <div class="dialog-btn">
-        <el-button type="primary" @click="submitForm('userForm')" size="small" round>添 加</el-button>
         <el-button @click="cancel" size="small" type="danger" round>关 闭</el-button>
       </div>
     </el-dialog>
 
     <!-- 短信发送记录 -->
-    <el-dialog title="添加人员" :visible.sync="sendRecord_child" width="60%" center
+    <el-dialog title="短信发送记录" :visible.sync="sendRecord_child" width="60%" center
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <sendRecord ref="sendRecord" v-if="sendRecord_child"></sendRecord>
       <div class="dialog-btn">
         <el-button @click="cancel" size="small" type="danger" round>关 闭</el-button>
       </div>
     </el-dialog>
+
+    <!-- 添加短信 -->
+    <el-dialog title="添加短信" :visible.sync="addsms_child" width="60%" center
+      :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
+      <addsms ref="addsms" v-if="addsms_child" :row='curAttenGroup'></addsms>
+      <div class="dialog-btn">
+        <el-button @click="determine" size="small" type="primary" round>保 存</el-button>
+        <el-button @click="cancel" size="small" type="danger" round>关 闭</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -84,14 +86,15 @@ export default smscenter
 <style lang='less'>
 .singRow {
   margin-right: 10px;
-  margin-bottom: 5px;
+  padding: 2px 0;
+  // margin-bottom: 5px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
 
 .singRow .el-checkbox__label{
-  width: 80px;
+  width: 128px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -99,6 +102,11 @@ export default smscenter
 }
 
 .check-sms .el-checkbox__label{
-  width: 140px;
+  width: 140px !important;
+}
+
+.check-person > div {
+  display: flex;
+  align-items: center;
 }
 </style>

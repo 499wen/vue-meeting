@@ -88,7 +88,7 @@
                 :current-page="filterTable.pageNum"
                 :page-sizes="[1, 5, 10, 20, 30, 40]"
                 :page-size="filterTable.pageSize"
-                layout="total, sizes, prev, pager, next, jumper"
+                layout="total,  prev, pager, next, jumper"
                 :total="filterTable.total"
               ></el-pagination>
             </div>

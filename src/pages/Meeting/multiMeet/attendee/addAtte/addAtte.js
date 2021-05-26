@@ -109,7 +109,7 @@ export default {
         // 子级会议
         parentMeetingId = this.meetingData.parentMeetingId
         api = this.API.findByMeetingIdAndPage(parentMeetingId, this.pageNum, this.pageSize)
-        this.$http.get(api)
+        this.$http.post(api, obj)
         .then(res => {
           this.hdPerson(res)
         }).catch(err => {

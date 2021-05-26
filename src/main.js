@@ -10,6 +10,8 @@ Vue.use(ElementUI);
 import ResetMessage from './plugins/resetMessage.js'
 Vue.prototype.$message = ResetMessage
 
+import './assets/menu-icon/iconfont.css'
+
 // 挂载axios
 import $http from './plugins/axios.js'
 Vue.prototype.$http = $http

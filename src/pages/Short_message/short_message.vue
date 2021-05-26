@@ -86,4 +86,25 @@ export default shortMessage
 
 <style scoped lang='less'>
 @import url('./short_message.less');
+
+</style>
+
+<style lang='less'>
+.clrol {
+  position: relative;
+  display: inline-block;
+}
+
+.clrol:after {
+  content: '';
+  position: absolute;
+  background-image: url('../../assets/images/7.png');
+  background-size: 100% 100%;
+  background-position: center center;
+  width: 15px;
+  height: 12px;
+  top: 50%;
+  left: -20px;
+  margin-top: -5px;
+}
 </style>

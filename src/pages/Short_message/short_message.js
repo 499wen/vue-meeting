@@ -57,9 +57,15 @@ export default {
     },
     // tree - 树结构
     renderContent(h, { node, data, store }) {
+      if(node.level == 1){
+        return (
+          <span class="custom-tree-node">
+            <span class=''>{node.label}</span>
+          </span>);
+      }
       return (
         <span class="custom-tree-node">
-          <span>{node.label}</span>
+          <span class='clrol'>{node.label}</span>
         </span>);
     },
 
@@ -134,7 +140,12 @@ export default {
       this.$http.get(this.API.findCompanySmsGroup)
         .then(res => {
           if(res.code == '000' && res.data){
-            this.data[0].children = res.data
+            this.data[0].children = res.data.sort((cur, next) => cur.sortNum - next.sortNum)
+
+            document.querySelector('.el-tree-node__content').style = `
+              background-color: #e67c7c;
+              color: #fff
+            `
           } else {
             this.data[0].children = []
           }
@@ -156,7 +167,7 @@ export default {
             res.data.filter(item => {
               item.use = item.isUse == 0 ? true : false
             })
-            this.tableData = res.data
+            this.tableData = res.data.sort((cur, next) => cur.sortNum - next.sortNum)
             this.total = res.total
           } else {
             this.tableData = []

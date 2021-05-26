@@ -9,24 +9,65 @@
 
   .sms-body {
     width: 100%;
-    height: calc(100% - 42px);
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 
-    .table {
-      width: 100%;
-      height: calc(100% - 42px);
+    .sms-tree {
+      width: 16%;
+      height: 100%;
+      margin-right: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px; 
+      box-sizing: border-box;
+  
+      .tree-head {
+        width: 100%;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        color: #fff;
+        background-color: #e67c7c;
+        font-size: 14px;
+      }
     }
+
+    .sms-table {
+      width: calc(84% - 20px);
+      height: 100%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 5px 10px;
+      box-sizing: border-box;
+
+      .func-sms {
+        width: 100%;
+        margin-bottom: 5px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+      }
+
+      .table {
+        width: 100%;
+        height: calc(100% - 33px);
+      }
+    }
+    
   }
 
-  .sms-table {
-    padding: 10px;
-    box-sizing: border-box;
-    position: fixed;
-    height: 300px;
-    background-color: #fff;
-    box-shadow: 1px 5px 15px 2px #234061;
-    overflow-y: auto;
-    z-index: 9999;
-  }
+  // .sms-table {
+  //   padding: 10px;
+  //   box-sizing: border-box;
+  //   position: fixed;
+  //   height: 300px;
+  //   background-color: #fff;
+  //   box-shadow: 1px 5px 15px 2px #234061;
+  //   overflow-y: auto;
+  //   z-index: 9999;
+  // }
 }
 
 .el-table td .check-person {

@@ -84,9 +84,9 @@ export default {
   created() {
     // 设置时间戳
     this.setCalendarTime(new Date().getTime())
-    
+
     // 获取未召开会议 数据
-    this.$http.get(this.API.meetingsPageAndStateCode(3, 1, 999, ''))
+    this.$http.get(this.API.meetingsPageAndStateCode(4, 1, 999, ''))
       .then(res => {
         if(res.code == '000' && res.data) {
           res.data.filter(item => {

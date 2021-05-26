@@ -19,7 +19,7 @@
       <!-- 表格数据 -->
       <div class="data-show-table">
         <div class="room-top"> 
-          <el-input size="small" placeholder="请输入会议名称" v-model="searchKey" @keyup.native.enter="searchBtn" class="input-with-select">
+          <el-input size="small" placeholder="请输入房间号" v-model="searchKey" @keyup.native.enter="searchBtn" class="input-with-select">
             <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
           </el-input>
           <el-button type="primary" size="small" @click="addRoom">添加房间</el-button>

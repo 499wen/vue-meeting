@@ -131,5 +131,19 @@ export default {
 
     // 获取参会人报到数据
     this.getAttenData()
+
+
+    // 分10个进程
+    this.worker = this.$worker.create([
+      { message: 'img01', func: data => data},
+      { message: 'img02', func: data => data},
+    ])
+
+    this.worker.postMessage('img01', ['第一个work']).then(res => {
+      console.log(res)
+    })
+    this.worker.postMessage('img02', ['第二个work']).then(res => {
+      console.log(res)
+    })
   }
 }

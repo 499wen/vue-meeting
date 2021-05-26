@@ -154,7 +154,7 @@ export default {
     },
     map() {
       var map = new BMap.Map("baidu-map"), that = this
-      map.centerAndZoom("北京",18);                   // 初始化地图,设置城市和地图级别。
+      map.centerAndZoom(that.ruleForm.address,18);                   // 初始化地图,设置城市和地图级别。
     
       var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
         {"input" : "suggestId"
@@ -234,7 +234,7 @@ export default {
             this.equipmentType = equipmentType;
             res.data.time = time
             this.ruleForm = res.data
-
+            this.map()
             setTimeout(() => {
               this.tips_blur()
             }, 300)
@@ -253,7 +253,7 @@ export default {
   },
   mounted() {
     this.id = this.$route.query.id
-    this.map()
+    
 
     setTimeout(() => {
       this.getData()

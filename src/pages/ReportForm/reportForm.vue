@@ -71,7 +71,7 @@
     </el-dialog>
 
     <!-- 明细 -->
-    <el-dialog title="查看明细" :visible.sync="detailed_child" width="80%" center
+    <el-dialog title="查看明细" :visible.sync="detailed_child" width="80%" center :show-close='false'
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <detailed ref="detailed" v-if="detailed_child" :row='row'></detailed>
       <div class="dialog-btn">

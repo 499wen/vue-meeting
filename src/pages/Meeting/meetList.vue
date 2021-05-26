@@ -6,10 +6,10 @@
       </div> 
 
       <div class="opera">
-        <el-input size="small" placeholder="请输入会议名称" v-model="searchKey" @keyup.native.enter="searchBtn">
+        <el-input size="small" placeholder="请输入会议名称" v-model="searchKey" @keyup.native.enter="searchBtn" style="width: 300px">
           <el-button slot="append" icon="el-icon-search" @click="searchBtn" type="primary"></el-button>
         </el-input>
-        <el-button size="small" @click="createMeet" type="primary" plain class="add-hotel"> 新建会议 </el-button>
+        <el-button size="small" @click="createMeet" type="warning"  class="add-hotel"> 新建会议 </el-button>
       </div> 
     </div> 
 
@@ -35,9 +35,10 @@
               <!-- 提示
                未发布: #2ba2ff 默认, 已发布: #60cfb9 .published, 进行中: #ffd04b .ongoing, 已结束: #6f6f6f .over -->
               <div :class="['meet-tips', 
-              item.tips == '已发布' && 'published',
-              item.tips == '进行中' && 'ongoing', 
-              item.tips == '已结束' && 'over']">{{ item.tips }}</div>
+              item.tipsLeft == '已发布' && 'published',
+              item.tipsLeft == '进行中' && 'ongoing', 
+              item.tipsLeft == '未发布' && item.tips == '已过期' && 'over',
+              item.tipsLeft == '已结束' && 'over']">{{ item.tipsLeft }}</div>
             </div>
 
             <!-- 会议基本信息 -->
@@ -63,7 +64,11 @@
 
             <!-- 会议 - 按钮 -->
             <div class="meet-btn">
-              <el-button class="btn" type="warning" size="mini" v-if="item.releaseCode == 1" round disabled>已发布</el-button>
+              <el-button :class="['btn', 'disabled',
+              item.tips == '已发布' && 'published',
+              item.tips == '进行中' && 'ongoing', 
+              item.tips == '已过期' && 'over',
+              item.tips == '已结束' && 'over']" size="mini" v-if="item.tips != '未发布'" round >{{ item.tips }}</el-button>
               <el-button class="btn" type="warning" size="mini" v-else round @click="SendingNotice(item, item.releaseCode, item.beginDate)">发布会议</el-button>
               <!-- <el-button class="btn" size="mini" round>发送邀请函</el-button> -->
               <el-button class="btn" size="mini" round>会议驾驶舱</el-button>
@@ -72,7 +77,13 @@
           </div>
         </div>
       </div>
-      <div class="meet-list no-meet" v-else> 此项无会议。。。 </div>
+      <div class="meet-list no-meet" v-else> 
+        <span v-show="tips == '1'">未添加会议。。。</span>
+        <span v-show="tips == '2'">无已结束会议。。。</span>
+        <span v-show="tips == '3'">无未发布会议。。。</span>
+        <span v-show="tips == '4'">无已发布会议。。。</span>
+        <span v-show="tips == '0'">无进行中会议。。。</span>
+      </div>
 
       <!-- 分页 -->
       <div class="pagin">
