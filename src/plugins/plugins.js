@@ -238,13 +238,11 @@ export function getSearch() {
  */
 export const preventReClick = Vue.directive('preventReClick', {
   inserted: function (el, binding) {
-      el.addEventListener('click', () => {
-          if (!el.disabled) {
-              el.disabled = true
-              setTimeout(() => {
-                  el.disabled = false
-              }, binding.value || 3000)
-          }
-      })
+    el.addEventListener('click', () => {
+      el.setAttribute('style', 'pointer-events: none;')
+      setTimeout(() => {
+        el.setAttribute('style', 'pointer-events: auto;')
+      }, binding.value || 3000)
+    })
   }
 })

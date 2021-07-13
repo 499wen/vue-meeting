@@ -14,6 +14,8 @@ export default {
   methods: {
     // 查看更多
     more(){
+      console.log(1123)
+      return 
       this.$router.push({
         path: '/info_more',
         query: { msg: '请假消息'}
