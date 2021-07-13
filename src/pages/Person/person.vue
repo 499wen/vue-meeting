@@ -44,18 +44,18 @@
       </el-dropdown> 
 
       <!-- 人员查询 - 条件组  --> 
-        <el-dropdown trigger="click" class="spacing right-10px" @command='clickCondi' placement='bottom'>
-          <el-button size="small">
-            <div class="cont">
-              <span >{{ tjgroup }}</span>
-              <i class="el-icon-arrow-down el-icon--right"></i>
-            </div>
-          </el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="(item, idx) in condiData" :key="idx" :command='idx'>{{ item.groupName }}</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-        <el-button size="small" @click="custom" class=" right-10px">自定义条件</el-button> 
+      <el-dropdown trigger="click" class="spacing right-10px" @command='clickCondi' placement='bottom'>
+        <el-button size="small">
+          <div class="cont">
+            <span >{{ tjgroup }}</span>
+            <i class="el-icon-arrow-down el-icon--right"></i>
+          </div>
+        </el-button>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item v-for="(item, idx) in condiData" :key="idx" :command='idx'>{{ item.groupName }}</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+      <el-button size="small" @click="custom" class=" right-10px">自定义条件</el-button> 
 
     </div>
 

@@ -13,39 +13,39 @@
       <div class="regist-title">注 册</div>
       <el-form class="form" :model="registerForm" ref="registerForm" :rules="rules" label-width="78px">
         <el-form-item label="版 本" prop="systemEditionId" >
-          <el-select v-model="registerForm.systemEditionId"> 
+          <el-select v-model="registerForm.systemEditionId" size="small"> 
             <el-option v-for="item in editList" :key="item.id"
             :label="item.systemEditionName" :value="item.id"></el-option>
           </el-select>
           <a href="https://www.hzics.com" target="_bland" style="margin-left:0.938rem">了解详情</a>
         </el-form-item>
         <el-form-item label="单位名称" prop="companyName">
-          <el-input v-model="registerForm.companyName" clearable @focus="focusOut('companyName')" @blur="blurOut"></el-input>
+          <el-input v-model="registerForm.companyName" clearable @focus="focusOut('companyName')" @blur="blurOut" size="small"></el-input>
         </el-form-item>
         <el-form-item label="姓 名" prop="customerName">
-          <el-input v-model="registerForm.customerName" clearable @focus="focusOut('customerName')" @blur="blurOut"></el-input>
+          <el-input v-model="registerForm.customerName" clearable @focus="focusOut('customerName')" @blur="blurOut" size="small"></el-input>
         </el-form-item>
         <el-form-item label="行 业" prop="trade" >
-          <el-select v-model="registerForm.trade">
+          <el-select v-model="registerForm.trade" size="small">
             <el-option v-for="item in tradeList" :key="item.value"
             :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="手机号码" prop="phone">
-          <el-input v-model="registerForm.phone" clearable @focus="focusOut('phone')" @blur="blurOut"></el-input>
+          <el-input v-model="registerForm.phone" clearable @focus="focusOut('phone')" @blur="blurOut" size="small"></el-input>
         </el-form-item>
-        <el-form-item label="电子邮箱" prop="email" >
-          <el-input v-model="registerForm.email" clearable @focus="focusOut('email')" @blur="blurOut"></el-input>
+        <el-form-item label="电子邮箱" prop="email">
+          <el-input v-model="registerForm.email" clearable @focus="focusOut('email')" @blur="blurOut" size="small"></el-input>
         </el-form-item>
         <el-form-item label="验证码" prop="checkCode">
-          <el-input v-model="registerForm.checkCode" clearable>
-            <el-button slot="append" @click="getCheckCode" :disabled="retryCount>0" >{{retryCount>0?retryCount+'S 后重试':'获取验证码'}}</el-button>
+          <el-input v-model="registerForm.checkCode" clearable size="small">
+            <el-button slot="append" @click="getCheckCode" :disabled="retryCount>0">{{retryCount>0?retryCount+'S 后重试':'获取验证码'}}</el-button>
           </el-input>
         </el-form-item>
 
         <div class="submit">
           <div class="submit-btn">
-            <el-button class="submit-btn-el" @click="apply"> 提交申请 </el-button>
+            <el-button class="submit-btn-el" @click="apply" round size="small"> 提交申请 </el-button>
           </div>
           <div class="alr-exist">
             已有账号 <span @click="goLogin">去登录</span>

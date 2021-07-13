@@ -82,19 +82,29 @@ export default {
     },
   },
   created() {
+    let curTime = new Date().getTime()
     // 设置时间戳
-    this.setCalendarTime(new Date().getTime())
+    this.setCalendarTime(curTime)
 
     // 获取未召开会议 数据
-    this.$http.get(this.API.meetingsPageAndStateCode(4, 1, 999, ''))
+    this.$http.get(this.API.meetingsPageAndStateCode(4, 1, 999, '') + '&codes=codes')
       .then(res => {
         if(res.code == '000' && res.data) {
-          res.data.filter(item => {
+          let result = res.data.filter(item => {
             item.meetTime = this.hdTime(item.beginDate, item.endDate)
             item.lowerT = this.ymd('st', item.beginDate)
             item.upperT = this.ymd('et', item.endDate)
+
+            return item
+            // if(curTime < item.beginDate){
+            //   item.meetTime = this.hdTime(item.beginDate, item.endDate)
+            //   item.lowerT = this.ymd('st', item.beginDate)
+            //   item.upperT = this.ymd('et', item.endDate)
+
+            //   return item
+            // }
           })
-          this.setNotheldMeet(res.data)
+          this.setNotheldMeet(result)
 
           this.show = true
         }

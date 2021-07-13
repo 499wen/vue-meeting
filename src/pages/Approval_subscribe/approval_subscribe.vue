@@ -230,7 +230,7 @@ export default {
             res.data.filter(item => {
               item.cate = this.meetRoomTypeEnum[item.type]
               item.time = selfTime(item.beginDate, false)
-              item.st = selfTime(item.beginDate, false, true)
+              item.st = selfTime(item.beginDate, false, true, true)
               item.et = selfTime(item.endDate, false, true, true)
             })
 

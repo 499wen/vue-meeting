@@ -3,6 +3,8 @@
     <div class="self-main"> 
       <div class="chartContent">
         <el-button @click="tabBtn" type="primary" plain size='mini'> 切换 </el-button>
+        <el-button @click="openScreens" v-if='!open' type="primary" plain size='mini'> 打开第二屏 </el-button>
+        <el-button @click="closeScreens" v-else type="primary" plain size='mini'> 关闭第二屏 </el-button>
       </div>
       <div class="chartContent">
           <el-col :span="qhTab" class="self-col" v-if="columnData.id">
@@ -12,15 +14,27 @@
               <div class="chartZi2">
                 <span style="padding-right: 10px" class="color">
                   <div class="bgc"></div>
-                  <span>已确认: {{ noneNum }}人 ({{ inviteNumber == 0 ? 0 : (noneNum * 100 / inviteNumber).toFixed(2) }}%)</span> 
+                  <div>
+                    <span class="label">已确认:</span>
+                    <span class="person-num">{{ noneNum }}人</span>
+                    <span>({{ inviteNumber == 0 ? 0 : (noneNum * 100 / inviteNumber).toFixed(2) }}%)</span>
+                  </div> 
                 </span>
                 <span style="padding-right: 10px" class="color">
                   <div class="bgc" style="background-color: #2f4554"></div>
-                  <span>未确认: {{ actualNum }}人 ({{ inviteNumber == 0 ? 0 : (actualNum * 100 / inviteNumber).toFixed(2) }}%)</span>
+                  <div>
+                    <span class="label">未确认:</span>
+                    <span class="person-num">{{ actualNum }}人</span>
+                    <span>({{ inviteNumber == 0 ? 0 : (actualNum * 100 / inviteNumber).toFixed(2) }}%)</span>
+                  </div> 
                 </span>
                 <span style="padding-right: 10px" class="color">
                   <div class="bgc" style="background-color: #61a0a8"></div>
-                  <span>请假: {{yingdaoNum}}人 ({{ inviteNumber == 0 ? 0 : (yingdaoNum * 100 / inviteNumber).toFixed(2) }}%)</span>
+                  <div>
+                    <span class="label">请假:</span>
+                    <span class="person-num">{{ yingdaoNum }}人</span>
+                    <span>({{ inviteNumber == 0 ? 0 : (yingdaoNum * 100 / inviteNumber).toFixed(2) }}%)</span>
+                  </div> 
                 </span>
               </div>
             </div>
@@ -33,14 +47,27 @@
                 <span style="padding-right: 10px" class="color">
                   <div class="bgc"></div>
                   <span>已确认: 0人 (0%)</span> 
+                  <div>
+                    <span class="label">已确认:</span>
+                    <span class="person-num">0人</span>
+                    <span>(0%)</span>
+                  </div> 
                 </span>
                 <span style="padding-right: 10px" class="color">
                   <div class="bgc" style="background-color: #2f4554"></div>
-                  <span>未确认: 0人 (0%)</span>
+                  <div>
+                    <span class="label">未确认:</span>
+                    <span class="person-num">0人</span>
+                    <span>(0%)</span>
+                  </div> 
                 </span>
                 <span style="padding-right: 10px" class="color">
                   <div class="bgc" style="background-color: #61a0a8"></div>
-                  <span>请假: 0人 (0%)</span>
+                  <div>
+                    <span class="label">请假:</span>
+                    <span class="person-num">0人</span>
+                    <span>(0%)</span>
+                  </div> 
                 </span>
               </div>
             </div>
@@ -75,8 +102,16 @@
                 :resizable="false"
               ></el-table-column>
               <el-table-column label="操作" align="center" :resizable="false">
-                <template slot-scope="scope" style="width: 10%" v-if=" scope.row.endMeet && scope.row.leaveState == 0 && scope.row.statusCode != 3">
-                  <el-button size="mini" @click="repairSign(scope.row)" type="primary">补签</el-button>
+                <template slot-scope="scope" style="width: 10%">
+                  <div v-show="scope.row.leaveState == 0 && scope.row.statusCode != 3">
+                    <el-button size="mini" @click="repairSign(scope.row)" type="primary">补签</el-button>
+                  </div>
+                  <!-- <div v-show="scope.row.leaveState == 0 && scope.row.statusCode == 0">
+                    <el-button size="mini" @click="confirmMeet(scope.row)" type="primary">确认参会</el-button>
+                  </div> -->
+                  <div v-show="scope.row.leaveState == 0 && scope.row.statusCode == 3">
+                    <el-button size="mini" @click="signWithdrawal(scope.row)" type="primary">撤销</el-button>
+                  </div>
                 </template>
               </el-table-column>
             </el-table>
@@ -111,6 +146,17 @@ export default detailed
 <style scoped lang='less'>
 @import url('./detailed.less');
 .detailed {
-  
+  .label {
+    display: inline-block;
+    width: 46px;
+    text-align: right;
+    text-align-last: justify;
+    margin-right: 5px;
+  }
+
+  .person-num {
+    display: inline-block;
+    margin-right: 5px;
+  }
 }
 </style>

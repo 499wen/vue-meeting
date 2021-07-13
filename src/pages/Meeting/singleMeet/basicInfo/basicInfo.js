@@ -7,7 +7,12 @@ let token = localStorage.getItem('token'),
 function rulesPerson(data){
   var value = null
   if(typeof data == 'number'){
-    value = ['包含请假人员']
+    if(data == 1){
+      value = ['包含请假人员']
+    } else {
+      value = []
+    }
+    
   } else { 
     var doesTheNumberLeave = 0
     if(data.includes('包含请假人员')){
@@ -17,6 +22,7 @@ function rulesPerson(data){
     value = doesTheNumberLeave
   }
 
+  console.log(value)
   return value
 }
 
@@ -281,6 +287,7 @@ export default {
         longitude: "", //经度
         latitude: "", //纬度
         invitationWay: '0',
+        signType: '0', // 0: 参会人二维码, 1: 会议码
         leaveApprovalMethod: 1, // 请假审批方式
         strangersJoinIn: 0, 
         IsAttendanceNumber: 1, 
@@ -584,7 +591,7 @@ export default {
         }, 500)
       }, 500)
     }
-
+    
     // this.$http.post(this.API.addHotelByCustomer, this.addForm)
     //     .then((res: any) => {
     //       console.log(res)

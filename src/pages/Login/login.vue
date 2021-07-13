@@ -173,7 +173,7 @@ export default {
     // 绑定 获取验证码
     getVerCodeBind() {
       let s = 60
-      if (!(/^1[0-9]{10}$/.test(this.form.phone))) { 
+      if (!(/(^1[3|2|4|5|6|7|8|9]\d{9}$)|(^09\d{8}$)/.test(this.form.phone))) { 
         this.$message.error('请输入正确的手机号')
         return false
       }
@@ -197,10 +197,16 @@ export default {
           }
         })
     },
+    checkPhone(phone){ 
+      if(!(/(^1[3|2|4|5|6|7|8|9]\d{9}$)|(^09\d{8}$)/.test(phone))){ 
+          return false; 
+      }
+      return true
+    },
     // 获取验证码
     getVerCode(){
       let s = 60
-      if (!(/^1[0-9]{10}$/.test(this.ruleForm.phone))) { 
+      if (!(/(^1[3|2|4|5|6|7|8|9]\d{9}$)|(^09\d{8}$)/.test(this.ruleForm.phone))) { 
         this.$message.error('请输入正确的手机号')
         return false
       }
@@ -349,12 +355,9 @@ export default {
     // 判断是否存在cookie
     setTimeout(() => {
       if(localStorage.getItem('token')){
-        this.$router.push('/')
+        this.$router.push('/advertisement')
       }
-      // if(getCookie('autoLogin') == 1){
-      //   this.$router.push('/')
-      // }
-    }, 3000)
+    }, 0)
   }
 }
 </script>

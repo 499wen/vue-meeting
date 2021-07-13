@@ -545,12 +545,14 @@ export default {
           arr.push(this.mockData(i, '2', item.dinner, item.date, item.eat.dinner))
         })
       })
+      arr = arr.filter(its => its)
+      console.log('arr', arr)
 
       if(!arr.length) {
         this.$message.error('餐饮信息不能为空')
         return
       }
-      result = arr.filter(item => (item && item.diningInformationUserList.length > 0) && item)
+      result = arr.filter(item => (item != 'false' && item.diningInformationUserList.length > 0) && item)
       if(!result.length){
         this.$message.error('请选择就餐人员')
         return

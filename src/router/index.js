@@ -2,7 +2,6 @@ import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import axios from '../plugins/axios.js'
 import API from '../API/api.js'
-import { setCookie, delCookie, getCookie } from '@/plugins/cookie'
 
 import { getSearch } from '@/plugins/plugins.js'
 
@@ -31,7 +30,18 @@ const routes = [
     meta: '/demo',
     component: () => import(/* webpackChunkName: "home" */ '../demo/demo.vue'),
   },
-
+  {
+    path: '/projection',
+    name: 'projection',
+    meta: '/projection',
+    component: () => import(/* webpackChunkName: "home" */ '../pages/Projection/projection.vue'),
+  },
+  {
+    path: '/advertisement',
+    name: '广告',
+    meta: '/advertisement',
+    component: () => import(/* webpackChunkName: "home" */ '../pages/Advertisement/advertisement.vue'),
+  },
   {
     path: '/',
     name: '框架',
@@ -197,6 +207,24 @@ const routes = [
       },
 
       /**
+       * 会务管理 - 信息通知 InfoRemin
+       */
+       {
+        path: '/infoRemin',
+        name: '信息通知',
+        meta: '/infoRemin',
+        component: () => import(/* webpackChunkName: "InfoRemin" */ '../pages/InfoRemin/InfoRemin.vue'),
+        children: []
+      },
+      {
+        path: '/remin',
+        name: '信息通知详情',
+        meta: '/remin',
+        component: () => import(/* webpackChunkName: "remin" */ '../pages/InfoRemin/remin/remin.vue'),
+        children: []
+      },
+
+      /**
        * 会议室预约 - 预约审批 approval_subscribe
        */
       {
@@ -217,6 +245,26 @@ const routes = [
         component: () => import(/* webpackChunkName: "reportForm" */ '../pages/ReportForm/reportForm.vue'),
         children: []
       },
+
+      /**
+       * 支付明细
+       */
+      {
+        path: '/payDetailed',
+        name: '支付明细',
+        meta: '/payDetailed',
+        component: () => import(/* webpackChunkName: "reportForm" */ '../pages/PayDetailed/payDetailed.vue'),
+      },
+
+      /**
+       * 费用中心
+       */
+       {
+        path: '/costcenter',
+        name: '费用中心',
+        meta: '/costcenter',
+        component: () => import(/* webpackChunkName: "reportForm" */ '../pages/CostCenter/costCenter.vue'),
+      }
     ]
   },
   

@@ -19,7 +19,7 @@
           <template slot-scope="scope">
             <div class="time">
               <span>{{ scope.row.time }}</span>
-              <span>{{ scope.row.beginAndEndDate }}</span>    
+              <span>{{ scope.row.beginAndEndDate }}</span>
             </div>
           </template>
         </el-table-column>

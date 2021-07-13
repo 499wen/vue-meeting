@@ -23,13 +23,9 @@
             </el-form-item>
           </div>
           <div class="image">
-            <div class="avatar-uploader">
-              <div class="avatar">
-                <img v-if="form.photoFileSaveName" :src="API.echoImage(form.photoFileSaveName, 'HeadFile')" @error="errImg(form.photoFileSaveName, 'HeadFile', $event)"/>
-                <img v-else src="@/assets/images/defaultImg.png" alt="">
-                <input type="file" name="" id="" class="hide" @change="updateLoad" ref="file">
-              </div>
-            </div>
+            <img v-if="form.photoFileSaveName" :src="API.echoImage(form.photoFileSaveName, 'HeadFile')" @error="errImg(form.photoFileSaveName, 'HeadFile', $event)"/>
+            <img v-else src="@/assets/images/defaultImg.png" alt="">
+            <input type="file" name="" id="" class="hide" @change="updateLoad" ref="file">
           </div>
           <div class="btn">
             <el-button type="primary" size='small' round @click="saveInfo">保 存</el-button>
@@ -252,11 +248,25 @@ export default {
   }
 
   .image {
-    width: 120px;
-    height: 136px;
+    width: 56px;
+    height: 56px;
     // border: 1px dashed #ccc;
-    border-radius: 3px;
+    border-radius: 50%;
     margin-left: 20px;
+    border: 1px dashed #ccc;
+    box-sizing: border-box;
+    position: relative;
+    transition: border .3s;
+	
+    & > img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+  }
+
+  .image:hover {
+    border-color: #409eff;
   }
 
 }

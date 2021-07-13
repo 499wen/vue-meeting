@@ -1,12 +1,18 @@
 import companyInfo from './companyInfo/companyInfo.vue'
 import init from './init/init.vue'
+import version from './version/version.vue'
 import { selfTime, toTree } from '@/plugins/plugins'
 import { delCookie } from '@/plugins/cookie.js'
+import QRCode from 'qrcodejs2'
+import $ from 'jquery'
+import costCenter from '../CostCenter/costCenter.vue'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   components: {
     companyInfo,
-    init
+    init,
+    version
   },
   data(){
     return {
@@ -24,13 +30,106 @@ export default {
       // 默认选中menu
       defaultActive: '',
 
+      // 所有版本
+      allVersion: [],
+      // 余额
+      balance: '',
+      // 总金额
+      totalMoney: 0,
+      // 订单id
+      id: '',
+      
+      // 按钮
+      btnUse: [
+        {buttonName: '基本信息', scription: 'basicInfo', icon: '/baseInformation.png', buttonId: '110001', num: 1, isShow: '1', isUse: '1'},
+        {buttonName: '参会人管理', scription: 'attendee', icon: '/attendPersonal.png', buttonId: '110003', num: 2, isShow: '1', isUse: '1'},
+        {buttonName: '会议室预约', scription: 'meetRoom', icon: '/roomReservation.png', buttonId: '110012', num: 3, isShow: '1', isUse: '1'},
+        {buttonName: '通知消息管理', scription: 'smscenter', icon: '/notice.png', buttonId: '110004', num: 4, isShow: '1', isUse: '1'},
+        {buttonName: '会议邀请函', scription: 'invitation', icon: '/meetingInvite.png', buttonId: '110002', num: 5, isShow: '1', isUse: '1'},
+        {buttonName: '签到配置', scription: 'appSign', icon: '/meetingInvite.png', buttonId: '110002', num: 6, isShow: '1', isUse: '1'},
+        {buttonName: '会议排位管理', scription: ' ', icon: '/ConferenceSeating.png', buttonId: '110005', num: 7, isShow: '1', isUse: '0'},
+        {buttonName: '会议住宿管理', scription: 'guestroom', icon: '/stayManagement.png', buttonId: '110007', num: 8, isShow: '1', isUse: '1'},
+        {buttonName: '会议用餐管理', scription: 'restaurant', icon: '/eatmanage.png', buttonId: '110008', num: 9, isShow: '1', isUse: '1'},
+        {buttonName: '会议车辆管理', scription: 'vehicletask', icon: '/carmanagement.png', buttonId: '110009', num: 10, isShow: '1', isUse: '0'},
+        {buttonName: '会务组管理', scription: 'meetingaffairs', icon: '/groupManage.png', buttonId: '110010', num: 11, isShow: '1', isUse: '0'},
+        {buttonName: '会议议程管理', scription: ' ', icon: '/ziliaomanagment.png', buttonId: '110006', num: 12, isShow: '1', isUse: '0'},
+        {buttonName: '参会统计', scription: ' ', icon: '/attendCensus.png', buttonId: '110011', num: 13, isShow: '1', isUse: '0'},
+        {buttonName: '会务组报道', scription: 'report', icon: '/attendCensus.png', buttonId: '110013', num: 14, isShow: '1', isUse: '0'},
+      ],
       // 子集组件 开关
       companyInfo_child: false,
       init_child: false,
-      
+      version_child: false,
+      qrcode_child: false
     }
   },
   methods: {
+    // vuex 保存会议数据
+    ...mapMutations([
+      'setButtonRole'
+    ]),
+    // 进入费用中心
+    costcenter() {
+      this.$router.push('/costcenter')
+    },
+    // 充值
+    recharge() {
+      this.$prompt('输入充值金额(保留2位小数)', '提示', {
+        closeOnPressEscape: false,
+        closeOnClickModal: false,
+        cancelButtonClass: 'btn_custom_cancel',
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPattern: /(^[0-9]\d{0,3}$)|(^\.\d{1,2}$)|(^[0-9]\d{0,3}\.\d{1,2}$)/,
+        // /^(([^0][0-9]+|0)\.([0-9]{1,2})$)|^([^0][0-9]+|0)$/
+        inputErrorMessage: '输入格式有误！'
+      }).then(({ value }) => {
+
+        this.$http.post(this.API.userRecharge, {
+          fee: value * 100
+        }).then(res => {
+            if(res.code == '000') {
+              this.qrcode_child = true
+              setTimeout(() => {
+                this.$refs.qrcode.innerHTML = ''; //清除二维码方法一
+                var qrcode = new QRCode(this.$refs.qrcode, {
+                  text: res.data.code_url, //页面地址 ,如果页面需要参数传递请注意哈希模式#
+                  width: 120,
+                  height: 120,
+                  colorDark: '#000000',
+                  colorLight: '#ffffff'
+                })
+                // qrcode.clear(); // 清除二维码方法二
+                // this.payResult(sid)
+                this.resultRecharge(res.id)
+              }, 500)
+            } else {
+              this.$message.error(res.msg)
+            }
+          })
+      }).catch(err => {})
+    },
+    // 充值结果
+    resultRecharge(id){
+      $.ajax({
+        url: this.API.getWxRechargeCode(id),
+        type: 'post',
+        dataType: 'json',
+        headers: {
+          token: localStorage.getItem('token')
+        },
+        success: (res) => {
+          if(res.code == '000'){
+            this.$message.success(res.msg)
+            this.qrcode_child = false
+
+            this.getcost()
+          } else {
+            this.$message.error(res.msg)
+          }
+        }
+      })
+    },
     // h5 app
     open(type){
       this.H5_app = true
@@ -91,6 +190,86 @@ export default {
         }
       })
     },
+    cgForm() {
+      let child = this.$refs.version, id = child.cur.id, 
+        couponId = child.ruleForm.couponId
+
+      console.log(child.cur)
+      // return 
+      child.$refs.ruleForm.validate((valid) => {
+        if (valid) {
+
+          this.$http.post(this.API.getWxPay(id, couponId))
+            .then(res => {
+              console.log(res)
+              if(res.code == '000'){
+                this.id = res.id
+                this.qrcode_child = true
+                setTimeout(() => {
+                  this.$refs.qrcode.innerHTML = ''; //清除二维码方法一
+                  var qrcode = new QRCode(this.$refs.qrcode, {
+                    text: res.data.code_url, //页面地址 ,如果页面需要参数传递请注意哈希模式#
+                    width: 120,
+                    height: 120,
+                    colorDark: '#000000',
+                    colorLight: '#ffffff'
+                  })
+                  // qrcode.clear(); // 清除二维码方法二
+                  this.payResult(id)
+                }, 500)
+              } else {
+                this.$message.error(res.msg)
+              }
+            })
+        }
+      })
+    },
+    // 支付调用结果
+    payResult (sid){
+      $.ajax({
+        url: this.API.getWxPayCode(this.id, sid),
+        type: 'post',
+        dataType: 'json',
+        headers: {
+          token: localStorage.getItem('token')
+        },
+        success: (res) => {
+          if(res.code == '000'){
+            this.$message.success(res.msg)
+            this.qrcode_child = false
+
+            // 更新数据
+            this.getcost()
+          } else {
+            this.$message.error(res.msg)
+          }
+        }
+      })
+    },
+    cancel() {
+      this.version_child = false
+    },
+    // 总金额
+    money(val) {
+      this.totalMoney = val
+    },
+
+    // 变更版本
+    changeVersion() {
+      this.version_child = true
+    },
+
+    // 获取明细数据
+    getcost() {
+      this.$router.go(0);
+      return 
+
+      this.getBalance()
+      if(this.$route.path == '/costcenter'){
+        costCenter.methods.getcost()
+      }
+      
+    },
 
     // 退出登录
     logout(){
@@ -135,6 +314,7 @@ export default {
           console.log(err)
         })
     },
+    
     toTree(data) {
       let result = []
       if(!Array.isArray(data)) {
@@ -170,6 +350,39 @@ export default {
         }
       })
     },
+    // 查询余额
+    getBalance(){
+      this.$http.get(this.API.findBalance)
+      .then(res => {
+        if(res.code == '000'){
+          this.balance = res.data.balance
+        }
+      })
+    },
+    // 获取所有版本
+    getVersion() {
+      this.$http.get(this.API.findAllByPageAndCustomType)
+      .then(res => {
+        if(res.code == '000'){
+
+          this.allVersion = res.data
+        }
+      })
+    },
+    // 权限按钮
+    getButton() {
+      let arr = []
+      this.$http.get(this.API.findCompanyButton)
+        .then(res => {
+          if(res.code == '000'){
+            res.data.filter(its => {
+              this.btnUse.filter(i => i.buttonName == its.buttonName && arr.push({...its, icon: i.icon, scription: i.scription}))
+            })
+            
+            this.setButtonRole(arr)
+          }
+        })
+    },
     // 获取公司信息
     init() {
       // 获取权限列表
@@ -177,6 +390,15 @@ export default {
 
       // 获取公司信息
       this.getCustomer()
+
+      // 查询余额
+      this.getBalance()
+
+      // 获取所有版本
+      this.getVersion()
+
+      // 权限按钮
+      this.getButton()
     }
   },
   created() {
@@ -200,6 +422,7 @@ export default {
     }
 
     let routes = this.$router.options.routes
+    console.log(this.router)
     routes.filter(item => item.name == '框架' && this.router.push(...item.children))
 
     // 获取公司信息
@@ -219,5 +442,17 @@ export default {
         this.init()
       }
     })
-  }
+
+    // 监听路由变化
+    window.onhashchange = (e) => {
+      console.log('路由变化')
+    }
+  },
+  watch:{
+    $route(to,from){
+      console.log(to.path, this.defaultActive);
+      // if(to.path == '/costcenter')
+        // this.defaultActive = '/costcenter'
+    }
+  },
 }

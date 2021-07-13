@@ -10,6 +10,7 @@ export default new Vuex.Store({
      */
     meetingData: {}, // 当前会议数据
     attendeeData: null, // 参会人数据
+    buttonRole: [], // 按钮权限
 
     /**
      * 首页
@@ -26,6 +27,11 @@ export default new Vuex.Store({
     // 设置参会人数据
     setAttendeeData(state, data){
       state.attendeeData = data
+    },
+
+    // 设置按钮权限
+    setButtonRole(state, data){
+      state.buttonRole = data
     },
 
     // 首页 - 未召开会议

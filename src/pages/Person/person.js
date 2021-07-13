@@ -379,7 +379,7 @@ export default {
     },
     // 导出人员
     exportPerson(){
-      let tHeader = [], filterVal = [], tableData,
+      let tHeader = ['姓名'], filterVal = ['userName'], tableData,
       obj = {
         contanUserIdArr: [],
         ifContanUserIdArr: false,
@@ -389,6 +389,7 @@ export default {
         tHeader.push(item.label)
         filterVal.push(item.prop)
       })
+      
       
       // 重名数据
       if(this.isdouble) {

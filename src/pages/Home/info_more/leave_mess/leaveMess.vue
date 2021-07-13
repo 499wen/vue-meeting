@@ -121,11 +121,11 @@ export default {
     applyAgree(code) {
       let child = this.$refs.approval
       let formObject = {
-          approvalReplyMessage: child.form.approvalOpinions
+        approvalReplyMessage: child.form.approvalOpinions
       };
       this.$http.post(this.API.examinationAndApprovalLeave(child.form.id, code), formObject)
         .then(res => {
-          if (res.code == "000") {
+          if (res.statusCode == "000") {
             this.$message.success('审批成功!')
             this.approval_child = false
             this.getLeave()

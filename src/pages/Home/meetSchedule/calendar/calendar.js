@@ -166,7 +166,8 @@ export default {
       }
     },
     // 根据年月 获取展示天号  
-    getDayNum(year, month, day){
+    getDayNum(year, month, day = 1){
+      console.log(year, month, day)
       let dayArr = [], // 保存天号
         timestamp = '', // 记录时间戳
         showDaynum = 42, // 展示42天日历
@@ -200,10 +201,11 @@ export default {
         timestamp = timeObj.getTime()
         // 当天之前 不作标识
         let meetNum = 0
-        if(year == todayYear && month == todayMonth && new Date().getDate() <= i){
+
+        // && new Date().getDate() <= i
+        if(year >= todayYear && month >= todayMonth){
           meetNum = this.hdNomeet(timestamp)
         }
-
         // 往头部追加 
         dayArr.push({
           timestamp, 
@@ -225,7 +227,7 @@ export default {
         // 往头部追加 
         dayArr.push({
           timestamp, 
-          day: i, 
+          day: i,
           select: false,
           is_weekend: false,
           is_axistMeet: false,
@@ -249,8 +251,10 @@ export default {
 
     // 处理未召开会议数据
     hdNomeet(timestamp) {
+      console.log(timestamp)
       let n = 0
       this.notheldMeet.filter(item => {
+        
         if(item.lowerT <= timestamp && timestamp <= item.upperT){
           n++
         }

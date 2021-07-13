@@ -1,5 +1,5 @@
 var noVueAll = null, noVueSingle = [], t = null, loading
-import axios from 'axios'
+import $ from 'jquery'
 
 export default {
   props: ['row'],
@@ -188,7 +188,7 @@ export default {
                         itemStyle: {
                             shadowBlur: 10,
                             shadowOffsetX: 0,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            shadowColor: 'rgba(0, 0, 0, 0)'
                         }
                     }
                 }
@@ -208,7 +208,12 @@ export default {
 
         Is: null, // 等于 不等于
         Does: null, // 包含 不包含
-        t: null
+        t: null,
+
+        // 分屏
+        presentationRequest: null,
+        presentationConnection: null,
+        open: false
     }
   },
   watch: {
@@ -219,12 +224,32 @@ export default {
   },
   
   methods: {
+      // 别问为什么这么写  因为存在即合理!
+      getTwoData() {
+        $.ajax({
+            url: this.API.singleStatistical(this.meetId),
+            type: 'get',
+            dataType: 'json',
+            headers: {
+                token: localStorage.getItem('token')
+            },
+            success: res => {
+                if(res.code == '000' && res.data){
+                    this.columnData = res.data.length ? res.data[0] : {}
+  
+                    this.getChart()
+                } else {
+                    this.$message.error(res.msg)
+                }
+            }
+        })
+      },
       // 
       initData(meetId){
           this.meetId = meetId
           this.getData()
           this.t = setInterval(() => {
-              this.getData()
+              this.getTwoData()
           }, 10000)
       },
       getData(){
@@ -280,6 +305,7 @@ export default {
 
       tabBtn(){
           this.qhTab = this.qhTab == 12 ? 24 : 12
+          this.selfPaginationFilter()
       },
 
       close() {
@@ -421,12 +447,7 @@ export default {
           this.drawLine()
 
           noVueSingle = []
-          loading = this.$loading({
-            lock: true,
-            text: 'Loading',
-            spinner: 'el-icon-loading',
-            background: 'rgba(0, 0, 0, 0.7)'
-          });
+          
           this.requestAllData()
 
 
@@ -437,25 +458,36 @@ export default {
       // 查询数据相关会议
       getDataMeet(){
           var meetId = this.columnData.id
-          this.$http.get(this.API.findMeetingStatisticalDataByMeeting(meetId, this.allTable.pageNum, this.allTable.pageSize))
-              .then(res => {
-                  console.log(res)
-                  if(res.code == '000' && res.data){
-                      res.data.filter(item => {
-                          item.signState = item.statusCode == 3 ? '已签到' : '未签到'
-                          item.state = this.statusTab(item.statusCode, item.leaveState)
-                          item.endMeet = new Date().getTime() < this.columnData.endDate && new Date().getTime() >= this.columnData.beginDate ? true : false
-                      })
-                      this.dataList = res.data
-                      this.allTable.total = res.total
-                  } else {
-                      this.dataList = []
-                      this.allTable.total = 0
-                  }
-              })
+          console.log(this.columnData)
+          $.ajax({
+            url: this.API.findMeetingStatisticalDataByMeeting(meetId, this.allTable.pageNum, this.allTable.pageSize),
+            type: 'get',
+            dataType: 'json',
+            headers: {
+                token: localStorage.getItem('token')
+            },
+            success: res => {
+                if(res.code == '000' && res.data){
+                    res.data.filter(item => {
+                      item.signState = item.statusCode == 3 ? '已签到' : '未签到'
+                      item.state = this.statusTab(item.statusCode, item.leaveState)
+                      // item.endMeet = new Date().getTime() < this.columnData.endDate && new Date().getTime() >= this.columnData.beginDate ? true : false
+                      item.endMeet = true
+                    })
+                    this.dataList = res.data
+                    this.allTable.total = res.total
+
+                    console.log(this.dataList)
+                } else {
+                    this.dataList = []
+                    this.allTable.total = 0
+                }
+            }
+        })
       },
       //补签
       repairSign(val) {
+
           this.$confirm('确定要进行补签吗？', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
@@ -464,11 +496,11 @@ export default {
               var meetingId = this.columnData.id,
               arr = [
                   { 
-                      phone: val.phone,
-                      meetingId,
-                      userId: val.id,
-                      isLay: '1',
-                      createTime: new Date().getTime()
+                    phone: val.phone,
+                    meetingId,
+                    userId: val.id,
+                    isLay: '1',
+                    createTime: new Date().getTime()
                   }
               ]
               this.$http.post(this.API.meetSign(meetingId, 1), arr).then(res => {
@@ -479,6 +511,9 @@ export default {
                       this.columnData.attendance =+ 1
                       this.columnData.missingNumber =- 1
                       val.statusCode = 3
+                      val.state = '已签到'
+
+                      // 删除
                       // this.getDataMeet();
                   } else {
                       this.$message({ type: 'info', message: res.msg });
@@ -495,6 +530,28 @@ export default {
               });
           });
       },
+
+      // 确认不参会
+      signWithdrawal(row) {
+        console.log(row)
+        this.$confirm('确定要进行撤销吗？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+        }).then(() => {
+            this.$http.post(this.API.signWithdrawal(row.id))
+            .then(res => {
+              console.log(res)
+              if(res.code == '000'){
+                  this.$message.success('撤销成功!')
+                  row.statusCode = 0
+                  row.state = '未确认'
+              }
+            })
+        })
+        
+      },
+
       /**
        * statusCode
        * 123 已确认
@@ -526,33 +583,93 @@ export default {
       // 请求全部得数据
       requestAllData(){
           var meetId = this.columnData.id
-          axios({
-            method: 'get',
-            url: this.API.findMeetingStatisticalDataByMeeting(meetId, this.allTable.pageNum, 2000),
+
+          $.ajax({
+            url: this.API.findMeetingStatisticalDataByMeeting(meetId, this.allTable.pageNum, 9999),
+            type: 'get',
+            dataType: 'json',
             headers: {
-              token: localStorage.getItem('token')
+                token: localStorage.getItem('token')
+            },
+            success: data => {
+                if(data.code == '000' && data.data){
+                    data.data.filter(item => {
+                        item.state = this.statusTab(item.statusCode, item.leaveState)
+                    })
+                    noVueSingle = data.data
+                }
             }
-          }).then(({ data }) => {
-              if(data.code == '000' && data.data){
-                data.data.filter(item => {
-                      item.state = this.statusTab(item.statusCode, item.leaveState)
-                  })
-                  noVueSingle.push(...data.data)
-                  console.log(noVueSingle.length)
-                  if (data.total > noVueSingle.length){
-                    this.allTable.pageNum ++
-                    this.requestAllData()
-                  } else {
-                    loading.close()
-                  }
-              }
-          }).catch(err => {})
+        })
+          
       },
+      // 打开二屏
+      openScreens(){
+        this.open = true
+        let token = localStorage.getItem('token')
+
+        // 初始化
+        this.presentationRequest.start()
+        .then(connection => {
+            console.log('Connected to ' + connection.url + ', id: ' + connection.id);
+
+            console.log(this.presentationConnection)
+            setTimeout(() => {
+              console.log(this.presentationConnection)
+              // 向第二屏发送参数
+              this.presentationConnection.send(JSON.stringify({row: this.row, token}));
+            }, 1000)
+        })
+        .catch(error => {
+            console.log(typeof error);
+            console.log(error);
+            // if(error.indexOf('No screens found') > -1){
+            //     this.$message.error('请链接第二屏!')
+            //     this.presentationRequest = null
+            // }
+        });
+      },
+      // 关闭第二屏
+      closeScreens() {
+        this.open = false
+        this.presentationConnection.terminate();
+      }
   },
   mounted() {
     console.log(this)
     
     this.initData(this.row.id)
+
+    // 分屏
+    this.presentationRequest = new PresentationRequest(['https://mt.smart-hwt.com/projection/index.html']);
+    navigator.presentation.defaultRequest = this.presentationRequest;
+
+    //监视连接是否可用
+    this.presentationRequest.addEventListener('connectionavailable', (event) => {
+      this.presentationConnection = event.connection;
+
+      this.presentationConnection.addEventListener('close', () => {
+        console.log('> Connection closed.');
+      });
+      this.presentationConnection.addEventListener('terminate', () => {
+        console.log('> Connection terminated.');
+      });
+      this.presentationConnection.addEventListener('message', (e) => {
+        console.log('> ' + e.data);
+      });
+    });
+
+    //监视可用的显示器
+    this.presentationRequest.getAvailability()
+    .then(availability => {
+      console.log('Available presentation displays: ' + availability.value);
+      availability.addEventListener('change', () => {
+        console.log('> Available presentation displays: ' + availability.value);
+      });
+    })
+    .catch(error => {
+      console.log('Presentation availability not supported, ' + error.name + ': ' +
+          error.message);
+    });
 
     // 分10个进程
     // this.worker = this.$worker.create([

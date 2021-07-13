@@ -18,6 +18,7 @@
 
       <!-- 内容 -->
       <div class="content" v-if="block">
+        
         <!-- 基本信息 -->
         <basicInfo ref='basicInfo' v-if="tabFunc == '基本信息'"></basicInfo>
         <!-- 参会人管理 -->
@@ -30,6 +31,8 @@
         <restaurant ref='restaurant' v-if="tabFunc == '餐饮管理'"></restaurant>
         <!-- 邀请函 -->
         <invitation ref='invitation' v-if="tabFunc == '邀请函'"></invitation>
+        <!-- app配置 -->
+        <appSign ref='appSign' v-if="tabFunc == '签到配置'"></appSign>
         <!-- 住宿管理 -->
         <guestroom ref='guestroom' v-if="tabFunc == '住宿管理'"></guestroom>
       </div>

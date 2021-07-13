@@ -129,7 +129,7 @@ export default {
       batchData.filter(item => ids.push(item.id))
 
       console.log(batchData, curPerson)
-      this.$http.post(this.API.sendMeetingSmsById(this.curPerson.id), ids)
+      this.$http.post(this.API.sendMeetingSmsById(this.meetingData.id, this.curPerson.id), ids)
         .then(res => {
           if(res.code == '000'){
             this.$message.success('发送成功!')

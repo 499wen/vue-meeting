@@ -58,7 +58,7 @@
                 @click="meet_func(item, data)"
               > 
                 <img :src="imgIcon(data.icon)" alt />
-                {{ data.name }}
+                {{ data.buttonName }}
               </div>
             </div>
 
@@ -71,8 +71,9 @@
               item.tips == '已结束' && 'over']" size="mini" v-if="item.tips != '未发布'" round >{{ item.tips }}</el-button>
               <el-button class="btn" type="warning" size="mini" v-else round @click="SendingNotice(item, item.releaseCode, item.beginDate)">发布会议</el-button>
               <!-- <el-button class="btn" size="mini" round>发送邀请函</el-button> -->
-              <el-button class="btn" size="mini" round>会议驾驶舱</el-button>
-              <el-button class="btn" size="mini" round>复制会议</el-button>
+              <!-- <el-button class="btn" size="mini" round>会议驾驶舱</el-button>
+              <el-button class="btn" size="mini" round>复制会议</el-button> -->
+              <!-- <el-button class="btn" size="mini" round v-if="item.tips == '已发布'">通知参会人</el-button> -->
             </div>
           </div>
         </div>

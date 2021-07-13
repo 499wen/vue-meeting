@@ -118,7 +118,7 @@ body {
 }
 
 .el-dialog--center {
-  margin-top: 80px !important;
+  margin-top: 90px !important;
 }
 
 // 顶部导航栏
@@ -177,7 +177,6 @@ body {
   margin-bottom: 0;
 }
 
-
 .pagin {
   width: 100%;
   padding-top: 10px;
@@ -187,7 +186,7 @@ body {
 
 ::-webkit-scrollbar {
 	width: 8px;
-	height: 4px;
+	height: 8px;
 	background-color: #f3f3f3;
 }
 
@@ -218,6 +217,12 @@ body {
 .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
   background-color: #d0e7ff;
   height: 30px;
+}
+
+// 去除子集显示
+.el-tree-node__expand-icon.expanded {
+  visibility: hidden;
+  padding: 6px 0 !important;
 }
 
 .btn_custom_cancel{

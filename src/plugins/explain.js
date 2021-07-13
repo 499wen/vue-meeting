@@ -103,7 +103,7 @@ this.height = dom.offsetHeight
   js
     total: 0,
     pageNum: 1,
-    pageSize: 1000
+    pageSize: 1000,
 
     // 分页方法
     sizeChange(val){

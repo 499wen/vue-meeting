@@ -1,0 +1,78 @@
+.payDetailed {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+
+  .content {
+    width: 100%;
+    height: calc(100% - 52px);
+    box-sizing: border-box;
+    display: flex;
+    align-content: flex-start;
+    flex-wrap: wrap;
+
+    .summary {
+      width: 100%;
+      height: 140px;
+      padding: 10px 20px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      border: 1px solid #999;
+      position: relative;
+
+      .detail {
+        width: 100%;
+        display: flex;
+
+        & > span {
+          margin-right: 15px;
+          font-size: 15px;
+        }
+
+        .money-sum {
+          font-weight: 700;
+        }
+      }
+
+      .amount-of-money {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .number {
+          font-size: 16px;
+          color: aquamarine;
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .data {
+      width: calc(100%);
+      height: calc(100% - 192px);
+
+      .table {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  .tips {
+    position: relative;
+  }
+
+  .tips:before {
+    content: '*';
+    color: rgb(255, 0, 140);
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    font-size: 20px;
+  }
+}

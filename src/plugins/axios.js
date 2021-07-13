@@ -43,7 +43,6 @@ function hideLoading() {
   }
 }
 
-
 //防抖：将 300ms 间隔内的关闭 loading 便合并为一次。防止连续请求时， loading闪烁的问题。
 var toHideLoading = _.debounce(()=>{
   try{
@@ -59,6 +58,7 @@ let instance = axios.create({
   headers: { 
     'content-type': 'application/json; charset=utf-8;',
     // 'Access-Control-Allow-Origin': '*',
+    // 'X-Alt-Referer': "https://mt.smart-hwt.com/"
     // Authorization: '12'
   }
 })

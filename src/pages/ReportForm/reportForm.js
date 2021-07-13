@@ -60,7 +60,8 @@ export default {
 
       let {outputWay, particulars, beLate, missing, leave, phoneNumber} = form
       console.log(outputWay, particulars, beLate, missing, leave, phoneNumber, child.handmeetingId)
-
+      
+      
       child.$refs['form'].validate((valid) => {
         if (valid) {
           // 02 分组, 01 部门
@@ -80,6 +81,7 @@ export default {
             if(res.code == '000'){
               var aDom = document.createElement('a')
               aDom.setAttribute('download', '报表')
+              aDom.setAttribute('target', '_blank')
               aDom.href = 'https://docxs-1305256445.cos.ap-guangzhou.myqcloud.com/' + res.data
               aDom.click()
             } else {
@@ -93,13 +95,19 @@ export default {
       this.clumnLook_child = false
     },
     close() {
-      // 清除定时器
       let child = this.$refs.detailed
+
+      // 清除定时器
       clearInterval(child.t)
       child.t = null
 
       // 关闭弹框
       this.detailed_child = false
+
+      // 关闭二屏
+      this.presentationRequest = null
+      this.presentationConnection = null
+      child.presentationConnection && child.presentationConnection.terminate();
     },
 
     // 获取参会人报到数据

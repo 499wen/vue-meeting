@@ -151,6 +151,20 @@
                         </el-col>
                       </div>
                     </el-form-item> 
+
+                    <el-form-item label="二维码签到选项">
+                      <div class="set-margin">
+                        <el-col :span="24">
+                          <el-radio :disabled="meetIsEnd" :label="'0'"
+                            v-model="addForm.signType"
+                          >参会人二维码</el-radio>
+                          <el-radio
+                            :disabled="meetIsEnd" :label="'1'"
+                            v-model="addForm.signType"
+                          >会议码</el-radio>
+                        </el-col>
+                      </div>
+                    </el-form-item> 
                   </el-collapse-item>
 
                   <!-- 更多信息 -->

@@ -75,7 +75,7 @@ export default {
             case 'internal' : externalCode = '0'; break;
             case 'external' : externalCode = '1'; break;
           }
-          api = this.API.findByMeetingIdAndPage(this.meetingData.id, this.meetingData.id, this.pageNum, 9999999, this.searchKey, 'ok', externalCode)
+          api = this.API.findByMeetingIdAndPage(this.meetingData.id, this.meetingData.id, this.pageNum, 9999999, this.searchKey, externalCode, 'ok')
         }
         this.$http.post(api, obj)
           .then(res => {
@@ -159,7 +159,7 @@ export default {
           case 'internal' : externalCode = '0'; break;
           case 'external' : externalCode = '1'; break;
         }
-        api = this.API.findByMeetingIdAndPage(this.meetingData.id, this.meetingData.id, this.pageNum, this.pageSize, this.searchKey, 'ok', externalCode)
+        api = this.API.findByMeetingIdAndPage(this.meetingData.id, this.meetingData.id, this.pageNum, this.pageSize, this.searchKey, externalCode, 'ok')
       }
       this.$http.post(api, obj)
         .then(res => {

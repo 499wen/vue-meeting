@@ -1,0 +1,317 @@
+.appSign {
+  width: 100%;
+  height: 100%;
+  padding: 20px 0;
+  box-sizing: border-box;
+  display: flex;
+
+  .base-map {
+    width: 100%;
+    padding: 20px 0 0 20px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    position: relative;
+    border-radius: 3px;
+    // margin-bottom: 50px;
+
+    &:before {
+      content: '底图选择';
+      letter-spacing: 2px;
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      margin-left: -15px;
+      width: 200px;
+      height: 30px;
+      background-color: #fff;
+      color: #333;
+      text-align: center;
+      line-height: 30px;
+      font-weight: 700;
+      font-size: 20px;
+    }
+
+    .map-box {
+      width: 100%;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: flex-start;
+      align-content: flex-start;
+      flex-wrap: wrap;
+      overflow-y: auto;
+      max-height: 100%;
+
+      .single {
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        box-sizing: border-box;
+        cursor: pointer;
+        width: 160px;
+        height: 120px;
+        margin-right: 20px;
+        margin-bottom: 20px;
+        padding: 10px 15px;
+
+        & > img {
+          width: 100%;
+          height: 100%;
+          border-radius: 3px;
+        }
+      }
+
+      .upload {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        border-style: dashed;
+
+        &:before {
+          content: '';
+          width: 50%;
+          height: 1px;
+          background-color: #ccc;
+          position: absolute;
+          left: 25%;
+          top: 50%;
+        }
+
+        &:after {
+          content: '';
+          height: 50%;
+          width: 1px;
+          background-color: #ccc;
+          position: absolute;
+          top: 25%;
+          left: 50%;
+        }
+
+        #file {
+          width: 100%;
+          height: 100%;
+          cursor: pointer;
+          position: absolute;
+          top: 0;
+          left: 0;
+          opacity: 0;
+        }
+      }
+
+      .select {
+        border-color: skyblue;
+        box-shadow: 1px 1px 10px 1px #ccc;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .select:before {
+        content: '';
+        position: absolute;
+        bottom: -25px;
+        right: -25px;
+        font-size: 20px;
+        background-color: skyblue;
+        width: 50px;
+        height: 50px;
+        transform: rotateZ(45deg);
+        text-align: center;
+        line-height: 50px;
+      }
+
+      .select:after {
+        content: '\2714';
+        position: absolute;
+        width: 25px;
+        text-align: center;
+        bottom: 0;
+        right: 0;
+        font-size: 18px;
+        color: #234060;
+      }
+    }
+  }
+
+
+  .taoi {
+    width: 100%;
+    position: relative;
+    padding: 20px 0 0 20px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+
+    &:before {
+      content: '模板选择';
+      letter-spacing: 2px;
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      margin-left: -100px;
+      width: 200px;
+      height: 30px;
+      background-color: #fff;
+      color: #333;
+      text-align: center;
+      line-height: 30px;
+      font-weight: 700;
+      font-size: 20px;
+    }
+  }
+
+  .model-box {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: flex-start;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    overflow-y: auto;    
+    max-height: 440px;
+
+    .single {
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      box-sizing: border-box;
+      cursor: pointer;
+      width: 260px;
+      height: 174px;
+      margin-right: 20px;
+      margin-bottom: 20px;
+      padding: 10px 20px;
+
+      // 公共样式
+      .meet-name {
+        color: #333;
+        font-size: 14px;
+        box-sizing: border-box;
+        width: 100%;
+        text-align: center;
+        padding: 0;
+      }
+
+      .photo {
+        width: 60px;
+        height: 60px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+        text-align: center;
+        line-height: 58px;
+      }
+
+      // 模型一
+      .one {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        flex-direction: column;
+
+        .person-info {
+          width: 100%;
+          flex: 1;
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          padding: 10px 0;
+          box-sizing: border-box;
+
+          .info {
+            width: calc(100% - 70px);
+            margin-left: 10px;
+            height: 60px;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            font-size: 14px;
+            color: #333;
+          }
+        }
+        
+        .sign-data {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 14px;
+          color: #333;
+        }
+      }
+
+      // 模型二
+      .two {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        flex-direction: column;
+
+        .person-info {
+          width: 100%;
+          flex: 1;
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          padding: 10px 0;
+          box-sizing: border-box;
+
+          .info {
+            width: calc(100% - 70px);
+            margin-left: 10px;
+            height: 60px;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            font-size: 14px;
+            color: #333;
+          }
+        }
+        
+        .sign-data {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 14px;
+          color: #333;
+        }
+      }
+      
+    }
+
+    .select {
+      border-color: skyblue;
+      box-shadow: 1px 1px 10px 1px #ccc;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .select:before {
+      content: '';
+      position: absolute;
+      bottom: -25px;
+      right: -25px;
+      font-size: 20px;
+      background-color: skyblue;
+      width: 50px;
+      height: 50px;
+      transform: rotateZ(45deg);
+      text-align: center;
+      line-height: 50px;
+    }
+
+    .select:after {
+      content: '\2714';
+      position: absolute;
+      width: 25px;
+      text-align: center;
+      bottom: 0;
+      right: 0;
+      font-size: 18px;
+      color: #234060;
+    }
+  }
+}

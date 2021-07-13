@@ -25,22 +25,33 @@
             <i class="el-icon-setting"></i>
             <span slot="title">会议管理</span>
           </el-menu-item>
-          
+          <el-menu-item index="/costcenter" v-show="false">
+            <i class="el-icon-setting"></i>
+            <span slot="title">费用明细</span>
+          </el-menu-item>
+          <!-- <el-menu-item index="/meet" v-show="false">
+            <i class="el-icon-setting"></i>
+            <span slot="title">会议管理</span>
+          </el-menu-item> -->
+
           <div v-for="(item, idx) in router" :key="idx">
             <!-- 一级 -->
             <el-submenu :index="item.menuUrl + ''" v-if="item.children">
               <template slot="title">
-                <i :class="`iconfont icon-${item.img}`"></i>
+                <img v-if="item.img" class="icon-img" :src="API.echoImage(item.img, 'icon')" @error="errImg(item.img, 'icon', $event)"/>
                 <span>{{ item.menuName }}</span>
               </template>
                 <!-- 二级 -->
                 <el-menu-item-group v-for="(child, index) in item.children" :key="index">
-                  <el-menu-item :index="'/'+child.menuUrl" class="child-menu">{{ '  '+child.menuName }}</el-menu-item>
+                  <el-menu-item :index="'/'+child.menuUrl" class="child-menu">
+                    <img v-if="item.img" class="icon-img" :src="API.echoImage(item.img, 'icon')" @error="errImg(item.img, 'icon', $event)"/>
+                    <span>{{ '  '+child.menuName }}</span>
+                  </el-menu-item>
                 </el-menu-item-group>
             </el-submenu>
             <!-- 一级 -->
             <el-menu-item :index="'/'+item.menuUrl" v-else>
-              <i :class="`iconfont icon-${item.img}`"></i>
+              <img class="icon-img" v-if="item.img" :src="API.echoImage(item.img, 'icon')" @error="errImg(item.img, 'icon', $event)"/>
               <span slot="title">{{ item.menuName }}</span>
             </el-menu-item>
           </div>
@@ -68,10 +79,32 @@
               <img src="@/assets/images/qrcodelogo.png" alt="">
               <span>会务通APP</span>
             </div>
-            <img v-if="loginInfo.photoFileSaveName" :src="API.echoImage(loginInfo.photoFileSaveName, 'HeadFile')" @error="errImg(loginInfo.photoFileSaveName, 'HeadFile', $event)"/>
-            <img src="@/assets/images/hztLogo.png" alt="" v-else>
 
-            <span>{{ loginInfo.customerName }}</span>
+            <div class="user-info">
+              <img v-if="loginInfo.photoFileSaveName" :src="API.echoImage(loginInfo.photoFileSaveName, 'HeadFile')" @error="errImg(loginInfo.photoFileSaveName, 'HeadFile', $event)"/>
+              <img src="@/assets/images/hztLogo.png" alt="" v-else>
+
+              <span>{{ loginInfo.customerName }}</span>
+
+              <!-- 信息卡片 -->
+              <div class="user-card">
+                <div class="card-box">
+                  <div class="card-single">
+                    <span class="label">余额</span>
+                    <span class="tip">{{balance}}</span>
+                  </div>
+                  <div class="card-single" @click="costcenter">
+                    <span class="label">费用明细</span>
+                    <!-- <span class="tip">代金券0</span> -->
+                  </div>
+                  <div class="card-single" @click="recharge">
+                    <span class="label">充值</span>
+                    <!-- <span class="tip">{{balance}}</span> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            
           </div>
         </div>
 
@@ -99,6 +132,11 @@
                 </div>
               </el-menu-item>
               <el-menu-item index="2-2">
+                <div id="logout" @click="changeVersion">
+                <i class="el-icon-edit"></i> 变更版本
+                </div>
+              </el-menu-item>
+              <el-menu-item index="2-2">
                 <div id="logout" @click="logout">
                 <i class="el-icon-switch-button"></i> 注销
                 </div>
@@ -114,7 +152,7 @@
     </div>
 
     <!-- 公司信息 -->
-    <el-dialog title="公司信息" :visible.sync="companyInfo_child" width="30%" center
+    <el-dialog title="公司信息" :visible.sync="companyInfo_child" width="700px" center
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <companyInfo ref="companyInfo" v-if="companyInfo_child" @close='companyInfo_child = false' @initInfo='getCustomer'></companyInfo>
     </el-dialog>
@@ -125,6 +163,29 @@
       <init ref="init" v-if="init_child"></init>
       <div class="dialog-btn">
         <el-button type="primary" @click="submitForm()" size="small" round>保 存</el-button>
+      </div>  
+    </el-dialog>
+
+    <!-- 变更版本 -->
+    <el-dialog title="变更版本" :visible.sync="version_child" width="10%" center
+      :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
+      <version ref="version" v-if="version_child" :allVersion='allVersion' @money='money'></version>
+      <div class="dialog-btn">
+        <span class="pay-money">应支付：{{ totalMoney }}</span>
+        <el-button type="primary" @click="cgForm" size="small" round>变 更</el-button>
+        <el-button @click="cancel" size="small" type="danger" round>取 消</el-button>
+      </div>  
+    </el-dialog>
+
+    <!-- 显示支付二维码 -->
+    <el-dialog title="支付" :visible.sync="qrcode_child" width="10%" center
+      :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
+      
+      <div class="qrcode" ref="qrcode"></div>
+
+      <div class="dialog-btn">
+        <!-- <el-button type="primary" @click="cgForm" size="small" round>变 更</el-button>
+        <el-button @click="cancel" size="small" type="danger" round>取 消</el-button> -->
       </div>  
     </el-dialog>
 

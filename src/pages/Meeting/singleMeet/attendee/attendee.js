@@ -134,6 +134,7 @@ export default {
                 console.log(res)
                 if(res.code == '000') {
                   this.$message.success('移除成功!')
+                  this.tableData = []
                   this.getAttenPerson()
                 } else {
                   this.$message.error(res.msg)
@@ -289,6 +290,39 @@ export default {
             }
           })
       }).catch(err => {})
+    },
+
+    // 参会人预约
+    subscribe(row) {
+      let obj = {
+        inviteId: row.id,
+        meetingId: this.meetingData.id
+      }
+
+      this.$http.post(this.API.addMeetingSginSms, obj)
+        .then(res => {
+          console.log(res)
+          if(res.code == '000'){
+            this.$message.success('预约成功!')
+            row.types = 1
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
+    },
+
+    // 参会人取消预约
+    cancelSub(row){
+      this.$http.post(this.API.delMeetingSginSms(row.sid))
+        .then(res => {
+          console.log(res)
+          if(res.code == '000'){
+            this.$message.success('取消成功!')
+            row.types = 0
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
     },
 
     // 分页方法

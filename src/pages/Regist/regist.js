@@ -103,15 +103,16 @@ export default {
         .then(res => {
           if(res.code == '000'){
             this.$message.success('验证码己成功发送,请注意查收')
-            let handle = setInterval(() => {
-              this.retryCount--
-              if(this.retryCount <= 0){
-                clearInterval(handle);
-              }
-            },1000)
           } else {
             this.$message.error(res.msg)
           }
+
+          let handle = setInterval(() => {
+            this.retryCount--
+            if(this.retryCount <= 0){
+              clearInterval(handle);
+            }
+          },1000)
         })
     },
     // 提交申请
