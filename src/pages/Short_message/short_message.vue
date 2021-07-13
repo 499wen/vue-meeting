@@ -6,7 +6,7 @@
         <span>短信中心</span>
       </div>
 
-      <!-- <el-button size="small" round @click="addRole" type="primary">添加短信模板</el-button> -->
+      <!-- <el-button v-preventReClick size="small" round @click="addRole" type="primary">添加短信模板</el-button> -->
     </div>
 
     <!--  -->
@@ -39,7 +39,7 @@
             </el-table-column>
             <el-table-column :show-overflow-tooltip="true" label="操作" width="120" align="center" :resizable="false">
               <template slot-scope="scope">
-                <el-button size="small" round @click="smsDetail(scope.row)" :class="scope.row.configurable == 1 && 'tips'">详情</el-button>
+                <el-button v-preventReClick size="small" round @click="smsDetail(scope.row)" :class="scope.row.configurable == 1 && 'tips'">详情</el-button>
               </template>
             </el-table-column>
             <el-table-column :show-overflow-tooltip="true" label="启用状态" width="120" align="center" :resizable="false">
@@ -72,7 +72,7 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <detail ref="detail" v-if="smsDetail_child" :detail='detail'></detail>
       <div class="dialog-btn" v-show="detail.configurable != 0">
-        <el-button type="primary" @click="submitForm" size="small" round>保 存</el-button>
+        <el-button v-preventReClick type="primary" @click="submitForm" size="small" round>保 存</el-button>
       </div>
     </el-dialog>
   </div>

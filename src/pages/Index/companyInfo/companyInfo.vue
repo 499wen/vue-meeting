@@ -28,7 +28,7 @@
             <input type="file" name="" id="" class="hide" @change="updateLoad" ref="file">
           </div>
           <div class="btn">
-            <el-button type="primary" size='small' round @click="saveInfo">保 存</el-button>
+            <el-button v-preventReClick type="primary" size='small' round @click="saveInfo">保 存</el-button>
           </div>
         </el-form>
 
@@ -54,7 +54,7 @@
           </div>
 
           <div class="btn">
-            <el-button type="primary" size='small' round>保 存</el-button>
+            <el-button v-preventReClick type="primary" size='small' round>保 存</el-button>
           </div>
         </el-form>
       </el-tab-pane>
@@ -77,7 +77,7 @@
             </el-form-item> -->
 
           <div class="btn">
-            <el-button type="primary" size='small' round @click="editPwd">保 存</el-button>
+            <el-button v-preventReClick type="primary" size='small' round @click="editPwd">保 存</el-button>
           </div>
         </el-form>
 

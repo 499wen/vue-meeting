@@ -248,10 +248,10 @@
 									</div>
 								</div>
 								<div class="flex invite-progress" style="margin-left: 10px;justify-content: center;">
-									<el-button size='mini' @click="dengWidth">等宽</el-button>
+									<el-button v-preventReClick size='mini' @click="dengWidth">等宽</el-button>
 								</div>
 								<div class="flex invite-progress">
-									<el-button size='mini' @click="levelCenter">水平居中</el-button>
+									<el-button v-preventReClick size='mini' @click="levelCenter">水平居中</el-button>
 								</div>
 								<div class="flex invite-progress" style="width: 100% !important">
 									<span class="style_label mr10" style="width: 52px">字体颜色</span>
@@ -297,13 +297,13 @@
 									</div>
 								</el-upload> -->
 								<div class="flex invite-progress">
-									<el-button size='mini' @click="dengWidth">等宽</el-button>
+									<el-button v-preventReClick size='mini' @click="dengWidth">等宽</el-button>
 								</div>
 								<div class="flex invite-progress">
-									<el-button size='mini' @click="levelCenter">水平居中</el-button>
+									<el-button v-preventReClick size='mini' @click="levelCenter">水平居中</el-button>
 								</div>
 								<div class="upload-demo">
-									<el-button size="mini" type="">点击上传</el-button>
+									<el-button v-preventReClick size="mini" type="">点击上传</el-button>
           				<input type="file" name="" id="" class="hide" @change="uploadImage" ref="file_pmt">
 								</div>
 								
@@ -443,7 +443,7 @@
 									:action="'API.url + API.router.imgupload'" :on-success="uploadVedio" ref="elupload"
 								 :headers="headers" accept="video/*" :show-file-list="false"
 								>
-									<el-button size="mini" type="">点击上传</el-button>
+									<el-button v-preventReClick size="mini" type="">点击上传</el-button>
 								</el-upload>
 
 								<el-upload 
@@ -452,7 +452,7 @@
 									:action="'API.url + API.router.imgupload'" :on-success="uploadAudio" ref="elupload"
 								 :headers="headers" accept="audio/*" :show-file-list="false"
 								>
-									<el-button size="mini" type="">点击上传</el-button>
+									<el-button v-preventReClick size="mini" type="">点击上传</el-button>
 								</el-upload>
 
 								<div class="flex invite-progress">
@@ -487,10 +487,10 @@
 						<div class="layui-colla-content layui-show">
 							<div style="display: flex; justify-content: space-between; align-items: center">
 								<div class="flex invite-progress" style="margin-left: 10px;justify-content: center;">
-									<el-button size='mini' @click="dengWidth">等宽</el-button>
+									<el-button v-preventReClick size='mini' @click="dengWidth">等宽</el-button>
 								</div>
 								<div class="flex invite-progress">
-									<el-button size='mini' @click="levelCenter">水平居中</el-button>
+									<el-button v-preventReClick size='mini' @click="levelCenter">水平居中</el-button>
 								</div>
 								<div class="flex invite-progress" style="float:left;margin:10px 0;">
 									<li class="flex top-floor mr20" @click="changeZindex(9)">
@@ -518,7 +518,7 @@
 				<el-collapse-item title="元素列" name="1">
 					<div v-if="dataCollection[curPage - 1]">
 						<div class="ele_btn clear_float" v-for="(item,index) in dataCollection[curPage - 1].eleList" :key="item.id">
-							<el-button size='small' @click="selectItem(item.id)" :id="'itemId'+item.id">{{item.nodeValue}}({{index+1}})</el-button>
+							<el-button v-preventReClick size='small' @click="selectItem(item.id)" :id="'itemId'+item.id">{{item.nodeValue}}({{index+1}})</el-button>
 						</div>
 					</div>
 				</el-collapse-item>
@@ -814,9 +814,9 @@
 					背景库
 				</div>
 				<div class="popup_bg-func">
-					<el-button size="small" type="danger" style="margin-right: 10px" @click="delBgimg">删除背景</el-button>
+					<el-button v-preventReClick size="small" type="danger" style="margin-right: 10px" @click="delBgimg">删除背景</el-button>
 					<div class="upload-demo">
-						<el-button size="small" type="primary">上传背景</el-button>
+						<el-button v-preventReClick size="small" type="primary">上传背景</el-button>
           	<input type="file" name="" id="" class="hide" @change="bgiUpload" ref="file">
 					</div>
 
@@ -831,8 +831,8 @@
 				</div>
 
 				<div class="popup_bottom">
-					<el-button size="small" type="primary" v-if="selectImg" @click="chioceImgRe">确定</el-button>
-					<el-button size="small" @click="closeBgi">关闭</el-button>
+					<el-button v-preventReClick size="small" type="primary" v-if="selectImg" @click="chioceImgRe">确定</el-button>
+					<el-button v-preventReClick size="small" @click="closeBgi">关闭</el-button>
 					
 				</div>
 			</div>
@@ -846,8 +846,8 @@
 					模板库
 				</div>
 				<div class="popup_bg-func">
-					<el-button size="small" type="danger" @click="delModel">删除模板</el-button>
-					<el-button size="small" @click="presModel">保存模板</el-button>
+					<el-button v-preventReClick size="small" type="danger" @click="delModel">删除模板</el-button>
+					<el-button v-preventReClick size="small" @click="presModel">保存模板</el-button>
 				</div>
 				<div class="popup_cente">
 
@@ -861,8 +861,8 @@
 				</div>
 
 				<div class="popup_bottom">
-					<el-button size="small" v-if="selectModel" type="primary" @click="modelBtn">选择</el-button>
-					<el-button size="small" @click="closeModel">关闭</el-button>
+					<el-button v-preventReClick size="small" v-if="selectModel" type="primary" @click="modelBtn">选择</el-button>
+					<el-button v-preventReClick size="small" @click="closeModel">关闭</el-button>
 				</div>
 			</div>
 		</div>

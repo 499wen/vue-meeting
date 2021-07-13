@@ -6,7 +6,7 @@
         <span>信息通知</span>
         <span>会议名称</span>
       </div>
-      <el-button round size="small" @click="$router.go(-1)">返回</el-button>
+      <el-button v-preventReClick round size="small" @click="$router.go(-1)">返回</el-button>
     </div>
     
     <div class="content">
@@ -27,8 +27,8 @@
 
       <div class="data">
         <div class="func">
-          <el-button round size="small" type="primary" @click="addPerson"> 添加人员 </el-button>
-          <el-button round size="small" type="primary" @click="delPerson"> 移除人员 </el-button>
+          <el-button v-preventReClick round size="small" type="primary" @click="addPerson"> 添加人员 </el-button>
+          <el-button v-preventReClick round size="small" type="primary" @click="delPerson"> 移除人员 </el-button>
         </div>
 
         <!-- 表格 -->
@@ -66,8 +66,8 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <AddPersonRemin ref="AddPersonRemin" v-if="addPerson_child" :row='row'></AddPersonRemin>
       <div class="dialog-btn">
-        <el-button type="primary" @click="submitForm" size="small" round>添 加</el-button>
-        <el-button @click="cancel" size="small" type="danger" round>取 消</el-button>
+        <el-button v-preventReClick type="primary" @click="submitForm" size="small" round>添 加</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>取 消</el-button>
       </div>
     </el-dialog>
   </div>

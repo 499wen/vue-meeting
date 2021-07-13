@@ -52,10 +52,10 @@
               </div>
 
               <div class="remove" v-if='false'>
-                <el-button size='mini' type="danger" @click="removeBreakfast(idx)" :disabled='disabled(item.date) || meetIsEnd'>移除餐厅</el-button>
+                <el-button v-preventReClick size='mini' type="danger" @click="removeBreakfast(idx)" :disabled='disabled(item.date) || meetIsEnd'>移除餐厅</el-button>
               </div>
               <div class="add" v-if='false'>
-                <el-button size='mini' type="primary" @click="addBreakfast(idx)" :disabled='disabled(item.date) || meetIsEnd'>添加餐厅</el-button>
+                <el-button v-preventReClick size='mini' type="primary" @click="addBreakfast(idx)" :disabled='disabled(item.date) || meetIsEnd'>添加餐厅</el-button>
               </div>
 
             </el-form>
@@ -96,10 +96,10 @@
               </div>
 
               <div class="remove" v-if='false'>
-                <el-button size='mini' type="danger" @click="removeLunch(idx)"  :disabled='disabled(item.date) || meetIsEnd'>移除餐厅</el-button>
+                <el-button v-preventReClick size='mini' type="danger" @click="removeLunch(idx)"  :disabled='disabled(item.date) || meetIsEnd'>移除餐厅</el-button>
               </div>
               <div class="add" v-if='false'>
-                <el-button size='mini' type="primary" @click="addLunch(idx)"  :disabled='disabled(item.date) || meetIsEnd'>添加餐厅</el-button>
+                <el-button v-preventReClick size='mini' type="primary" @click="addLunch(idx)"  :disabled='disabled(item.date) || meetIsEnd'>添加餐厅</el-button>
               </div>
 
             </el-form>
@@ -140,10 +140,10 @@
               </div> 
 
               <div class="remove" v-if='false'>
-                <el-button size='mini' type="danger" @click="removeDinner(idx)" :disabled='disabled(item.date) || meetIsEnd'>移除餐厅</el-button>
+                <el-button v-preventReClick size='mini' type="danger" @click="removeDinner(idx)" :disabled='disabled(item.date) || meetIsEnd'>移除餐厅</el-button>
               </div>
               <div class="add" v-if='false'>
-                <el-button size='mini' type="primary" @click="addDinner(idx)" :disabled='disabled(item.date) || meetIsEnd'>添加餐厅</el-button>
+                <el-button v-preventReClick size='mini' type="primary" @click="addDinner(idx)" :disabled='disabled(item.date) || meetIsEnd'>添加餐厅</el-button>
               </div>
 
             </el-form>
@@ -156,7 +156,7 @@
       </div>
 
       <div class="addCard">
-        <el-button type="warning" size='mini' @click="addMeals" :disabled="meetIsEnd">添加</el-button>
+        <el-button v-preventReClick type="warning" size='mini' @click="addMeals" :disabled="meetIsEnd">添加</el-button>
       </div>
 
       <!-- 添加用餐人员 -->
@@ -173,7 +173,7 @@
           </el-select>
           <!-- 条件组查询 -->
           <el-dropdown trigger="click" class="spacing" @command='clickCondi' placement='bottom'>
-            <el-button size="small">
+            <el-button v-preventReClick size="small">
               条件组查询<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
@@ -181,7 +181,7 @@
             </el-dropdown-menu>
           </el-dropdown>
           <el-input placeholder="请输入手机号，姓名" v-model="searchKey" class="input-with-select" size="small" @keyup.native.enter="getChrPerson">
-            <el-button slot="append" icon="el-icon-search" @click="getChrPerson"></el-button>
+            <el-button v-preventReClick slot="append" icon="el-icon-search" @click="getChrPerson"></el-button>
           </el-input>
         </div>
 
@@ -214,9 +214,9 @@
             <!-- <div class="showPerson">{{ tableData.length }}人</div> -->
           </div>
           <div class="table-center">
-            <el-button class="c-btn" @click="removePerson()">&gt;</el-button>
-            <el-button class="c-btn" @click="addPerson()">&lt;</el-button>
-            <!-- <el-button class="c-btn" type="warning" @click="savePerson()" :disabled="meetIsEnd">保存</el-button> -->
+            <el-button v-preventReClick class="c-btn" @click="removePerson()">&gt;</el-button>
+            <el-button v-preventReClick class="c-btn" @click="addPerson()">&lt;</el-button>
+            <!-- <el-button v-preventReClick class="c-btn" type="warning" @click="savePerson()" :disabled="meetIsEnd">保存</el-button> -->
           </div>
           <div class="table-public">
             <el-table
@@ -248,13 +248,13 @@
         </div>
 
         <!-- <span slot="footer" class="dialog-footer"> 
-          <el-button @click="addPersonBox = false">取 消</el-button>
-          <el-button type="primary" @click="addPersonBox = false">确 定</el-button>
+          <el-button v-preventReClick @click="addPersonBox = false">取 消</el-button>
+          <el-button v-preventReClick type="primary" @click="addPersonBox = false">确 定</el-button>
         </span> -->
       </el-dialog>
     </div>
     <div class="prese">
-      <el-button type="warning" size='mini' @click="prese" :disabled="meetIsEnd">保存餐厅信息</el-button>
+      <el-button v-preventReClick type="warning" size='mini' @click="prese" :disabled="meetIsEnd">保存餐厅信息</el-button>
     </div>
   </div>
 </template>

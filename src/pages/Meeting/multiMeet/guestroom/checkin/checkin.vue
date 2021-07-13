@@ -3,7 +3,7 @@
     <div class="header">
       <!-- 条件组 -->
       <el-dropdown trigger="click" class="spacing" @command='clickCondi' placement='bottom'>
-        <el-button size="small">
+        <el-button v-preventReClick size="small">
           条件组查询<i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
         <el-dropdown-menu slot="dropdown">

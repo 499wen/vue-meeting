@@ -3,7 +3,7 @@
     <div class="container">
       <!-- 容器顶部 -->
       <div class="c-top">
-        <el-button title="删除条件组" type="danger" size='small' @click="delCondition">删除条件组</el-button>
+        <el-button v-preventReClick title="删除条件组" type="danger" size='small' @click="delCondition">删除条件组</el-button>
       </div>
 
       <div class="c-body">
@@ -26,7 +26,7 @@
 
             <el-row class="condis-item" v-for="(item,index) in param.queryConditionList" :key="index">
               <el-col :span="2">
-                <el-button type="danger" icon="el-icon-delete" size='small' :disabled="!editBool" circle  title="删除条件" @click="removeCondis(index)"></el-button>
+                <el-button v-preventReClick type="danger" icon="el-icon-delete" size='small' :disabled="!editBool" circle  title="删除条件" @click="removeCondis(index)"></el-button>
               </el-col>
               <el-col :span="2" class="condis-condies" v-show="index > 0" >
                 <el-select :disabled="!editBool" v-model="item.logicalSymbol" placeholder="请选择条件类型">
@@ -53,19 +53,19 @@
             <el-row class="tc">
               <!-- 默认 -->
               <div v-if="bool">
-                <el-button type="success" size='small' icon="el-icon-plus" title="添加条件" @click="addCondis">添加条件</el-button>
-                <el-button type="primary" size='small' icon="el-icon-circle-check" title="查询" @click="preservation('new')">保存</el-button>
+                <el-button v-preventReClick type="success" size='small' icon="el-icon-plus" title="添加条件" @click="addCondis">添加条件</el-button>
+                <el-button v-preventReClick type="primary" size='small' icon="el-icon-circle-check" title="查询" @click="preservation('new')">保存</el-button>
               </div>
               <!-- 点击条件组 -->
               <div v-else>
                 <div v-if="!editBool">
-                  <el-button type="primary" size='small' icon="el-icon-edit" title="查询" @click="edit">编辑</el-button>
-                  <el-button type="info" size='small' icon="el-icon-circle-close" title="查询" @click="signOutEdit">退出编辑</el-button>
+                  <el-button v-preventReClick type="primary" size='small' icon="el-icon-edit" title="查询" @click="edit">编辑</el-button>
+                  <el-button v-preventReClick type="info" size='small' icon="el-icon-circle-close" title="查询" @click="signOutEdit">退出编辑</el-button>
                 </div>
                 <div v-else>
-                  <el-button type="primary" size='small' icon="el-icon-circle-check" title="查询" @click="preservation('update')">保存</el-button>
-                  <el-button type="success" size='small' icon="el-icon-plus" title="添加条件" @click="addCondis">添加条件</el-button>
-                  <el-button type="info" size='small' icon="el-icon-circle-close" title="查询" @click="signOutEdit">退出编辑</el-button>
+                  <el-button v-preventReClick type="primary" size='small' icon="el-icon-circle-check" title="查询" @click="preservation('update')">保存</el-button>
+                  <el-button v-preventReClick type="success" size='small' icon="el-icon-plus" title="添加条件" @click="addCondis">添加条件</el-button>
+                  <el-button v-preventReClick type="info" size='small' icon="el-icon-circle-close" title="查询" @click="signOutEdit">退出编辑</el-button>
                 </div>
               </div>
             </el-row>

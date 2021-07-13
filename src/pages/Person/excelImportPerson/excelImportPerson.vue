@@ -5,12 +5,12 @@
       <el-radio v-model="radio" label="external">外部人员</el-radio>
     </div>
     <div class="label">
-      <el-button type="primary" @click="downloadFile" >下载模板文件</el-button>
+      <el-button v-preventReClick type="primary" @click="downloadFile" >下载模板文件</el-button>
       <span class="text">请下载模板文件，按模板文件格式编辑后在上传！</span>
     </div>
     <div class="label">
       <div class="file">
-        <el-button type="success">选择导入人员</el-button>
+        <el-button v-preventReClick type="success">选择导入人员</el-button>
         <input type="file" name="" id="" class="hide" @change="importExcel" ref="file">
       </div>
       <span class="text">请选择要上传的excel文件开始上传！(最多10000条数据)</span>

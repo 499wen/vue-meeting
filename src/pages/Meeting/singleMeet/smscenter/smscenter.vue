@@ -21,10 +21,10 @@
       <div class="sms-table">
         <!-- 功能 -->
         <div class="func-sms">
-          <el-button round size='small' type="primary" @click="addSms">添加短信</el-button>
-          <el-button round size='small' type="danger" @click="removeSms">移除短信</el-button>
-          <el-button round size='small' type="primary" @click="dispose">人工发送短信</el-button>
-          <!-- <el-button round size='small' type="success" @click="sendRecord">短信发送记录</el-button> -->
+          <el-button v-preventReClick round size='small' type="primary" @click="addSms">添加短信</el-button>
+          <el-button v-preventReClick round size='small' type="danger" @click="removeSms">移除短信</el-button>
+          <el-button v-preventReClick round size='small' type="primary" @click="dispose">人工发送短信</el-button>
+          <!-- <el-button v-preventReClick round size='small' type="success" @click="sendRecord">短信发送记录</el-button> -->
         </div>
         <!-- table -->
         <div class="table">
@@ -47,7 +47,7 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <dispose ref="dispose" v-if="dispose_child"></dispose>
       <div class="dialog-btn">
-        <el-button @click="cancel" size="small" type="danger" round>关 闭</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>关 闭</el-button>
       </div>
     </el-dialog>
 
@@ -56,7 +56,7 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <sendRecord ref="sendRecord" v-if="sendRecord_child"></sendRecord>
       <div class="dialog-btn">
-        <el-button @click="cancel" size="small" type="danger" round>关 闭</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>关 闭</el-button>
       </div>
     </el-dialog>
 
@@ -65,8 +65,8 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <addsms ref="addsms" v-if="addsms_child" :row='curAttenGroup'></addsms>
       <div class="dialog-btn">
-        <el-button @click="determine" size="small" type="primary" round>保 存</el-button>
-        <el-button @click="cancel" size="small" type="danger" round>关 闭</el-button>
+        <el-button v-preventReClick @click="determine" size="small" type="primary" round>保 存</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>关 闭</el-button>
       </div>
     </el-dialog>
 

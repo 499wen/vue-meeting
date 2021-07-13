@@ -110,7 +110,7 @@ export default {
           <span class="custom-tree-node">
             <span>{node.label}</span>
             <span>
-              <el-button size="mini" type="text" on-click={ (e) => this.append(data, e) } icon="el-icon-circle-plus-outline"></el-button>
+              <el-button v-preventReClick size="mini" type="text" on-click={ (e) => this.append(data, e) } icon="el-icon-circle-plus-outline"></el-button>
             </span>
           </span>)
       } else {
@@ -118,8 +118,8 @@ export default {
           <span class="custom-tree-node">
             <span>{node.label}</span>
             <span>
-              <el-button size="mini" type="text" on-click={ (e) => this.remove(data, e) } icon="el-icon-delete"></el-button>
-              <el-button size="mini" type="text" on-click={ (e) => this.edit(node, data, e) } icon="el-icon-edit"></el-button>
+              <el-button v-preventReClick size="mini" type="text" on-click={ (e) => this.remove(data, e) } icon="el-icon-delete"></el-button>
+              <el-button v-preventReClick size="mini" type="text" on-click={ (e) => this.edit(node, data, e) } icon="el-icon-edit"></el-button>
             </span>
           </span>)
       }

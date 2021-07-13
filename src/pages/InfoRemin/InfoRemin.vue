@@ -21,7 +21,7 @@
             </el-table-column>
             <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' label="操作" width='130'>
               <template slot-scope="scope">
-                <el-button size='small' round type="primary" @click="openDetailed(scope.row)">信息提醒</el-button>
+                <el-button v-preventReClick size='small' round type="primary" @click="openDetailed(scope.row)">信息提醒</el-button>
               </template>
             </el-table-column>
           </el-table>

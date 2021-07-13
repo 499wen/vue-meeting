@@ -19,16 +19,16 @@
       <!-- 数据操作 -->
       <div class="data-oper">
         <div class="data-add">
-          <el-button round size='small' type="primary" @click="addAtteBtn" :disabled='meetingData.timeNow > meetingData.endDate'>添加参会人</el-button>
-          <el-button round size='small' type="danger" @click="removeAtte" :disabled='meetingData.timeNow > meetingData.endDate'>移除参会人</el-button>
-          <el-button round size='small' type="danger" @click="removeAll" :disabled='meetingData.timeNow > meetingData.endDate'>移除全部</el-button>
-          <el-button round size='small' v-show='!curAttenGroup.parentId' type="primary" @click="manualImport" :disabled='meetingData.timeNow > meetingData.endDate'>手动录入</el-button>
+          <el-button v-preventReClick round size='small' type="primary" @click="addAtteBtn" :disabled='meetingData.timeNow > meetingData.endDate'>添加参会人</el-button>
+          <el-button v-preventReClick round size='small' type="danger" @click="removeAtte" :disabled='meetingData.timeNow > meetingData.endDate'>移除参会人</el-button>
+          <el-button v-preventReClick round size='small' type="danger" @click="removeAll" :disabled='meetingData.timeNow > meetingData.endDate'>移除全部</el-button>
+          <el-button v-preventReClick round size='small' v-show='!curAttenGroup.parentId' type="primary" @click="manualImport" :disabled='meetingData.timeNow > meetingData.endDate'>手动录入</el-button>
         </div>
         <div class="data-query">
-          <el-button class="spacing" size='small' @click="exportAtten" v-show="false">导出参会人</el-button>
+          <el-button v-preventReClick class="spacing" size='small' @click="exportAtten" v-show="false">导出参会人</el-button>
           <!-- 条件组查询 -->
           <el-dropdown trigger="click" class="spacing" @command='clickCondi' placement='bottom' v-show="false">
-            <el-button size="small">
+            <el-button v-preventReClick size="small">
               条件组查询<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
@@ -36,7 +36,7 @@
             </el-dropdown-menu>
           </el-dropdown>
           <el-input size="small" placeholder="请输入名称，手机号" v-model="searchKey" @keyup.native.enter="searchBtn">
-            <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
+            <el-button v-preventReClick slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
           </el-input>
         </div>
       </div>
@@ -76,8 +76,8 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <manualImport ref="manualImport" v-if="manualImport_child" :groupId='this.curAttenGroup.id'></manualImport>
       <div class="dialog-btn">
-        <el-button type="primary" @click="newAddPerson" size="small" round>添 加</el-button>
-        <el-button @click="cancel" size="small" type="danger" round>取 消</el-button>
+        <el-button v-preventReClick type="primary" @click="newAddPerson" size="small" round>添 加</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>取 消</el-button>
       </div>
     </el-dialog>
 
@@ -86,8 +86,8 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <addAtte ref="addAtte" v-if="addAtte_child" :groupId='this.curAttenGroup.id'></addAtte>
       <div class="dialog-btn">
-        <el-button type="primary" @click="addTo" size="small" round>添 加</el-button>
-        <el-button @click="cancel" size="small" type="danger" round>取 消</el-button>
+        <el-button v-preventReClick type="primary" @click="addTo" size="small" round>添 加</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>取 消</el-button>
       </div>
     </el-dialog>
 
@@ -96,8 +96,8 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <operconditionGroup ref="conditionGroup" v-if="condition_child" :groupId='this.curAttenGroup.id'></operconditionGroup>
       <div class="dialog-btn">
-        <el-button type="primary" @click="addCondis" size="small" round>添 加</el-button>
-        <el-button @click="cancel" size="small" type="danger" round>取 消</el-button>
+        <el-button v-preventReClick type="primary" @click="addCondis" size="small" round>添 加</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>取 消</el-button>
       </div>
     </el-dialog>
 
@@ -106,8 +106,8 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <operconditionGroup ref="conditionGroup" v-if="editGroup_child" :groupId='this.curAttenGroup.id'></operconditionGroup>
       <div class="dialog-btn">
-        <el-button type="primary" @click="addCondis" size="small" round>保 存</el-button>
-        <el-button @click="cancel" size="small" type="danger" round>取 消</el-button>
+        <el-button v-preventReClick type="primary" @click="addCondis" size="small" round>保 存</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>取 消</el-button>
       </div>
     </el-dialog>
 

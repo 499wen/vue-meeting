@@ -3,7 +3,7 @@
     <div class="top">
       <!-- 条件组查询 -->
       <el-dropdown trigger="click" class="spacing" @command='clickCondi' placement='bottom'>
-        <el-button size="small">
+        <el-button v-preventReClick size="small">
           条件组查询<i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
         <el-dropdown-menu slot="dropdown">
@@ -12,7 +12,7 @@
       </el-dropdown>
 
       <el-input size="small" placeholder="输入参会人名称、手机号" v-model="searchKey" @keyup.native.enter="getAtten" class="search">
-        <el-button slot="append" icon="el-icon-search" @click="getAtten"></el-button>
+        <el-button v-preventReClick slot="append" icon="el-icon-search" @click="getAtten"></el-button>
       </el-input>
     </div>
 
@@ -40,7 +40,7 @@
 
       <!-- 按钮 -->
       <div class="btn">
-        <el-button size="small" @click="sendOut"> 发送 </el-button>
+        <el-button v-preventReClick size="small" @click="sendOut"> 发送 </el-button>
       </div>
 
       <!-- 人员 -->

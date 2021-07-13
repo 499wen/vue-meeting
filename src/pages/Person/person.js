@@ -130,7 +130,7 @@ export default {
           <span class="tree-title"> {node.label} </span> <span class="node-tool-bar" >
             {
               data.departmentName == '内部人员' 
-              ? <el-button type="text" class="el-icon-circle-plus-outline" title="添加"
+              ? <el-button v-preventReClick type="text" class="el-icon-circle-plus-outline" title="添加"
                               on-click={(e) => this.append(data, e)} > </el-button>
               : ''
             }
@@ -138,13 +138,13 @@ export default {
       } else if(node.level == 3){
           html = (<span class="custom-tree-node" >
             <span class="tree-title"> {node.label} </span> <span class="node-tool-bar" >
-                <el-button type="text"
+                <el-button v-preventReClick type="text"
                     class="el-icon-edit-outline"
                     title="重命名"
                     on-click={(e) => this.edit(data, e)} >
                 </el-button>
 
-                <el-button type="text"
+                <el-button v-preventReClick type="text"
                     class="el-icon-delete"
                     title="删除"
                     on-click={(e) => this.remove(data, node, e)} >

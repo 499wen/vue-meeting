@@ -14,7 +14,7 @@
 
     <!-- 按钮 -->
     <!-- <div class="hover-btn">
-      <el-button round size='small' type="primary" @click="determine">确 定</el-button>
+      <el-button v-preventReClick round size='small' type="primary" @click="determine">确 定</el-button>
     </div> -->
   </div>
 </template>

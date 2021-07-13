@@ -15,7 +15,7 @@
               <el-input placeholder="请输入手机号" prefix-icon="el-icon-phone" v-model="ruleForm.phone">
               </el-input>
               <el-input placeholder="请输入验证码" class="auto-hight" prefix-icon="el-icon-paperclip" @keyup.native.enter="login" v-model="ruleForm.smsCheckCode">
-                  <el-button slot="append" class="btn" @click="getVerCode">{{ verCodeText }}</el-button>
+                  <el-button v-preventReClick slot="append" class="btn" @click="getVerCode">{{ verCodeText }}</el-button>
               </el-input>
               
           </el-tab-pane>
@@ -35,7 +35,7 @@
 
       <!-- 登录按钮 -->
       <div class="login-btn" v-if="activeName != 'wechatLogin'">
-        <el-button class="login-btn-b" @click="login()">登 录</el-button>
+        <el-button v-preventReClick class="login-btn-b" @click="login()">登 录</el-button>
       </div>
 
       <!-- 其它功能 -->
@@ -79,13 +79,13 @@
         </el-form-item>
         <el-form-item label="验证码" prop="smsCheckCode">
           <el-input placeholder="请输入验证码" class="auto-hight" @keyup.native.enter="submitForm" v-model="form.smsCheckCode">
-            <el-button slot="append" class="btn" @click="getVerCodeBind">{{ verCode }}</el-button>
+            <el-button v-preventReClick slot="append" class="btn" @click="getVerCodeBind">{{ verCode }}</el-button>
           </el-input>
         </el-form-item>
         
       </el-form>
       <div class="dialog-btn">
-        <el-button type="primary" @click="submitForm" size="small" round>绑 定</el-button>
+        <el-button v-preventReClick type="primary" @click="submitForm" size="small" round>绑 定</el-button>
       </div>
     </el-dialog>
     <!-- 幕布 -->

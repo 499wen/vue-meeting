@@ -64,7 +64,6 @@ let instance = axios.create({
 })
 //请求拦截器
 instance.interceptors.request.use(
-  
   config=>{
     config = config || {}
     let token=localStorage.getItem('token')
@@ -75,8 +74,6 @@ instance.interceptors.request.use(
       config.headers.token = token
       // config.headers.Authorization = token
     }
-
-    // console.log(config)
     showLoading()
     return config;
   },

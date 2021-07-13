@@ -31,7 +31,7 @@
             <!-- <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' label="状态" width='100'>
               <template slot-scope="scope">
                 <span>{{scope.row.status}}</span>
-                <el-button size='small' round type="primary" @click="openDetailed(scope.row)">明细</el-button>
+                <el-button v-preventReClick size='small' round type="primary" @click="openDetailed(scope.row)">明细</el-button>
               </template>
             </el-table-column> -->
           </el-table>
@@ -58,7 +58,7 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <detailed ref="detailed" v-if="detailed_child" :row='row'></detailed>
       <div class="dialog-btn">
-        <el-button @click="cancel" size="small" type="danger" round>关 闭</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>关 闭</el-button>
       </div>
     </el-dialog>
 

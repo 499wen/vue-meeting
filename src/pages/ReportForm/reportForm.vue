@@ -39,8 +39,8 @@
         </el-table-column>
         <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' label="操作" width='180'>
           <template slot-scope="scope">
-            <el-button round size='small' type="primary" @click="detailed(scope.row)">查看</el-button>
-            <el-button round size='small' type="primary" @click="clumnLook(scope.row)">导出报表</el-button>
+            <el-button v-preventReClick round size='small' type="primary" @click="detailed(scope.row)">查看</el-button>
+            <el-button v-preventReClick round size='small' type="primary" @click="clumnLook(scope.row)">导出报表</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -65,8 +65,8 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <clumnLook ref="clumnLook" v-if="clumnLook_child" :row='row'></clumnLook>
       <div class="dialog-btn">
-        <el-button type="primary" size="small" round @click="exportBb">导出报表</el-button>
-        <el-button size="small" type="danger" round @click="cancel">取 消</el-button>
+        <el-button v-preventReClick type="primary" size="small" round @click="exportBb">导出报表</el-button>
+        <el-button v-preventReClick size="small" type="danger" round @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
 
@@ -75,7 +75,7 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <detailed ref="detailed" v-if="detailed_child" :row='row'></detailed>
       <div class="dialog-btn">
-        <el-button size="small" type="danger" round @click="close">关 闭</el-button>
+        <el-button v-preventReClick size="small" type="danger" round @click="close">关 闭</el-button>
       </div>
     </el-dialog>
   </div>

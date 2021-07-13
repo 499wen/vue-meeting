@@ -3,6 +3,7 @@ import operconditionGroup from './operconditionGroup/operconditionGroup.vue' // 
 import manualImport from './manualImport/manualImport.vue' // 手动录入
 import { mapState } from 'vuex'
 import { toTree, exportToExcel, Load } from '@/plugins/plugins.js'
+import $ from 'jquery'
 
 export default {
   components: {
@@ -102,6 +103,10 @@ export default {
 
     // 移除全部参会人
     removeAll() {
+      if(this.tableData.length == 0){
+        this.$message.error('没有可以移除的参会人!')
+        return 
+      }
       this.$confirm('是否移除全部人员?', '提示', {  
         closeOnPressEscape: false,
         closeOnClickModal: false,
@@ -111,16 +116,34 @@ export default {
         type: 'warning'
       }).then(() => {
         this.doRemoveAll()
-      }).catch(() => {})
+      }).catch((err) => {
+        console.log(err)
+      })
+    },
+    test() {
+      console.log('11')
     },
     doRemoveAll() {
       let obj = {
         contanUserIdArr: [],
         ifContanUserIdArr: false,
         queryConditionArr: this.queryConditionArr
-      }
-      this.$http.post(this.API.findByMeetingIdAndPage(this.meetingData.id, this.curAttenGroup.id, this.pageNum, 999999, this.searchKey), obj)
-        .then(res => {
+      }, load = this.$loading({
+        lock: true,
+        text: "Loading...",
+        background: 'rgba(0, 0, 0, 0.5)',
+        target: "body"
+      })
+      $.ajax({
+        url: this.API.findByMeetingIdAndPage(this.meetingData.id, this.curAttenGroup.id, this.pageNum, 999999, this.searchKey),
+        data: obj,
+        dataType: 'JSON',
+        headers: {
+          token: localStorage.getItem('token')
+        },
+        type: 'post',
+        success: (res) => {
+          console.log(res)
           if(res.code == '000' && res.data){
             let data = [], api
             res.data.filter(item => data.push(item.id))
@@ -134,13 +157,19 @@ export default {
                 console.log(res)
                 if(res.code == '000') {
                   this.$message.success('移除成功!')
-                  this.tableData = []
+                  load.close()
                   this.getAttenPerson()
                 } else {
                   this.$message.error(res.msg)
                 }
               })
           }
+        }
+      })
+
+      this.$http.post(this.API.findByMeetingIdAndPage(this.meetingData.id, this.curAttenGroup.id, this.pageNum, 999999, this.searchKey), obj)
+        .then(res => {
+          
         })
     },
     // 搜索按钮
@@ -164,7 +193,7 @@ export default {
           <span class="custom-tree-node">
             <span>{node.label}</span>
             <span>
-              <el-button size="mini" type="text" on-click={ (e) => this.append(data, e) } disabled={meetingData.timeNow > meetingData.endDate} icon="el-icon-circle-plus-outline"></el-button>
+              <el-button v-preventReClick size="mini" type="text" on-click={ (e) => this.append(data, e) } disabled={meetingData.timeNow > meetingData.endDate} icon="el-icon-circle-plus-outline"></el-button>
             </span>
           </span>)
       } else {
@@ -172,8 +201,8 @@ export default {
           <span class="custom-tree-node">
             <span>{node.label}</span>
             <span>
-              <el-button size="mini" type="text" on-click={ (e) => this.remove(data, e) } disabled={meetingData.timeNow > meetingData.endDate} icon="el-icon-delete"></el-button>
-              <el-button size="mini" type="text" on-click={ (e) => this.edit(node, data, e) } disabled={meetingData.timeNow > meetingData.endDate} icon="el-icon-edit"></el-button>
+              <el-button v-preventReClick size="mini" type="text" on-click={ (e) => this.remove(data, e) } disabled={meetingData.timeNow > meetingData.endDate} icon="el-icon-delete"></el-button>
+              <el-button v-preventReClick size="mini" type="text" on-click={ (e) => this.edit(node, data, e) } disabled={meetingData.timeNow > meetingData.endDate} icon="el-icon-edit"></el-button>
             </span>
           </span>)
       }

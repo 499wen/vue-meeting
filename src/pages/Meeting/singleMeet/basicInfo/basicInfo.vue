@@ -177,10 +177,10 @@
                             <el-option label="协办方" value="coOrganizer"></el-option>
                           </el-select>
                         </el-input>
-                        <el-button size="small" class="sm-del" @click="delSponsor(idx)" :disabled="meetIsEnd">删除</el-button>
+                        <el-button v-preventReClick size="small" class="sm-del" @click="delSponsor(idx)" :disabled="meetIsEnd">删除</el-button>
                       </div>
                       <div class="set-margin">
-                        <el-button size="small" class="sm-select" @click="addSponsor" :disabled="meetIsEnd">添加会议组织</el-button>
+                        <el-button v-preventReClick size="small" class="sm-select" @click="addSponsor" :disabled="meetIsEnd">添加会议组织</el-button>
                       </div>
                     </el-form-item> 
 
@@ -204,12 +204,12 @@
                             <el-input v-model="item.teltPhone" size="small" :disabled="meetIsEnd"></el-input>
                           </div>
                           <div class="card-single">
-                            <el-button size="small" class="sm-select" @click="delContact(idx)" :disabled="meetIsEnd">删除联系人</el-button>
+                            <el-button v-preventReClick size="small" class="sm-select" @click="delContact(idx)" :disabled="meetIsEnd">删除联系人</el-button>
                           </div>
                         </div>
                       </div>
                       <div class="set-margin">
-                        <el-button size="small" class="sm-select" @click="addContact" :disabled="meetIsEnd">添加联系人</el-button>
+                        <el-button v-preventReClick size="small" class="sm-select" @click="addContact" :disabled="meetIsEnd">添加联系人</el-button>
                       </div>
                     </el-form-item> 
 
@@ -224,10 +224,10 @@
                         <div class="label-agenda">议程{{ idx + 1 }}:</div>
                         <el-input size="small" v-model="item.value" class="sm-input" :disabled="meetIsEnd">
                         </el-input>
-                        <el-button size="small" class="sm-del" @click="delProduce(idx)" :disabled="meetIsEnd">删除</el-button>
+                        <el-button v-preventReClick size="small" class="sm-del" @click="delProduce(idx)" :disabled="meetIsEnd">删除</el-button>
                       </div>
                       <div class="set-margin">
-                        <el-button size="small" class="sm-select" @click="addProduce" :disabled="meetIsEnd">添加会议议程</el-button>
+                        <el-button v-preventReClick size="small" class="sm-select" @click="addProduce" :disabled="meetIsEnd">添加会议议程</el-button>
                       </div>
                     </el-form-item> 
 
@@ -240,8 +240,8 @@
           </div>
         </div>
         <div class="submit-btn">
-          <el-button type="danger" round size='small' @click="edit" v-show="addForm.timeNow < addForm.endDate">修 改</el-button>
-          <el-button type="danger" round size='small' @click="save" :disabled="meetIsEnd">确 认</el-button>
+          <el-button v-preventReClick type="danger" round size='small' @click="edit" v-show="addForm.timeNow < addForm.endDate">修 改</el-button>
+          <el-button v-preventReClick type="danger" round size='small' @click="save" :disabled="meetIsEnd">确 认</el-button>
         </div>
       </div>
       

@@ -4,7 +4,7 @@
       <div class="func-left">
         <!-- 人员类型 -->
         <el-dropdown trigger="click" class="spacing" @command='personType' placement='bottom'>
-          <el-button size="small">
+          <el-button v-preventReClick size="small">
             {{ type }}<i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
@@ -16,7 +16,7 @@
 
         <!-- 人员查询 - 条件组  --> 
         <el-dropdown trigger="click" class="spacing right-10px" @command='clickCondi' placement='bottom'>
-          <el-button size="small">
+          <el-button v-preventReClick size="small">
             <div class="cont">
               <span >{{ tjgroup }}</span>
               <i class="el-icon-arrow-down el-icon--right"></i>
@@ -26,12 +26,12 @@
             <el-dropdown-item v-for="(item, idx) in condiData" :key="idx" :command='idx'>{{ item.groupName }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <el-button size="small" @click="custom" class=" right-10px">自定义条件</el-button> 
+        <el-button v-preventReClick size="small" @click="custom" class=" right-10px">自定义条件</el-button> 
       </div>
 
       <!-- 查询数据 -->
       <el-input size="small" class="search" placeholder="请输入会议名称" v-model="searchKey" @keyup.native.enter="searchBtn">
-        <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
+        <el-button v-preventReClick slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
       </el-input>
     </div>
 
@@ -65,7 +65,7 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <conditionGroup ref="conditionGroup" v-if="condi_child"></conditionGroup>
       <div class="dialog-btn">
-        <el-button @click="close" size="small" type="danger" round>关 闭</el-button>
+        <el-button v-preventReClick @click="close" size="small" type="danger" round>关 闭</el-button>
       </div>
     </el-dialog>
   </div>

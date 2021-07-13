@@ -10,7 +10,7 @@
       </el-form-item>
       <el-form-item label="优惠码">
         <el-input v-model="ruleForm.couponId" class="input-with-select" size="small">
-          <el-button slot="append" @click="verif">检验</el-button>
+          <el-button v-preventReClick slot="append" @click="verif">检验</el-button>
         </el-input>
       </el-form-item>
     </el-form>

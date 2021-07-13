@@ -2,9 +2,9 @@
   <div>
     <div class="oper">
       <el-input  placeholder="请输入内容" v-model="searchKey" class="input-with-select" @keyup.native.enter="searchBtn">
-        <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
+        <el-button v-preventReClick slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
       </el-input>
-      <!-- <el-button > 添加人员 </el-button> -->
+      <!-- <el-button v-preventReClick > 添加人员 </el-button> -->
     </div>
 
     <div class="member-table">

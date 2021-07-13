@@ -13,7 +13,7 @@
 
             <el-row class="condis-item" v-for="(item,index) in param.queryConditionList" :key="index">
               <el-col :span="2">
-                <el-button type="danger" icon="el-icon-delete" size='small'  circle  title="删除条件" @click="removeCondis(index)"></el-button>
+                <el-button v-preventReClick type="danger" icon="el-icon-delete" size='small'  circle  title="删除条件" @click="removeCondis(index)"></el-button>
               </el-col>
               <el-col :span="2" class="condis-condies" v-show="index > 0" >
                 <el-select  v-model="item.logicalSymbol" placeholder="请选择条件类型">
@@ -39,7 +39,7 @@
             </el-row>
             <el-row class="tc">
               <!-- 默认 -->
-              <el-button type="success" size='small' icon="el-icon-plus" title="添加条件" @click="addCondis">添加条件</el-button>
+              <el-button v-preventReClick type="success" size='small' icon="el-icon-plus" title="添加条件" @click="addCondis">添加条件</el-button>
             </el-row>
           </div>
         </div>

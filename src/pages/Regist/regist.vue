@@ -39,13 +39,13 @@
         </el-form-item>
         <el-form-item label="验证码" prop="checkCode">
           <el-input v-model="registerForm.checkCode" clearable size="small">
-            <el-button slot="append" @click="getCheckCode" :disabled="retryCount>0">{{retryCount>0?retryCount+'S 后重试':'获取验证码'}}</el-button>
+            <el-button v-preventReClick slot="append" @click="getCheckCode" :disabled="retryCount>0">{{retryCount>0?retryCount+'S 后重试':'获取验证码'}}</el-button>
           </el-input>
         </el-form-item>
 
         <div class="submit">
           <div class="submit-btn">
-            <el-button class="submit-btn-el" @click="apply" round size="small"> 提交申请 </el-button>
+            <el-button v-preventReClick class="submit-btn-el" @click="apply" round size="small"> 提交申请 </el-button>
           </div>
           <div class="alr-exist">
             已有账号 <span @click="goLogin">去登录</span>

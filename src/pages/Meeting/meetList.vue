@@ -7,9 +7,9 @@
 
       <div class="opera">
         <el-input size="small" placeholder="请输入会议名称" v-model="searchKey" @keyup.native.enter="searchBtn" style="width: 300px">
-          <el-button slot="append" icon="el-icon-search" @click="searchBtn" type="primary"></el-button>
+          <el-button v-preventReClick slot="append" icon="el-icon-search" @click="searchBtn" type="primary"></el-button>
         </el-input>
-        <el-button size="small" @click="createMeet" type="warning"  class="add-hotel"> 新建会议 </el-button>
+        <el-button v-preventReClick size="small" @click="createMeet" type="warning"  class="add-hotel"> 新建会议 </el-button>
       </div> 
     </div> 
 
@@ -64,16 +64,16 @@
 
             <!-- 会议 - 按钮 -->
             <div class="meet-btn">
-              <el-button :class="['btn', 'disabled',
+              <el-button v-preventReClick :class="['btn', 'disabled',
               item.tips == '已发布' && 'published',
               item.tips == '进行中' && 'ongoing', 
               item.tips == '已过期' && 'over',
               item.tips == '已结束' && 'over']" size="mini" v-if="item.tips != '未发布'" round >{{ item.tips }}</el-button>
-              <el-button class="btn" type="warning" size="mini" v-else round @click="SendingNotice(item, item.releaseCode, item.beginDate)">发布会议</el-button>
-              <!-- <el-button class="btn" size="mini" round>发送邀请函</el-button> -->
-              <!-- <el-button class="btn" size="mini" round>会议驾驶舱</el-button>
-              <el-button class="btn" size="mini" round>复制会议</el-button> -->
-              <!-- <el-button class="btn" size="mini" round v-if="item.tips == '已发布'">通知参会人</el-button> -->
+              <el-button v-preventReClick class="btn" type="warning" size="mini" v-else round @click="SendingNotice(item, item.releaseCode, item.beginDate)">发布会议</el-button>
+              <!-- <el-button v-preventReClick class="btn" size="mini" round>发送邀请函</el-button> -->
+              <!-- <el-button v-preventReClick class="btn" size="mini" round>会议驾驶舱</el-button>
+              <el-button v-preventReClick class="btn" size="mini" round>复制会议</el-button> -->
+              <!-- <el-button v-preventReClick class="btn" size="mini" round v-if="item.tips == '已发布'">通知参会人</el-button> -->
             </div>
           </div>
         </div>
@@ -104,8 +104,8 @@
       <el-dialog title="选择会议类型" :visible.sync="addMeeting" width="10%" center
         :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
         <div class="dialog-btn">
-          <el-button type="primary" @click="single_stage" size="small" round>单级会议</el-button>
-          <el-button @click="multi_stage" size="small" type="danger" round>多级会议</el-button>
+          <el-button v-preventReClick type="primary" @click="single_stage" size="small" round>单级会议</el-button>
+          <el-button v-preventReClick @click="multi_stage" size="small" type="danger" round>多级会议</el-button>
         </div>
       </el-dialog>
     </div> 

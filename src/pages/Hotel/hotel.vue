@@ -8,9 +8,9 @@
 
       <div class="opera">
         <el-input size="small" placeholder="请输入酒店名称" v-model="searchKey" @keyup.native.enter="searchBtn">
-          <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
+          <el-button v-preventReClick slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
         </el-input>
-        <el-button size="small" @click="addHotel" type="primary" plain class="add-hotel"> 新建酒店 </el-button>
+        <el-button v-preventReClick size="small" @click="addHotel" type="primary" plain class="add-hotel"> 新建酒店 </el-button>
       </div>
     </div>
 
@@ -31,9 +31,9 @@
         ></el-table-column>
         <el-table-column :show-overflow-tooltip="true" :resizable="false"  align='center' label="操作" width="350">
           <template slot-scope="scope">
-            <el-button size="small" type="primary" @click="addUsers(scope.row)" round>楼栋配置</el-button>
-            <el-button size="small" type="warning" @click="handleEdit(scope.row)" round>修改酒店</el-button>
-            <el-button size="small" type="danger" @click="deleteUsers(scope.row)" round>删除酒店</el-button>
+            <el-button v-preventReClick size="small" type="primary" @click="addUsers(scope.row)" round>楼栋配置</el-button>
+            <el-button v-preventReClick size="small" type="warning" @click="handleEdit(scope.row)" round>修改酒店</el-button>
+            <el-button v-preventReClick size="small" type="danger" @click="deleteUsers(scope.row)" round>删除酒店</el-button>
           </template> 
         </el-table-column> 
       </el-table>
@@ -59,7 +59,7 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <building ref="building" v-if="building_child" :hotel='curHotel'></building>
       <div class="dialog-btn">
-        <el-button @click="cancel" size="small" type="primary" round>关 闭</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="primary" round>关 闭</el-button>
       </div>
     </el-dialog>
   </div>

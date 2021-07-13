@@ -8,9 +8,9 @@
 
       <div class="opera">
         <el-input size="small" placeholder="请输入餐厅名称" v-model="searchKey" @keyup.native.enter="searchBtn">
-          <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
+          <el-button v-preventReClick slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
         </el-input>
-        <el-button size="small" @click="addHotel" type="primary" plain class="add-hotel"> 新建餐厅 </el-button>
+        <el-button v-preventReClick size="small" @click="addHotel" type="primary" plain class="add-hotel"> 新建餐厅 </el-button>
       </div>
     </div>
 
@@ -31,8 +31,8 @@
         ></el-table-column>
         <el-table-column :show-overflow-tooltip="true" :resizable="false"  align='center' label="操作" width="350">
           <template slot-scope="scope">
-            <el-button size="small" type="warning" @click="handleEdit(scope.row)" round>修 改</el-button>
-            <el-button size="small" type="danger" @click="deleteUsers(scope.row)" round>删 除</el-button>
+            <el-button v-preventReClick size="small" type="warning" @click="handleEdit(scope.row)" round>修 改</el-button>
+            <el-button v-preventReClick size="small" type="danger" @click="deleteUsers(scope.row)" round>删 除</el-button>
           </template> 
         </el-table-column> 
       </el-table>

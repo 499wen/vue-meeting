@@ -20,9 +20,9 @@
       <div class="data-show-table">
         <div class="room-top"> 
           <el-input size="small" placeholder="请输入房间号" v-model="searchKey" @keyup.native.enter="searchBtn" class="input-with-select">
-            <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
+            <el-button v-preventReClick slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
           </el-input>
-          <el-button type="primary" size="small" @click="addRoom">添加房间</el-button>
+          <el-button v-preventReClick type="primary" size="small" @click="addRoom">添加房间</el-button>
         </div>
 
         <!-- table -->
@@ -36,8 +36,8 @@
           </el-table-column>
           <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' label="操作" width='160'>
             <template slot-scope="scope">
-              <el-button @click="editRoomBtn(scope.row)" type="primary" size="small" round>编辑</el-button>
-              <el-button @click="delRoom(scope.row.id)" type="danger" size="small" round>删除</el-button>
+              <el-button v-preventReClick @click="editRoomBtn(scope.row)" type="primary" size="small" round>编辑</el-button>
+              <el-button v-preventReClick @click="delRoom(scope.row.id)" type="danger" size="small" round>删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -63,8 +63,8 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <addRoom ref="addRoom" v-if="addRoom_child"></addRoom>
       <div class="dialog-btn">
-        <el-button type="primary" @click="submitForm()" size="small" round>添 加</el-button>
-        <el-button @click="cancel" size="small" type="danger" round>取 消</el-button>
+        <el-button v-preventReClick type="primary" @click="submitForm()" size="small" round>添 加</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>取 消</el-button>
       </div>
     </el-dialog>
 
@@ -73,8 +73,8 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <editRoom ref="editRoom" v-if="editRoom_child" :editItem='editItem'></editRoom>
       <div class="dialog-btn">
-        <el-button type="primary" @click="editSave()" size="small" round>修 改</el-button>
-        <el-button @click="cancel" size="small" type="danger" round>取 消</el-button>
+        <el-button v-preventReClick type="primary" @click="editSave()" size="small" round>修 改</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>取 消</el-button>
       </div>
     </el-dialog>
   </div>

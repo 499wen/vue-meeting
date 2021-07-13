@@ -10,12 +10,12 @@
     <div class="operat"> 
       <div class="search-box right-10px" >
         <el-input size="small" placeholder="输入姓名、拼音、手机进行搜索" v-model="searchKey"  @keyup.enter.native='searchBtn'>
-          <el-button slot="append" icon="el-icon-search" @click="searchBtn" size="small"></el-button>
+          <el-button v-preventReClick slot="append" icon="el-icon-search" @click="searchBtn" size="small"></el-button>
         </el-input>
       </div>
 
       <el-dropdown @command="addPersonL" class="right-10px" placement='bottom-start'>
-        <el-button type="warning" size="small">
+        <el-button v-preventReClick type="warning" size="small">
           人员管理
           <i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
@@ -30,7 +30,7 @@
       </el-dropdown>
 
       <el-dropdown @command="handleCommand" class="right-10px" placement='bottom-start'>
-        <el-button type="warning" size="small">
+        <el-button v-preventReClick type="warning" size="small">
           相片管理
           <i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
@@ -45,7 +45,7 @@
 
       <!-- 人员查询 - 条件组  --> 
       <el-dropdown trigger="click" class="spacing right-10px" @command='clickCondi' placement='bottom'>
-        <el-button size="small">
+        <el-button v-preventReClick size="small">
           <div class="cont">
             <span >{{ tjgroup }}</span>
             <i class="el-icon-arrow-down el-icon--right"></i>
@@ -55,7 +55,7 @@
           <el-dropdown-item v-for="(item, idx) in condiData" :key="idx" :command='idx'>{{ item.groupName }}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <el-button size="small" @click="custom" class=" right-10px">自定义条件</el-button> 
+      <el-button v-preventReClick size="small" @click="custom" class=" right-10px">自定义条件</el-button> 
 
     </div>
 
@@ -92,7 +92,7 @@
               v-for="(item, idx) in tableCate" :key="idx"></el-table-column>
             <el-table-column :show-overflow-tooltip="true" :resizable="false" align="center" label="操作" width="100">
               <template slot-scope="scope">
-                <el-button @click="updateUser(scope.row)" class="edit" round size='small'>编辑</el-button>
+                <el-button v-preventReClick @click="updateUser(scope.row)" class="edit" round size='small'>编辑</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -119,8 +119,8 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <AddPerson ref="AddPerson" v-if="addPeroson_child" :deparmentId='deparmentId'></AddPerson>
       <div class="dialog-btn">
-        <el-button type="primary" @click="submitForm()" size="small" round>添 加</el-button>
-        <el-button @click="cancel" size="small" type="danger" round>取 消</el-button>
+        <el-button v-preventReClick type="primary" @click="submitForm()" size="small" round>添 加</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>取 消</el-button>
       </div>
     </el-dialog>
 
@@ -129,7 +129,7 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <ExcelImportPeroson ref="ExcelImportPeroson" v-if="importPeroson_child" @close='closeComponent'></ExcelImportPeroson>
       <div class="dialog-btn">
-        <el-button @click="cancel" size="small" type="danger" round>关 闭</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>关 闭</el-button>
       </div>
     </el-dialog>
 
@@ -138,8 +138,8 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <EditPeroson ref="EditPerson" :personId='editPersonId' v-if="editPeroson_child"></EditPeroson>
       <div class="dialog-btn">
-        <el-button type="primary" @click="editSave()" size="small" round>保 存</el-button>
-        <el-button @click="cancel" size="small" type="danger" round>取 消</el-button>
+        <el-button v-preventReClick type="primary" @click="editSave()" size="small" round>保 存</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>取 消</el-button>
       </div>
     </el-dialog>
 
@@ -149,8 +149,8 @@
       <UpdatePhoto ref="UpdatePhoto" v-if="updatePhoto_child" @setShowNum='setShowNum'></UpdatePhoto>
       <div class="dialog-btn padding-0">
         <div v-if="showNum != 0" class='tips-num' style="margin-right: 10px">一共上传{{ showNum }}张</div>
-        <el-button size="small" type="primary" v-if="showNum != 0" round @click="imgUploadAll($event, 0)">提 交</el-button>
-        <el-button @click="cancel" size="small" type="danger" round>关 闭</el-button>
+        <el-button v-preventReClick size="small" type="primary" v-if="showNum != 0" round @click="imgUploadAll($event, 0)">提 交</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>关 闭</el-button>
       </div>
     </el-dialog>
 
@@ -159,8 +159,8 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <NoPhotos ref="NoPhotos" v-if="noPhotos_child"></NoPhotos>
       <div class="dialog-btn">
-        <el-button type="primary" @click="relation()" size="small" round>关联相片</el-button>
-        <el-button @click="cancel" size="small" type="danger" round>取 消</el-button>
+        <el-button v-preventReClick type="primary" @click="relation()" size="small" round>关联相片</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>取 消</el-button>
       </div>
     </el-dialog>
 
@@ -169,7 +169,7 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <conditionGroup ref="conditionGroup" v-if="condi_child"></conditionGroup>
       <div class="dialog-btn">
-        <el-button @click="close" size="small" type="danger" round>关 闭</el-button>
+        <el-button v-preventReClick @click="close" size="small" type="danger" round>关 闭</el-button>
       </div>
     </el-dialog>
 

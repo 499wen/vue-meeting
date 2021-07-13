@@ -5,9 +5,9 @@
         <!-- 条件组查询 -->
         <el-button-group autofocus>
            
-          <el-button size="small" @click="custom">自定义条件</el-button> 
+          <el-button v-preventReClick size="small" @click="custom">自定义条件</el-button> 
           <el-dropdown trigger="click" class="spacing" @command='clickCondi' placement='bottom'>
-            <el-button size="small">
+            <el-button v-preventReClick size="small">
               条件组查询<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
@@ -19,7 +19,7 @@
 
       <div class="head-right">
         <el-input size="small" placeholder="请输入人员名称" v-model="searchKey" @keyup.native.enter="searchBtn">
-          <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
+          <el-button v-preventReClick slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
         </el-input>
       </div>
     </div>
@@ -66,7 +66,7 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <conditionGroup ref="conditionGroup" v-if="condi_child"></conditionGroup>
       <div class="dialog-btn">
-        <el-button @click="cancel" size="small" type="danger" round>关 闭</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>关 闭</el-button>
       </div>
     </el-dialog>
   </div>

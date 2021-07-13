@@ -2,9 +2,9 @@
   <div class="projection">
     <div class="self-main"> 
       <div class="chartContent">
-        <!-- <el-button @click="tabBtn" type="primary" plain size='mini'> 切换 </el-button>
-        <el-button @click="openScreens" v-if='!open' type="primary" plain size='mini'> 打开第二屏 </el-button>
-        <el-button @click="closeScreens" v-else type="primary" plain size='mini'> 关闭第二屏 </el-button> -->
+        <!-- <el-button v-preventReClick @click="tabBtn" type="primary" plain size='mini'> 切换 </el-button>
+        <el-button v-preventReClick @click="openScreens" v-if='!open' type="primary" plain size='mini'> 打开第二屏 </el-button>
+        <el-button v-preventReClick @click="closeScreens" v-else type="primary" plain size='mini'> 关闭第二屏 </el-button> -->
       </div>
       <div class="chartContent">
           <el-col :span="qhTab" class="self-col" v-if="columnData.id">

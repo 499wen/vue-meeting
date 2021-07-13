@@ -58,7 +58,7 @@ export default {
           <span class="custom-tree-node">
             <span>{node.label}</span>
             <span>
-              <el-button size="mini" type="text" class="el-icon-circle-plus-outline" on-click={ (e) => this.append(data, e) }></el-button>
+              <el-button v-preventReClick size="mini" type="text" class="el-icon-circle-plus-outline" on-click={ (e) => this.append(data, e) }></el-button>
             </span>
           </span>);
       } else {
@@ -66,7 +66,7 @@ export default {
           <span class="custom-tree-node">
             <span>第{node.label}层</span>
             <span>
-              <el-button size="mini" type="text" class="el-icon-delete" on-click={ (e) => this.remove(node, data, e) }></el-button>
+              <el-button v-preventReClick size="mini" type="text" class="el-icon-delete" on-click={ (e) => this.remove(node, data, e) }></el-button>
             </span>
           </span>);
       }

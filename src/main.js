@@ -36,6 +36,10 @@ Vue.use(vueLazy, {
   loading: require('@/assets/images/avatar.png')
 })
 
+// 防多次点击，重复提交
+import {preventReClick} from './plugins/plugins.js'
+Vue.use(preventReClick)
+
 // 引入 vue-worker
 import VueWorker from 'vue-worker'
 Vue.use(VueWorker)

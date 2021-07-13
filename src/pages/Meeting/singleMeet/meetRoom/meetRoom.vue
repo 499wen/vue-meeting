@@ -33,7 +33,7 @@
         <el-table-column :show-overflow-tooltip="true" label="预约"
           width="100px" align="center" prop="stateCode" :resizable='false'>
           <template slot-scope="scope" v-if="scope.row.Is === 3">
-            <el-button type="primary" @click="subscribe(scope.row.id)" 
+            <el-button v-preventReClick type="primary" @click="subscribe(scope.row.id)" 
             round :disabled='meetIsEnd' size="small">选择</el-button>
           </template>
         </el-table-column>

@@ -19,14 +19,14 @@
       <!-- 数据操作 -->
       <div class="data-oper">
         <div class="data-add">
-          <el-button round size='small' type="primary" @click="addRoomBtn">添加客房</el-button>
-          <el-button round size='small' type="primary" @click="onekeyCheckin">一键安排入住</el-button>
-          <el-button round size='small' type="danger" @click="onekeyRemove">一键清空人员</el-button>
-          <el-button round size='small' type="danger" @click="removeRoom">移除客房</el-button>  
+          <el-button v-preventReClick round size='small' type="primary" @click="addRoomBtn">添加客房</el-button>
+          <el-button v-preventReClick round size='small' type="primary" @click="onekeyCheckin">一键安排入住</el-button>
+          <el-button v-preventReClick round size='small' type="danger" @click="onekeyRemove">一键清空人员</el-button>
+          <el-button v-preventReClick round size='small' type="danger" @click="removeRoom">移除客房</el-button>  
         </div>
         <div class="data-query">
           <el-input size="small" placeholder="请输入房间号" v-model="searchKey" @keyup.native.enter="searchBtn">
-            <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
+            <el-button v-preventReClick slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
           </el-input>
         </div>
       </div>
@@ -49,8 +49,8 @@
             </el-table-column>
             <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' label="操作" width='200'>
               <template slot-scope="scope">
-                <el-button size="mini" @click="btnSetCheckIn(scope.row)" type="primary" round>入住安排</el-button>
-                <el-button size="mini" @click="btnClearUser(scope.row)" type="danger" round>清空</el-button>
+                <el-button v-preventReClick size="mini" @click="btnSetCheckIn(scope.row)" type="primary" round>入住安排</el-button>
+                <el-button v-preventReClick size="mini" @click="btnClearUser(scope.row)" type="danger" round>清空</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -77,8 +77,8 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <addRoom ref="addRoom" v-if="addRoom_child"></addRoom>
       <div class="dialog-btn">
-        <el-button type="primary" @click="addTo" size="small" round>添 加</el-button>
-        <el-button @click="cancel" size="small" type="danger" round>取 消</el-button>
+        <el-button v-preventReClick type="primary" @click="addTo" size="small" round>添 加</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>取 消</el-button>
       </div>
     </el-dialog>
 
@@ -87,8 +87,8 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <checkin ref="checkin" v-if="checkin_child" ></checkin>
       <div class="dialog-btn">
-        <el-button type="primary" @click="addCheck" size="small" round>添 加</el-button>
-        <el-button @click="cancel" size="small" type="danger" round>取 消</el-button>
+        <el-button v-preventReClick type="primary" @click="addCheck" size="small" round>添 加</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>取 消</el-button>
       </div>
     </el-dialog>
   </div>

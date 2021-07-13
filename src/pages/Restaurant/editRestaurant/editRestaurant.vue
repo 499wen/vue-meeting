@@ -61,7 +61,7 @@
           </div>
         </div>
         <div class="submit-btn">
-          <el-button type="danger" round size='small' @click="save">确认修改</el-button>
+          <el-button v-preventReClick type="danger" round size='small' @click="save">确认修改</el-button>
         </div>
       </div>
       

@@ -16,7 +16,7 @@
           v-for="(item, idx) in tableCate" :key="idx"> </el-table-column> 
         <el-table-column :show-overflow-tooltip="true" align="center" :resizable='false' label="操作" width='150'>
           <template slot-scope="scope" v-if="scope.row.approvalState == '0'">
-            <el-button type="primary" size='small' @click="approval(scope.row)"> 审批 </el-button>
+            <el-button v-preventReClick type="primary" size='small' @click="approval(scope.row)"> 审批 </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -41,9 +41,9 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <approval ref="approval" v-if="approval_child" :form="selectRow"></approval>
       <div class="dialog-btn">
-        <el-button @click="applyAgree(1)" size="small" type="primary" round>同 意</el-button>
-        <el-button @click="applyAgree(2)" size="small" type="success" round>不同意</el-button>
-        <el-button @click="cancel" size="small" type="danger" round>关 闭</el-button>
+        <el-button v-preventReClick @click="applyAgree(1)" size="small" type="primary" round>同 意</el-button>
+        <el-button v-preventReClick @click="applyAgree(2)" size="small" type="success" round>不同意</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>关 闭</el-button>
       </div>
     </el-dialog>
   </div>

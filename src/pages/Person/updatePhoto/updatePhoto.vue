@@ -15,7 +15,7 @@
               (建议图片格式为：JPEG/PNG，每张大小不超过200kb)
             </p>
 
-            <!-- <el-button size='small' v-if="this.gl.length && this.showNum == 0" @click="exportToExcel">导出excel</el-button> -->
+            <!-- <el-button v-preventReClick size='small' v-if="this.gl.length && this.showNum == 0" @click="exportToExcel">导出excel</el-button> -->
 
             <div class="person-type" v-if="false">
               <el-radio-group v-model="radio" @change="radioGroup" fill="red">
@@ -29,7 +29,7 @@
     </div>
 
     <!-- <div v-if="showNum != 0" style="margin-right: 10px">一共上传{{ showNum }}张</div>  
-    <el-button size="small" type="primary" v-if="showNum != 0" @click="imgUploadAll($event, 0)">提交</el-button> -->
+    <el-button v-preventReClick size="small" type="primary" v-if="showNum != 0" @click="imgUploadAll($event, 0)">提交</el-button> -->
   </div>
 </template>
 

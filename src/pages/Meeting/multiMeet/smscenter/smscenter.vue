@@ -2,8 +2,8 @@
   <div class="smscenter">
     <!-- 功能 -->
     <div class="sms-func">
-      <el-button round size='small' type="primary">个性短信配置</el-button>
-      <el-button round size='small' type="success">短信发送记录</el-button>
+      <el-button v-preventReClick round size='small' type="primary">个性短信配置</el-button>
+      <el-button v-preventReClick round size='small' type="success">短信发送记录</el-button>
     </div>
 
     <!-- 主体 -->
@@ -35,7 +35,7 @@
 
       <!-- 分页 -->
       <div class="pagin">
-        <el-button size="small" round type="primary" @click="determine">保存</el-button>
+        <el-button v-preventReClick size="small" round type="primary" @click="determine">保存</el-button>
       </div>
 
     </div>

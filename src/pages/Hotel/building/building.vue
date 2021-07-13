@@ -1,7 +1,7 @@
 <template>
   <div class="building">
     <div class="operation">
-      <el-button @click="addBuild" type="primary" size="small">添加大楼</el-button>
+      <el-button v-preventReClick @click="addBuild" type="primary" size="small">添加大楼</el-button>
     </div>
     <el-table :data="tableData" height="400"  border align='center'>
       <el-table-column :show-overflow-tooltip="true" type="index" align='center' label='序号' :resizable="false" width="80"></el-table-column>
@@ -11,9 +11,9 @@
       </el-table-column>
       <el-table-column :show-overflow-tooltip="true" label="操作" align='center' :resizable="false" width="300">
         <template slot-scope="scope">
-          <el-button @click="look(scope.row)" type="primary" size="small">查看房间</el-button>
-          <el-button @click="editBuild(scope.row)" type="primary" size="small">编辑</el-button>
-          <el-button @click="delBuild(scope.row.id)" type="danger" size="small">删除</el-button>
+          <el-button v-preventReClick @click="look(scope.row)" type="primary" size="small">查看房间</el-button>
+          <el-button v-preventReClick @click="editBuild(scope.row)" type="primary" size="small">编辑</el-button>
+          <el-button v-preventReClick @click="delBuild(scope.row.id)" type="danger" size="small">删除</el-button>
         </template>
       </el-table-column> 
     </el-table>
@@ -23,7 +23,7 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <room v-if="room_child" ref="room" :building='curBuild'></room>
       <div class="dialog-btn">
-        <el-button @click="cancel" size="small" type="danger" round>关 闭</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>关 闭</el-button>
       </div>
     </el-dialog>
 

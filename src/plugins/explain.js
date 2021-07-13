@@ -76,8 +76,8 @@ this.height = dom.offsetHeight
         :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
         <AddPerson ref="AddPerson" v-if="addPeroson_child"></AddPerson>
         <div class="dialog-btn">
-          <el-button type="primary" @click="submitForm('userForm')" size="small" round>添 加</el-button>
-          <el-button @click="cancel" size="small" type="danger" round>取 消</el-button>
+          <el-button v-preventReClick type="primary" @click="submitForm('userForm')" size="small" round>添 加</el-button>
+          <el-button v-preventReClick @click="cancel" size="small" type="danger" round>取 消</el-button>
         </div>
       </el-dialog>
  */
@@ -167,9 +167,9 @@ this.height = dom.offsetHeight
           <span class="custom-tree-node">
             <span>{node.label}</span>
             <span>
-              <el-button size="mini" type="text" on-click={ (e) => this.append(data, e) } icon="el-icon-circle-plus-outline"></el-button>
-              <el-button size="mini" type="text" on-click={ (e) => this.remove(node, data, e) } icon="el-icon-delete"></el-button>
-              <el-button size="mini" type="text" on-click={ (e) => this.edit(node, data, e) } icon="el-icon-edit"></el-button>
+              <el-button v-preventReClick size="mini" type="text" on-click={ (e) => this.append(data, e) } icon="el-icon-circle-plus-outline"></el-button>
+              <el-button v-preventReClick size="mini" type="text" on-click={ (e) => this.remove(node, data, e) } icon="el-icon-delete"></el-button>
+              <el-button v-preventReClick size="mini" type="text" on-click={ (e) => this.edit(node, data, e) } icon="el-icon-edit"></el-button>
             </span>
           </span>);
       },
@@ -200,7 +200,7 @@ this.height = dom.offsetHeight
  * el-input 列表搜索
  *  html:
       <el-input size="small" placeholder="请输入会议名称" v-model="searchKey" @keyup.native.enter="searchBtn">
-        <el-button slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
+        <el-button v-preventReClick slot="append" icon="el-icon-search" @click="searchBtn"></el-button>
       </el-input>
     
     js: 

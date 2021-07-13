@@ -1,4 +1,5 @@
 import { Loading } from 'element-ui'
+import Vue from 'vue'
 
 /**
  * 时间戳转换日期
@@ -231,3 +232,19 @@ export function getSearch() {
 
   return paraObj
 }
+
+/**
+ * 防多次点击，重复提交
+ */
+export const preventReClick = Vue.directive('preventReClick', {
+  inserted: function (el, binding) {
+      el.addEventListener('click', () => {
+          if (!el.disabled) {
+              el.disabled = true
+              setTimeout(() => {
+                  el.disabled = false
+              }, binding.value || 3000)
+          }
+      })
+  }
+})

@@ -162,7 +162,7 @@
       :close-on-click-modal='false' :close-on-press-escape='false' custom-class='dialog' top='80px'>
       <init ref="init" v-if="init_child"></init>
       <div class="dialog-btn">
-        <el-button type="primary" @click="submitForm()" size="small" round>保 存</el-button>
+        <el-button v-preventReClick type="primary" @click="submitForm()" size="small" round>保 存</el-button>
       </div>  
     </el-dialog>
 
@@ -172,8 +172,8 @@
       <version ref="version" v-if="version_child" :allVersion='allVersion' @money='money'></version>
       <div class="dialog-btn">
         <span class="pay-money">应支付：{{ totalMoney }}</span>
-        <el-button type="primary" @click="cgForm" size="small" round>变 更</el-button>
-        <el-button @click="cancel" size="small" type="danger" round>取 消</el-button>
+        <el-button v-preventReClick type="primary" @click="cgForm" size="small" round>变 更</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>取 消</el-button>
       </div>  
     </el-dialog>
 
@@ -184,8 +184,8 @@
       <div class="qrcode" ref="qrcode"></div>
 
       <div class="dialog-btn">
-        <!-- <el-button type="primary" @click="cgForm" size="small" round>变 更</el-button>
-        <el-button @click="cancel" size="small" type="danger" round>取 消</el-button> -->
+        <!-- <el-button v-preventReClick type="primary" @click="cgForm" size="small" round>变 更</el-button>
+        <el-button v-preventReClick @click="cancel" size="small" type="danger" round>取 消</el-button> -->
       </div>  
     </el-dialog>
 

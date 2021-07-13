@@ -29,7 +29,7 @@
             <div :class="['single', its.select && 'select']" v-for="(its, idx) in typeList" :key="idx" @click="handleClick(its)"> {{ its.label }} </div>
           </div>
 
-          <el-button size="small" @click="exportExcel" class="margin-right" type="primary"> 导出报表 </el-button>
+          <el-button v-preventReClick size="small" @click="exportExcel" class="margin-right" type="primary"> 导出报表 </el-button>
         </div>
 
         <!-- 表格 -->

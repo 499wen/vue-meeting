@@ -2,9 +2,9 @@
   <div class="detailed">
     <div class="self-main"> 
       <div class="chartContent">
-        <el-button @click="tabBtn" type="primary" plain size='mini'> 切换 </el-button>
-        <el-button @click="openScreens" v-if='!open' type="primary" plain size='mini'> 打开第二屏 </el-button>
-        <el-button @click="closeScreens" v-else type="primary" plain size='mini'> 关闭第二屏 </el-button>
+        <el-button v-preventReClick @click="tabBtn" type="primary" plain size='mini'> 切换 </el-button>
+        <el-button v-preventReClick @click="openScreens" v-if='!open' type="primary" plain size='mini'> 打开第二屏 </el-button>
+        <el-button v-preventReClick @click="closeScreens" v-else type="primary" plain size='mini'> 关闭第二屏 </el-button>
       </div>
       <div class="chartContent">
           <el-col :span="qhTab" class="self-col" v-if="columnData.id">
@@ -104,13 +104,13 @@
               <el-table-column label="操作" align="center" :resizable="false">
                 <template slot-scope="scope" style="width: 10%">
                   <div v-show="scope.row.leaveState == 0 && scope.row.statusCode != 3">
-                    <el-button size="mini" @click="repairSign(scope.row)" type="primary">补签</el-button>
+                    <el-button v-preventReClick size="mini" @click="repairSign(scope.row)" type="primary">补签</el-button>
                   </div>
                   <!-- <div v-show="scope.row.leaveState == 0 && scope.row.statusCode == 0">
-                    <el-button size="mini" @click="confirmMeet(scope.row)" type="primary">确认参会</el-button>
+                    <el-button v-preventReClick size="mini" @click="confirmMeet(scope.row)" type="primary">确认参会</el-button>
                   </div> -->
                   <div v-show="scope.row.leaveState == 0 && scope.row.statusCode == 3">
-                    <el-button size="mini" @click="signWithdrawal(scope.row)" type="primary">撤销</el-button>
+                    <el-button v-preventReClick size="mini" @click="signWithdrawal(scope.row)" type="primary">撤销</el-button>
                   </div>
                 </template>
               </el-table-column>
@@ -132,7 +132,7 @@
       
     </div>
     <div class="chartBtn">
-      <!-- <el-button @click="close" type="primary">关闭</el-button> -->
+      <!-- <el-button v-preventReClick @click="close" type="primary">关闭</el-button> -->
     </div>
   </div>
 </template>

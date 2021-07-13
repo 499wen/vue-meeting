@@ -154,10 +154,10 @@
                             <el-option label="协办方" value="coOrganizer"></el-option>
                           </el-select>
                         </el-input>
-                        <el-button size="small" class="sm-del" @click="delSponsor(idx)">删除</el-button>
+                        <el-button v-preventReClick size="small" class="sm-del" @click="delSponsor(idx)">删除</el-button>
                       </div>
                       <div class="set-margin">
-                        <el-button size="small" class="sm-select" @click="addSponsor">添加会议组织</el-button>
+                        <el-button v-preventReClick size="small" class="sm-select" @click="addSponsor">添加会议组织</el-button>
                       </div>
                     </el-form-item> 
 
@@ -181,12 +181,12 @@
                             <el-input v-model="item.teltPhone" size="small"></el-input>
                           </div>
                           <div class="card-single">
-                            <el-button size="small" class="sm-select" @click="delContact(idx)">删除联系人</el-button>
+                            <el-button v-preventReClick size="small" class="sm-select" @click="delContact(idx)">删除联系人</el-button>
                           </div>
                         </div>
                       </div>
                       <div class="set-margin">
-                        <el-button size="small" class="sm-select" @click="addContact">添加联系人</el-button>
+                        <el-button v-preventReClick size="small" class="sm-select" @click="addContact">添加联系人</el-button>
                       </div>
                     </el-form-item> 
 
@@ -201,10 +201,10 @@
                         <div class="label-agenda">议程{{ idx + 1 }}:</div>
                         <el-input size="small" v-model="item.value" class="sm-input">
                         </el-input>
-                        <el-button size="small" class="sm-del" @click="delProduce(idx)">删除</el-button>
+                        <el-button v-preventReClick size="small" class="sm-del" @click="delProduce(idx)">删除</el-button>
                       </div>
                       <div class="set-margin">
-                        <el-button size="small" class="sm-select" @click="addProduce">添加会议议程</el-button>
+                        <el-button v-preventReClick size="small" class="sm-select" @click="addProduce">添加会议议程</el-button>
                       </div>
                     </el-form-item> 
 
@@ -217,7 +217,7 @@
           </div>
         </div>
         <div class="submit-btn">
-          <el-button type="danger" round size='small' @click="save">确认添加</el-button>
+          <el-button v-preventReClick type="danger" round size='small' @click="save">确认添加</el-button>
         </div>
       </div>
       

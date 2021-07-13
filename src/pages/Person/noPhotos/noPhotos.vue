@@ -29,7 +29,7 @@
     <div class="no-image">
       <div class="no-title">
         <span>未匹配照片</span>
-        <el-button size="mini" @click="delAll">删除全部照片</el-button>
+        <el-button v-preventReClick size="mini" @click="delAll">删除全部照片</el-button>
       </div>
 
       <!-- 存放照片 -->
